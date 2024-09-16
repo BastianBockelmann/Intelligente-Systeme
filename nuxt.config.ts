@@ -3,7 +3,6 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/icon',
     '@nuxt/content',
-    '@nuxt/image',
     '@nuxt/devtools',
     '@nuxt/ui'
   ],
@@ -11,4 +10,7 @@ export default defineNuxtConfig({
   typescript: {
     shim: false
   },
+  colorMode: {
+    preference: 'light'
+  }
 })
