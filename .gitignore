@@ -22,3 +22,14 @@ logs
 .env
 .env.*
 !.env.example
+
+
+# node_modules
+# *.log*
+# .nuxt
+# .nitro
+# .cache
+# .output
+# .env
+# dist
+# *.sqlite

@@ -6,8 +6,9 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
     "typecheck": "nuxt typecheck",
-    "postinstall": "nuxt prepare"
+    "lint": "eslint --max-warnings 0 ."
   },
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
