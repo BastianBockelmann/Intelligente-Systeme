@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import moment from "moment";
+import { useChatStore } from '~/stores/chatStore';
+
+const chatStore = useChatStore();
 
 const userInput = ref("");
 const chatContainer = ref<HTMLElement | null>(null);
@@ -168,7 +171,7 @@ const items = [
       class="h-full text-gray-800 flex flex-col space-y-4 overflow-y-auto p-4 relative"
     >
       <div
-        v-for="(message, index) in messages"
+        v-for="(message, index) in chatStore.allMessages"
         :key="index"
         class="flex justify-center items-center"
         :class="{
@@ -217,8 +220,8 @@ const items = [
     <!-- Input Area -->
     <div class="w-full pb-4 md:px-36 px-7 flex-1 items-center">
       <UInput
-        v-model="userInput"
-        @keyup.enter="sendMessage"
+        v-model="chatStore.userInput"
+        @keyup.enter="chatStore.sendMessage"
         placeholder="Senden Sie eine Nachricht..."
         variant="outline"
         class="flex-1"
@@ -231,7 +234,7 @@ const items = [
           <UButton
             v-show="userInput !== ''"
             class="rounded-full"
-            @click="sendMessage"
+            @click="chatStore.sendMessage"
             variant="soft"
             size="xl"
             icon="i-heroicons-arrow-up"
