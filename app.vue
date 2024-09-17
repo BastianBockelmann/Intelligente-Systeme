@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full">
+  <div>
     <NuxtLayout>
       <NuxtPage />
       <UNotifications />

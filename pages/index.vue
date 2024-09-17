@@ -1,51 +1,248 @@
 <script setup lang="ts">
-// Import Heroicons
-import { PaperAirplaneIcon as HeroiconsSolidPaperAirplaneIcon } from '@heroicons/vue/24/solid';
+import { ref, onMounted, watch } from "vue";
+import moment from "moment";
 
-const userInput = ref('');
+const userInput = ref("");
+const chatContainer = ref<HTMLElement | null>(null);
+const showScrollButton = ref(false); // New state for scroll button visibility
 const messages = ref([
-    { text: 'Hello! How can I help you today?', isUser: false }
+  {
+    text: "Stelle mir eine Frage über deine Auslandsreise für nötige Informationenen vor deiner Reise.",
+    isUser: false,
+    time: convertDate(new Date()),
+  },
 ]);
 
 // Function to handle sending a message
 const sendMessage = () => {
-    if (userInput.value.trim() !== '') {
-        // Add user message
-        messages.value.push({ text: userInput.value, isUser: true });
+  if (userInput.value.trim() !== "") {
+    // Add user message
+    messages.value.push({
+      text: String(userInput.value),
+      isUser: true,
+      time: convertDate(new Date()),
+    });
 
-        // Add a simple bot response (for demo purposes)
-        setTimeout(() => {
-            messages.value.push({ text: 'This is a bot response.', isUser: false });
-        }, 500);
+    // Add a simple bot response (for demo purposes)
+    setTimeout(() => {
+      messages.value.push({
+        text: "Hier müsste der Chat Response später durch LLM kommen...",
+        isUser: false,
+        time: convertDate(new Date()),
+      });
+    }, 500);
 
-        // Clear input
-        userInput.value = '';
-    }
+    setTimeout(() => {
+      scrollToBottom();
+    }, 1000);
+
+    // Clear input
+    userInput.value = "";
+  }
 };
+
+// Function to format date
+function convertDate(date: Date) {
+  const formattedDate = moment(date).format("DD.MM.YYYY - HH:mm");
+  return formattedDate;
+}
+
+// Scroll to bottom function with smooth scroll
+const scrollToBottom = () => {
+  if (chatContainer.value) {
+    chatContainer.value.scrollTo({
+      top: chatContainer.value.scrollHeight,
+      behavior: "smooth", // Smooth scrolling
+    });
+  }
+};
+
+// Watch for changes in messages to scroll down
+watch(messages, () => {
+  scrollToBottom();
+});
+
+// Scroll to bottom on mounted
+onMounted(() => {
+  scrollToBottom();
+
+  // Listen to scroll events to show or hide the scroll button
+  if (chatContainer.value) {
+    chatContainer.value.addEventListener("scroll", () => {
+      if (chatContainer.value) {
+        // Show button if scrolled up, hide if at bottom
+        showScrollButton.value =
+          chatContainer.value.scrollTop + chatContainer.value.clientHeight <
+          chatContainer.value.scrollHeight;
+      }
+    });
+  }
+});
+
+const items = [
+  [
+    {
+      label: "ChatBot Auswertiges Amt",
+      slot: "account",
+      disabled: true,
+    },
+  ],
+  [
+    {
+      label: "Intelligente Systeme WS-24/25",
+      slot: "modul",
+      disabled: true,
+    },
+  ],
+  [
+    {
+      label: "https://www.auswaertiges-amt.de/opendata/travelwarning",
+      slot: "api",
+      icon: "i-heroicons-cog-8-tooth",
+      disabled: true,
+    },
+  ],
+];
 </script>
 
 <template>
-    <div class="items-center justify-center">
-        <span class="text-gray-700 bg-red-500 w-full">Chatbot für das Auswertige Amt</span>
-        <div class="bg-gray-200 rounded-2xl w-full h-full mx-auto p-6 shadow-md rounded-lg mt-10">
-            <!-- Chat Display Area -->
-            <div
-                class="shadow-lg rounded-2xl text-gray-800 flex flex-col space-y-4 mb-4 h-80 overflow-y-auto border-2-black p-4">
-                <div v-for="(message, index) in messages" :key="index"
-                    :class="{ 'self-end text-right': message.isUser, 'self-start text-left': !message.isUser }"
-                    class="bg-gray-100 p-2 rounded-md shadow-sm max-w-xs">
-                    {{ message.text }}
-                </div>
-            </div>
+  <div class="h-screen flex flex-col justify-between">
+    <div class="flex justify-center items-center px-2">
+      <UDropdown
+        mode="hover"
+        :items="items"
+        :ui="{ width: 'w-60', item: { disabled: 'cursor-text select-text' } }"
+        :popper="{ placement: 'bottom-start' }"
+      >
+        <UButton
+          variant="ghost"
+          label="Über"
+          icon="i-heroicons-information-circle"
+        />
+        <template #account="{ item }">
+          <div class="text-left">
+            <p>Application</p>
+            <p
+              class="break-words truncate font-medium text-gray-900 dark:text-white"
+            >
+              {{ item.label }}
+            </p>
+          </div>
+        </template>
 
-            <!-- Input Area -->
-            <div class="flex items-center">
-                <input type="text" v-model="userInput" @keyup.enter="sendMessage" placeholder="Type your message..."
-                    class="flex-1 p-2 border rounded-md focus:outline-none focus:border-blue-500" />
-                <button @click="sendMessage" class="ml-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                    <HeroiconsSolidPaperAirplaneIcon class="w-5 h-5 transform rotate-45" />
-                </button>
-            </div>
-        </div>
+        <template #modul="{ item }">
+          <div class="text-left">
+            <p>Modul:</p>
+            <p
+              class="break-words truncate font-medium text-gray-900 dark:text-white"
+            >
+              {{ item.label }}
+            </p>
+          </div>
+        </template>
+
+        <template #api="{ item }">
+          <div class="text-left">
+            <p>Benutze API:</p>
+            <UButton
+              class="font-medium text-left break-words"
+              :to="item.label"
+              :label="item.label"
+              variant="link"
+            ></UButton>
+          </div>
+        </template>
+      </UDropdown>
+
+      <!-- Header Area -->
+      <span
+        class="w-full text-gray-700 dark:text-gray-100 text-center text-xl font-semibold py-3"
+      >
+        Chatbot zu Informationen des Auswertigen Amtes für Auslandsreisen
+      </span>
     </div>
+
+    <!-- Chat Display Area -->
+    <div
+      ref="chatContainer"
+      class="h-full text-gray-800 flex flex-col space-y-4 overflow-y-auto p-4 relative"
+    >
+      <div
+        v-for="(message, index) in messages"
+        :key="index"
+        class="flex justify-center items-center"
+        :class="{
+          'self-end text-right': message.isUser,
+          'self-start text-left': !message.isUser,
+        }"
+      >
+        <div
+          v-if="!message.isUser"
+          class="text-gray-500 text-center items-center flex justify-center h-10 w-10 mr-2 rounded-full bg-white dark:bg-gray-800 border dark:border-gray-600"
+        >
+          <UIcon name="i-heroicons-check-circle" class="w-6 h-6" />
+        </div>
+        <div class="flex-1">
+          <span class="text-xs text-gray-600 dark:text-gray-400">{{
+            message.time
+          }}</span>
+          <div
+            class="bg-gray-200 dark:text-gray-300 dark:bg-gray-800 p-1 my-auto rounded-md shadow-sm max-w-xs break-words"
+          >
+            {{ message.text }}
+          </div>
+        </div>
+
+        <div
+          v-if="message.isUser"
+          class="text-gray-600 dark:text-gray-400 text-center items-center justify-center flex h-10 w-10 ml-2 rounded-full bg-white dark:bg-gray-800 border dark:border-gray-600"
+        >
+          <UIcon name="i-heroicons-user" class="w-6 h-6" />
+        </div>
+      </div>
+
+      <!-- Scroll to Bottom Button -->
+      <UButton
+        v-if="showScrollButton"
+        @click="scrollToBottom"
+        class="fixed bottom-24 left-1/2 transform -translate-x-1/2 rounded-full shadow-lg"
+        variant="soft"
+        icon="i-heroicons-arrow-down"
+        size="lg"
+      >
+        Runter Scrollen
+      </UButton>
+    </div>
+
+    <!-- Input Area -->
+    <div class="w-full pb-4 px-36 flex-1 items-center">
+      <UInput
+        v-model="userInput"
+        @keyup.enter="sendMessage"
+        placeholder="Senden Sie eine Nachricht..."
+        variant="outline"
+        class="flex-1"
+        autocomplete="off"
+        :ui="{ rounded: 'rounded-2xl', icon: { trailing: { pointer: '' } } }"
+        size="lg"
+        icon="i-heroicons-chat-bubble-left-ellipsis"
+      >
+        <template #trailing>
+          <UButton
+            v-show="userInput !== ''"
+            class="rounded-full"
+            @click="sendMessage"
+            variant="soft"
+            size="xl"
+            icon="i-heroicons-arrow-up"
+            :padded="false"
+          ></UButton>
+        </template>
+      </UInput>
+      <p class="text-center text-gray-500 text-xs">Dies ist ein Projekt für das Modul: Intelligente Systeme von
+      </p>
+      <p class="text-center text-gray-500 text-xs">Lea Mangelsen, Gerrit Biller und Bastian Bockelmann
+    </p>
+    </div>
+  </div>
 </template>
