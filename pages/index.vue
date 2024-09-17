@@ -158,7 +158,7 @@ const items = [
       <span
         class="w-full text-gray-700 dark:text-gray-100 text-center text-xl font-semibold py-3"
       >
-        Chatbot zu Informationen des Auswertigen Amtes für Auslandsreisen
+        Chatbot - Infos für Auslandsreisen
       </span>
     </div>
 
@@ -215,7 +215,7 @@ const items = [
     </div>
 
     <!-- Input Area -->
-    <div class="w-full pb-4 px-36 flex-1 items-center">
+    <div class="w-full pb-4 md:px-36 px-7 flex-1 items-center">
       <UInput
         v-model="userInput"
         @keyup.enter="sendMessage"
