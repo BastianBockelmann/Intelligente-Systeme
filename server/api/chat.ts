@@ -1,82 +1,72 @@
-import { LangChainStream, Message, StreamingTextResponse } from 'ai';
-import { ChatOpenAI } from 'langchain/chat_models/openai';
-import { AIMessage, HumanMessage } from 'langchain/schema';
+import type { Message, LangChainAdapter } from 'ai'
+import { ChatOpenAI } from '@langchain/openai'
+import { AIMessage, HumanMessage } from '@langchain/core/messages';
+import { PromptTemplate } from '@langchain/core/prompts'
 
 export default defineLazyEventHandler(() => {
-  // fetch the OpenAI API key
-  const apiKey = useRuntimeConfig().openaiApiKey;
-  if (!apiKey) {
-    throw createError('Missing OpenAI API key');
-  }
+    // API Key holen
+    const config = useRuntimeConfig();
+    const apiKey = config.openaiApiKey;
+    if (!apiKey) {
+        throw createError('OpenAI API key fehlt');
+    }
 
-  // create a OpenAI LLM client
-  const llm = new ChatOpenAI({
-    openAIApiKey: apiKey,
-    streaming: true,
-  });
+    // Client OpenAI
+    const llm = new ChatOpenAI({
+        openAIApiKey: String(apiKey),
+        streaming: true,
+    });
 
-  return defineEventHandler(async (event) => {
-    const { messages } = await readBody<{ messages: Message[] }>(event);
+    // Prompt Template definieren
+    const promptTemplate = new PromptTemplate({
+        template: `
+        Du bist ein Assistent, der Informationen und Hilfe zu Auslandsreisen und relevanten Vorgaben des Auswärtigen Amts in Deutschland bereitstellt.
+        Deine Aufgabe ist es, präzise und hilfreiche Informationen zu liefern, die für jemanden, der ins Ausland reisen möchte, wichtig sind.
+        Dazu gehören Reisehinweise, Sicherheitswarnungen und Empfehlungen des Auswärtigen Amts.
 
-    const { stream, handlers } = LangChainStream();
-    llm
-      .invoke(
-        (messages as Message[]).map((message) =>
-          message.role === 'user' ? new HumanMessage(message.content) : new AIMessage(message.content)
-        ),
-        { callbacks: [handlers] }
-      )
-      .catch(console.error);
-    return new StreamingTextResponse(stream);
-  });
+        Benutzerfrage: {userQuestion}
+
+        Gib eine detaillierte Antwort basierend auf den offiziellen Richtlinien und Informationen des Auswärtigen Amts.`,
+    inputVariables: ["userQuestion"],});
+
+    // Prompt mit der Benutzernachricht füllen
+
+
+    return defineEventHandler(async (event) => {
+        console.info('Event des Handlers', event)
+        const { messages } = await readBody<{ messages: Message[] }>(event);
+
+        // Prompt mit der Benutzernachricht füllen
+        const prompt = await promptTemplate.format({ userQuestion: messages[0].content });
+
+        // LangChainAdapter fürs Streaming
+        const { stream, handlers } = LangChainAdapter();
+
+        // Nachricht, Content
+        try {
+            // Chatbot Nachricht bearbeiten und streamen
+            await llm.invoke(
+                messages.map((message) =>
+                    message.role === 'user'
+                        ? new HumanMessage(message.content)
+                        : new AIMessage(message.content)
+                ),
+                { callbacks: [handlers] }  // Callback für das Streaming
+            );
+        } catch (error) {
+            console.error('Fehler bei der Chatbot-Anfrage:', error);
+            throw createError({
+                statusCode: 500,
+                statusMessage: 'Fehler bei der Chatbot-Anfrage',
+            });
+        }
+
+        // Antwort Stream
+        return new Response(stream, {
+            status: 200,
+            headers: {
+                'Content-Type': 'text/plain; charset=utf-8',
+            },
+        });
+    });
 });
-
-
-// // /server/api/chat.ts
-// import { OpenAI } from "langchain/llms/openai";
-// import { LLMChain } from "langchain/chains";
-// import { PromptTemplate } from "@langchain/core/message";
-
-// // OpenAI Integrieren und API Key anbinden
-// const openai = new OpenAI({
-//   openAIApiKey: useRuntimeConfig().public.OPENAI_API_KEY,
-//   temperature: 0.7, // Optionale Konfiguration zur Steuerung der Kreativität
-//   maxTokens: 500,  // Begrenze die Anzahl der zurückgegebenen Tokens
-// });
-
-// export default defineLazyEventHandler(async (event) => {
-//   try {
-//     // Question Message
-//     const body = await readBody(event);
-
-//     // Vordefiniertes Prompt Template
-//     const template = `
-//     You are a helpful assistant that provides accurate and up-to-date information about foreign travel, visa requirements, safety warnings, and embassy services based on data from the Auswärtiges Amt (German Foreign Office). Respond in a clear and concise manner, and prioritize safety and travel advice.
-//     User query: {input}`;
-
-//     // Prompt Template generieren
-//     const prompt = new PromptTemplate({
-//       template,
-//       inputVariables: ["input"],
-//     });
-
-//     // LLM-Chain erstellen
-//     const chain = new LLMChain({
-//       llm: openai,
-//       prompt,
-//     });
-
-//     // get response from question
-//     const response = await chain.call({
-//       input: body.message,
-//     });
-
-//     // Rückgabe der Antwort
-//     return { text: response.text };
-//   } catch (error) {
-//     console.error("Open API Methode fehlgeschlagen: ", error);
-//     return {text: 'Leider ist ein Fehler bei dem Ausführen der Methode aufgetreten.'}
-//   }
-// });
-
-// // https://dev.to/ikudev/chatting-with-your-documents-building-an-intelligent-chatbot-with-nuxt-langchain-and-vercel-ai-sdk-43ab

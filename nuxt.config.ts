@@ -1,15 +1,15 @@
 export default defineNuxtConfig({
   runtimeConfig: {
-    public: {
-      OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-    },
+    openaiApiKey: 'test',
   },
   compatibilityDate: '2024-04-03',
   modules: [
     '@nuxt/icon',
     '@nuxt/content',
     '@nuxt/devtools',
-    '@nuxt/ui'
+    '@nuxt/ui',
+    '@nuxtjs/tailwindcss',
+    '@pinia/nuxt'
   ],
   devtools: { enabled: true },
   typescript: {
