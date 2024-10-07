@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
 import moment from "moment";
 
 const userInput = ref("");
@@ -68,28 +67,44 @@ onMounted(() => {
   }
 });
 
+
+
 // Funktion um Chatbot-Antwort vom Backend abzurufen
 const fetchChatbotResponse = async (userMessage: string) => {
   try {
-    const response = await $fetch('/api/chat', {
+    const response = await fetch('/api/chat', {
       method: 'POST',
-      body: { messages: [{ role: 'user', content: userMessage }] }, // Benutzer-Nachricht
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ messages: [{ role: 'user', content: userMessage }] }), // Benutzer-Nachricht
     });
 
+    userInput.value = ""
+
+    // Sicherstellen, dass die Antwort ein Stream ist
     const reader = response.body?.getReader();
     if (reader) {
-      let decoder = new TextDecoder();
+      const decoder = new TextDecoder();
       let done = false;
       let chatbotMessage = '';
 
-      // Streaming der Antwort vom Chatbot
+      // Streaming der Antwort
       while (!done) {
         const { value, done: readerDone } = await reader.read();
         done = readerDone;
         if (value) {
-          chatbotMessage += decoder.decode(value);
-          // Dynamisch die Antwort anzeigen, während sie gestreamt wird
-          addMessageToChatbot(chatbotMessage);
+          // Chunk dekodieren
+          const chunk = decoder.decode(value, { stream: true });
+
+          // Clean up the format: remove the '0:' indices and other artifacts
+          const cleanedChunk = chunk.replace(/\d+:"/g, '').replace(/"\n?/g, '').replace(/\n\n/g, ' ');
+
+          // Dynamically add the clean text to the message being built
+          chatbotMessage += cleanedChunk;
+
+          // Dynamisch die Nachricht aktualisieren, während der Text gestreamt wird
+          addMessageToChatbot(chatbotMessage.trim());
         }
       }
     }
@@ -98,14 +113,21 @@ const fetchChatbotResponse = async (userMessage: string) => {
   }
 };
 
-// Funktion um die Chatbot-Nachricht hinzuzufügen
+// Funktion zum Hinzufügen der Chatbot-Nachricht
 const addMessageToChatbot = (text: string) => {
-  messages.value.push({
-    text: text,
-    isUser: false,
-    time: convertDate(new Date()),
-  });
+  // Aktualisiere die letzte Nachricht oder füge eine neue hinzu
+  const lastMessage = messages.value[messages.value.length - 1];
+  if (!lastMessage.isUser) {
+    lastMessage.text = text; // Aktualisiere die bestehende Nachricht
+  } else {
+    messages.value.push({
+      text: text,
+      isUser: false,
+      time: convertDate(new Date()),
+    });
+  }
 
+  // Scrollen zum unteren Ende des Chats
   scrollToBottom();
 };
 
