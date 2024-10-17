@@ -41,12 +41,12 @@ export const USE_RECOMMENDATIONSTORE = defineStore("itemStore", {
       try {
         // Erstelle ein Array von Promises, um die API-Anfragen parallel durchzuführen
         const promises = ids.map(async (id) => {
-          const apiString = "https://www.auswaertiges-amt.de/opendata/travelwarning/" + id;
+          const apiString = `https://www.auswaertiges-amt.de/opendata/travelwarning/${id}`;
           const response = await fetch(apiString);
     
           // Stelle sicher, dass die Antwort erfolgreich ist
           if (!response.ok) {
-            throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
+            throw new Error(`Failed to fetch for ID ${id}: ${response.status} ${response.statusText}`);
           }
     
           const data = await response.json();
@@ -58,13 +58,14 @@ export const USE_RECOMMENDATIONSTORE = defineStore("itemStore", {
         // Warte, bis alle Promises aufgelöst sind (alle Anfragen beendet)
         const results = await Promise.all(promises);
     
-        // Füge die neuen Ergebnisse zur bestehenden allrecommendations-Liste hinzu
-        results.forEach((data) => {
-          this.allrecommendations.push(...Object.values(data));  // Push die Werte in die Liste
-        });
+        // Nutze flatMap, um die Werte direkt in die Liste zu pushen
+        this.allrecommendations.push(
+          ...results.flatMap(data => Object.values(data))
+        );
       } catch (error) {
         console.error('Error loading recommendations:', error);
       }
     }
+    
   },
 });

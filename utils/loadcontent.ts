@@ -4,9 +4,6 @@ export function loadcontent() {
 
     const recommendations = USE_RECOMMENDATIONSTORE()
 
-    for(const rec of recommendations.recommendations) {
-
-        recommendations.loadContentFromAPI(rec)
-    }
+    recommendations.loadContentFromAPI(recommendations.recommendations)
 
 }

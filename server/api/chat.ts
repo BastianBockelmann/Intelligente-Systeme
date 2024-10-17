@@ -1,14 +1,22 @@
 import type { Message } from "ai";
-import { LangChainStream } from "ai"; // Korrigierter Import
+import { LangChainStream } from "ai";
 import { ChatOpenAI } from "@langchain/openai";
 import { HumanMessage } from "@langchain/core/messages";
 import { PromptTemplate } from "@langchain/core/prompts";
-import { Langfuse } from "langfuse"; // Direkt importieren
+import { Langfuse } from "langfuse";
+import { encoding_for_model } from "tiktoken"; // Import tiktoken
+
+// Token counting function
+function countTokens(text: string, model: string): number {
+  const encoding = encoding_for_model(model);
+  const tokens = encoding.encode(text);
+  encoding.free();
+  return tokens.length;
+}
 
 export default defineLazyEventHandler(() => {
   const config = useRuntimeConfig();
 
-  // Langfuse initialisieren
   const langfuse = new Langfuse({
     secretKey: config.langfuseSecretKey,
     publicKey: config.langfusePublicKey,
@@ -23,13 +31,11 @@ export default defineLazyEventHandler(() => {
     });
   }
 
-  // OpenAI Client initialisieren
   const llm = new ChatOpenAI({
     openAIApiKey: String(apiKey),
     streaming: true,
   });
 
-  // Prompt Template definieren
   const promptTemplate = new PromptTemplate({
     template: `
         Du bist ein Assistent, der Informationen und Hilfe zu Auslandsreisen und relevanten Vorgaben des Auswärtigen Amts in Deutschland bereitstellt.
@@ -42,14 +48,9 @@ export default defineLazyEventHandler(() => {
     inputVariables: ["userQuestion"],
   });
 
-  // Event Handler für den API-Endpunkt
   return defineEventHandler(async (event) => {
-    console.info("Event des Handlers", event);
-
-    // Body der Anfrage lesen
     const { messages } = await readBody<{ messages: Message[] }>(event);
 
-    // Überprüfen, ob Nachrichten vorhanden sind
     if (!messages || messages.length === 0) {
       throw createError({
         statusCode: 400,
@@ -57,38 +58,45 @@ export default defineLazyEventHandler(() => {
       });
     }
 
-    // Langfuse Trace initialisieren
     const trace = langfuse.trace({
       name: "chat-api-call",
-      userId: "user__12345", // Beispiel für eine eindeutige User-ID
+      userId: "Team_Arbeit_Auswertiges_Amt",
       metadata: {
         userQuestion: messages[0].content,
       },
-      tags: ["production"], // Tags für den Trace
+      tags: ["production"],
     });
 
-    // Prompt mit der Benutzernachricht füllen
     const prompt = await promptTemplate.format({
       userQuestion: messages[0].content,
     });
 
-    // Berechne die Anzahl der Tokens für das Prompt
-    const inputTokenCount = 1000;
-
-    // Streaming Setup mit LangChainStream
-    const { stream, handlers } = LangChainStream();
-
-    // Tracken der API-Aufrufdauer
-    const start = Date.now();
+    // Token count for the input message
+    const inputTokenCount = countTokens(prompt, "gpt-4"); // Use tiktoken for counting
     let outputTokenCount = 0;
 
-    try {
-      // Nachrichten verarbeiten und streamen
-      await llm.call([new HumanMessage(prompt)], {
-        callbacks: [handlers], // Callback für das Streaming
-      });
+    const { stream, handlers } = LangChainStream();
+    const start = Date.now();
 
-      // Event in Langfuse Trace aufzeichnen
+    try {
+        // Process message with streaming, use the handlers to track token usage
+        await llm.call([new HumanMessage(prompt)], {
+          callbacks: [
+            {
+              handleLLMNewToken(token) {
+                // Count the tokens as they are streamed
+                outputTokenCount++;
+              },
+              handleLLMEnd() {
+                // When the response completes
+                console.log("Stream ended.");
+              },
+            },
+            handlers, // Existing handlers for the streaming response
+          ],
+        });
+
+      // Event on successful response
       trace.event({
         name: "LLM_Response_Success",
         metadata: {
@@ -100,15 +108,13 @@ export default defineLazyEventHandler(() => {
         },
       });
     } catch (error) {
-      // Fehlerfall im Trace festhalten
+      // Error Handling for Langfuse
       trace.event({
         name: "LLM_Response_Error",
         metadata: {
           error: error.message,
         },
       });
-
-      console.error("Fehler bei der Chatbot-Anfrage:", error);
       throw createError({
         statusCode: 500,
         statusMessage: "Fehler bei der Chatbot-Anfrage",
@@ -116,17 +122,44 @@ export default defineLazyEventHandler(() => {
     }
 
     const duration = Date.now() - start;
-    console.info(`Dauer der Verarbeitung: ${duration}ms`);
 
-    // Trace mit Dauer aktualisieren
-    trace.update({
-      metadata: {
-        duration,
-        result: "success",
+    // Kosten berechnen (GPT-4 preis pro 1000 Tokens)
+    const totalTokens = inputTokenCount + outputTokenCount;
+    const costPerToken = 0.00003; // Example cost for OpenAI GPT-4
+    const inputCost = inputTokenCount * costPerToken;
+    const outputCost = outputTokenCount * costPerToken;
+    const totalCost = inputCost + outputCost;
+
+    // Create Langfuse generation with usage and cost tracking
+    const generation = langfuse.generation({
+      model: "gpt-4", // Specify the model used
+      usage: {
+        promptTokens: inputTokenCount,   // Input token count
+        completionTokens: outputTokenCount, // Output token count
+        totalTokens,       // Total token count
+        unit: "TOKENS",    // Specify token unit
+        inputCost,         // Input cost based on token usage
+        outputCost,        // Output cost based on token usage
+        totalCost          // Total cost
       },
     });
 
-    // Antwort streamen
+    // Update Langfuse with generation details
+    generation.update({
+      usage: {
+        promptTokens: inputTokenCount,
+        completionTokens: outputTokenCount,
+        totalTokens,
+        inputCost,
+        outputCost,
+        totalCost,
+      },
+    });
+
+    // End the generation to signify completion
+    generation.end();
+
+    // Return the streamed response
     return new Response(stream, {
       status: 200,
       headers: {

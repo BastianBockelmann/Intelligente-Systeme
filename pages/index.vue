@@ -6,7 +6,7 @@ const chatContainer = ref<HTMLElement | null>(null);
 const showScrollButton = ref(false); // Scroll-Button sichtbar oder nicht
 const messages = ref([
   {
-    text: "Stelle mir eine Frage über deine Auslandsreise für nötige Informationen vor deiner Reise.",
+    text: "Stelle mir eine <b>Frage</b> <br>über deine Auslandsreise für nötige Informationen vor deiner Reise.",
     isUser: false,
     time: convertDate(new Date()),
   },
@@ -97,6 +97,8 @@ const fetchChatbotResponse = async (userMessage: string) => {
           // Chunk dekodieren
           const chunk = decoder.decode(value, { stream: true });
 
+          console.log('Dies ist die rückgabe von Chatgpt: ' + chunk)
+
           // Clean up the format: remove the '0:' indices and other artifacts
           const cleanedChunk = chunk.replace(/\d+:"/g, '').replace(/"\n?/g, '').replace(/\n\n/g, ' ');
 
@@ -113,8 +115,42 @@ const fetchChatbotResponse = async (userMessage: string) => {
   }
 };
 
+function formatMessageWithLists(text: string): string {
+
+  // Fettschrift für Titel (z.B. **Titel**)
+  let formattedText = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+  formattedText = formattedText.replace(/(?:\n|^)(\d+)\.\s(.+?)(?=\n|$)/g, "<li>$1. $2</li>");
+
+  // Nummerierte Listen (1., 2., 3. ...) erkennen und in <li> umwandeln
+  formattedText = formattedText.replace(/(?:\n|^)(\d+)\.\s(.+?)(?=\n|$)/g, "<li>$1. $2</li>");
+
+  // Aufzählungen mit - in Listen umwandeln (- Listenelement)
+  formattedText = formattedText.replace(/(?:\n|^)-\s(.+?)(?=\n|$)/g, "<li>$1</li>");
+
+  // Alle <li> in <ul> oder <ol> umschließen, abhängig von der Liste
+  formattedText = formattedText.replace(/(<li>\d+\. .*<\/li>)/g, "<ol>$1</ol>");
+  formattedText = formattedText.replace(/(<li>(?!\d\.).*<\/li>)/g, "<ul>$1</ul>");
+
+  // Doppelte Zeilenumbrüche in Absätze (<p>) umwandeln
+  formattedText = formattedText.replace(/\n\n/g, "</p><p>");
+
+  // Einfache Zeilenumbrüche außerhalb von Listen in <br> umwandeln
+  formattedText = formattedText.replace(/\n/g, "<br>");
+
+  // Entferne doppelte Backslashes
+  formattedText = formattedText.replace(/\\n/g, "<br>");
+
+  // Text in <p> packen, falls nicht bereits in einem Block
+  return `<p>${formattedText}</p>`;
+}
+
 // Funktion zum Hinzufügen der Chatbot-Nachricht
 const addMessageToChatbot = (text: string) => {
+
+   // Nachricht formatieren
+   const formattedText = formatMessageWithLists(text);
+
   // Aktualisiere die letzte Nachricht oder füge eine neue hinzu
   const lastMessage = messages.value[messages.value.length - 1];
   if (!lastMessage.isUser) {
@@ -208,12 +244,19 @@ const items = [
           <UIcon name="i-heroicons-check-circle" class="w-6 h-6" />
         </div>
         <div class="flex-1">
-          <span class="text-xs text-gray-600 dark:text-gray-400">{{
-            message.time
-          }}</span>
-          <div
+          <span class="text-xs text-gray-600 dark:text-gray-400">
+            {{ message.time }}
+          </span>
+
+          <!-- Wenn Chatbot Antwort -->
+          <div v-if="!message.usUser"
             class="bg-gray-200 dark:text-gray-300 dark:bg-gray-800 p-1 my-auto rounded-md shadow-sm max-w-xs break-words">
-            {{ message.text }}
+            <span v-html="message.text"></span>
+          </div>
+
+          <div v-if="message.usUser"
+            class="bg-gray-200 dark:text-gray-300 dark:bg-gray-800 p-1 my-auto rounded-md shadow-sm max-w-xs break-words">
+            <span>{{message.text}}</span>
           </div>
         </div>
 

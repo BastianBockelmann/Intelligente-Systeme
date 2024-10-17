@@ -39,6 +39,7 @@
     "nuxt": "^3.13.2",
     "openai": "^4.67.1",
     "pinia": "^2.2.4",
+    "tiktoken": "^1.0.17",
     "vue": "latest",
     "vue-router": "latest"
   },
