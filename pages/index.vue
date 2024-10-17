@@ -68,7 +68,6 @@ onMounted(() => {
 });
 
 
-
 // Funktion um Chatbot-Antwort vom Backend abzurufen
 const fetchChatbotResponse = async (userMessage: string) => {
   try {
@@ -118,7 +117,7 @@ const fetchChatbotResponse = async (userMessage: string) => {
 function formatMessageWithLists(text: string): string {
 
   // Fettschrift für Titel (z.B. **Titel**)
-  let formattedText = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+  let formattedText = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
 
   formattedText = formattedText.replace(/(?:\n|^)(\d+)\.\s(.+?)(?=\n|$)/g, "<li>$1. $2</li>");
 
@@ -154,10 +153,10 @@ const addMessageToChatbot = (text: string) => {
   // Aktualisiere die letzte Nachricht oder füge eine neue hinzu
   const lastMessage = messages.value[messages.value.length - 1];
   if (!lastMessage.isUser) {
-    lastMessage.text = text; // Aktualisiere die bestehende Nachricht
+    lastMessage.text = formattedText; // Aktualisiere die bestehende Nachricht
   } else {
     messages.value.push({
-      text: text,
+      text: formattedText,
       isUser: false,
       time: convertDate(new Date()),
     });
