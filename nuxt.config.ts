@@ -4,7 +4,12 @@ export default defineNuxtConfig({
     openaiApiKey: process.env.OPENAI_API_KEY,
     langfuseSecretKey: process.env.LANGFUSE_SECRET_KEY,
     langfusePublicKey: process.env.LANGFUSE_PUBLIC_KEY,
-  },
+    //Pinecone Database
+    pineconeApiKey: process.env.PINECONE_API_KEY,
+    pineconeEnvironment: process.env.PINECONE_ENVIRONMENT,
+    indexName: 'traveldata',
+    timeout: 80000
+    },
   compatibilityDate: "2024-04-03",
   modules: [
     "@nuxt/icon",
