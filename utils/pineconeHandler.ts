@@ -223,7 +223,7 @@ export async function queryPineconeData(
 }
 
 // Funktion zum Abrufen des gesamten Contents eines Landes aus der JSON-Datei anhand des ISO3-Codes
-function getFullContentFromJson(iso3Code: string): string | null {
+export function getFullContentFromJson(iso3Code: string): string | null {
   const countryData = countriesData[iso3Code];  // Suche den Eintrag basierend auf dem iso3Code
   if (countryData && countryData.content) {
     return countryData.content;  // Rückgabe des gesamten Contents des Eintrags

@@ -87,6 +87,27 @@ export default defineComponent({
       } finally {
         isSearching.value = false;
       }
+    },
+
+    async fetchContent() {
+      if (!this.iso3Code.trim()) {
+        message.value = 'Bitte geben Sie einen ISO3-Code ein';
+        return;
+      }
+
+      try {
+        const { data, error } = await useFetch(`/api/getCountryContent?iso3Code=${this.iso3Code}`);
+        if (error.value) {
+          throw new Error(error.value);
+        }
+        if (data.value && data.value.content) {
+          this.content = data.value.content;
+        } else {
+          this.content = 'Kein Content für diesen ISO3-Code gefunden.';
+        }
+      } catch (err) {
+        this.content = `Fehler beim Abrufen des Contents: ${err.message}`;
+      }
     }
   }
 });
@@ -126,8 +147,8 @@ export default defineComponent({
 
         <!-- Bereich zur Anzeige des Inhalts -->
         <div v-if="content" class="content-display">
-          <h3>Content für {{ iso3Code }}</h3>
-          <p>{{ content }}</p>
+          <h3>Daten Auswärtiges Amt für {{ iso3Code }}</h3>
+          <p class="max-h-60 overflow-y-auto break-words p-2 border rounded">{{ content }}</p>
         </div>
       </div>
 
@@ -159,7 +180,7 @@ export default defineComponent({
                 Warnung vorhanden!
               </p>
               <p class="font-semibold">Content</p>
-              <p class="h-12 overflow-auto">{{ result.content }}</p>
+              <p class="max-h-60 overflow-y-auto break-words p-2 border rounded">{{ result.content }}</p>
             </div>
           </div>
         </div>
