@@ -1,7 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useFetch } from '#app';
-
 const loading = ref(false);
 const message = ref('');
 const searchQuery = ref(''); // Für das Suchfeld
@@ -15,7 +14,9 @@ export default defineComponent({
       message,
       searchQuery,
       searchResults,
-      isSearching
+      isSearching,
+      iso3Code: '',
+      content: ''
     };
   },
   methods: {
@@ -32,15 +33,15 @@ export default defineComponent({
         loading.value = false;
       }
     },
-    
+
     async updateDataTest() {
       console.log('Test Button wurde geklickt!');
     },
-    
+
     async testPinecone() {
       console.log('Pinecone prüfen und ggf. initalisieren Button wurde geklickt!');
     },
-    
+
     async writePinecone() {
       console.log('Pinecone Daten aktualisieren/hochladen Button wurde geklickt!');
       try {
@@ -62,7 +63,7 @@ export default defineComponent({
 
       isSearching.value = true;
       message.value = '';
-      
+
       try {
         const { data, error } = await useFetch('/api/queryData', {
           method: 'POST',
@@ -113,21 +114,32 @@ export default defineComponent({
         Daten in VektorDB / Pinecone hochladen
       </UButton>
 
+
+      <!-- Gesamten Content zu Iso3 Code abrufen -->
+      <div class="content-fetcher">
+        <h2>Länder-Content Abrufen</h2>
+        <!-- Eingabefeld für den ISO3-Code -->
+        <input v-model="iso3Code" type="text" placeholder="Geben Sie den ISO3-Code ein" />
+
+        <!-- Button, um den Content abzurufen -->
+        <button @click="fetchContent">Content abrufen</button>
+
+        <!-- Bereich zur Anzeige des Inhalts -->
+        <div v-if="content" class="content-display">
+          <h3>Content für {{ iso3Code }}</h3>
+          <p>{{ content }}</p>
+        </div>
+      </div>
+
+
+
       <div class="mt-8 space-y-4">
         <h2 class="text-lg font-semibold">Pinecone Datenabfrage</h2>
-        
+
         <div class="flex space-x-2">
-          <UInput
-            v-model="searchQuery"
-            placeholder="Geben Sie Ihren Suchbegriff ein..."
-            class="flex-grow"
-            @keyup.enter="searchPinecone"
-          />
-          <UButton 
-            @click="searchPinecone" 
-            :disabled="isSearching"
-            class="w-24"
-          >
+          <UInput v-model="searchQuery" placeholder="Geben Sie Ihren Suchbegriff ein..." class="flex-grow"
+            @keyup.enter="searchPinecone" />
+          <UButton @click="searchPinecone" :disabled="isSearching" class="w-24">
             {{ isSearching ? 'Suche...' : 'Suchen' }}
           </UButton>
         </div>

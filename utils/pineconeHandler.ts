@@ -7,11 +7,10 @@
 // 4. Abfrage von Daten aus Pinecone
 // 5. optional: Löschen von Daten in Pinecone
 
-
 // Importieren der benötigten Bibliotheken
 import * as fs from 'fs';
 import { join } from 'path';
-import { encode } from 'gpt-3-encoder';
+import { encode, decode } from 'gpt-3-encoder';
 import OpenAI from 'openai';
 import { Pinecone } from '@pinecone-database/pinecone';
 
@@ -46,7 +45,7 @@ async function getEmbedding(text: string) {
 }
 
 // Funktion zum Aufteilen von Text in Chunks (Abschnitte), um Token-Limits einzuhalten
-function splitTextIntoChunks(text: string, maxTokens: number, overlap: number) {
+function splitTextIntoChunks(text: string, maxTokens: number, overlap: number, countryName: string) {
   const tokens = encode(text);  // Tokenisierung des gesamten Textes
   let chunks = [];
   let start = 0;
@@ -54,13 +53,19 @@ function splitTextIntoChunks(text: string, maxTokens: number, overlap: number) {
   while (start < tokens.length) {
     const end = Math.min(start + maxTokens, tokens.length);  // Berechnen des Endes jedes Chunks
     const chunkTokens = tokens.slice(start, end);  // Erstellen des Token-Chunks
-    const chunkText = chunkTokens.map(token => token).join('');  // Zusammenführen der Tokens in einen Text-Chunk
-    chunks.push(chunkText);  // Hinzufügen des Chunks zur Liste
+    const chunkText = `${countryName}: ${decode(chunkTokens)}`;  // Dekodieren der Tokens in den ursprünglichen Text und Hinzufügen des Ländernamens
+
+    chunks.push({
+      text: chunkText,  // Speichern des Text-Chunks
+      tokens: chunkTokens  // Speichern der Tokeninformationen
+    });
+
     start += maxTokens - overlap;  // Aktualisieren des Startindex für den nächsten Chunk mit Überlappung
   }
 
   return chunks;
 }
+
 
 // Funktion zum Prüfen und ggf. Initialisieren des Pinecone-Indexes
 async function checkAndInitIndex() {
@@ -100,8 +105,12 @@ export async function processAndStoreData() {
   console.log(indexInitMessage);  // Log-Eintrag zur Index-Initialisierung
 
   const countries = Object.entries(countriesData);  // Umwandlung in Array von [key, value] Paaren
+  const totalCountries = countries.length;  // Gesamtanzahl der Länder bestimmen
 
-  for (const [iso3Code, countryData] of countries) {
+  for (let countryIndex = 0; countryIndex < totalCountries; countryIndex++) {
+    const [iso3Code, countryData] = countries[countryIndex];
+    console.log(`Verarbeite Land ${countryIndex + 1} von ${totalCountries}: ${iso3Code}`);  // Fortschritt anzeigen
+
     // Typ-Sicherstellung und Extraktion der benötigten Daten
     const country = countryData as {
       countryName: string;
@@ -110,39 +119,42 @@ export async function processAndStoreData() {
       warning: boolean;
       // ggf. weitere Felder hinzufügen
     };
-// Zusammenführen der relevanten Textdaten
-const countryText = `${country.countryName}: ${country.content}`;
-const maxTokens = 5000;
-const overlap = 1000;
-const countryChunks = splitTextIntoChunks(countryText, maxTokens, overlap);
+    
+    // Zusammenführen der relevanten Textdaten
+    const countryText = `${country.countryName}: ${country.content}`;
+    const maxTokens = 5000;
+    const overlap = 1000;
+    const countryChunks = splitTextIntoChunks(countryText, maxTokens, overlap, country.countryName);
+    const totalChunks = countryChunks.length;
 
-// Verarbeitung der Chunks
-for (let i = 0; i < countryChunks.length; i++) {
-  try {
-    const chunkText = countryChunks[i];
-    const embedding = await getEmbedding(chunkText);
+    // Verarbeitung der Chunks
+    for (let i = 0; i < countryChunks.length; i++) {
+      try {
+        const chunk = countryChunks[i];
+        const embedding = await getEmbedding(chunk.text);  // Erstellen des Embeddings für den Chunk
 
-    // Speichern in Pinecone mit korrekter ID und Metadaten
-    await pinecone.Index(indexName).upsert([
-      {
-        id: `${iso3Code}_chunk_${i}`, // Verwendung des ISO3-Codes aus der Schlüsselstruktur
-        values: embedding,
-        metadata: {
-          countryName: country.countryName,
-          iso3CountryCode: iso3Code, // Verwendung des ISO3-Codes aus der Schlüsselstruktur
-          warning: country.warning,
-          content: country.content,
-          chunkIndex: i,
-        },
-      },
-    ]);
+        // Speichern in Pinecone mit korrekter ID und Metadaten; nur der Text des Chunks wird als Content gespeichert
+        await pinecone.Index(indexName).upsert([
+          {
+            id: `${iso3Code}_chunk_${i}`, // Verwendung des ISO3-Codes aus der Schlüsselstruktur
+            values: embedding,
+            metadata: {
+              countryName: country.countryName,
+              iso3CountryCode: iso3Code, // Verwendung des ISO3-Codes aus der Schlüsselstruktur
+              warning: country.warning,
+              content: chunk.text,  // Speichern nur des jeweiligen Chunks
+              chunkIndex: i,
+              totalChunks: totalChunks,
+            },
+          },
+        ]);
 
-    console.log(`Stored chunk ${i} for country ${country.countryName} (${iso3Code})`);
-  } catch (error) {
-    console.error(`Error processing chunk ${i} for country ${iso3Code}: ${error}`);
+        console.log(`Stored chunk ${i} for country ${country.countryName} (${iso3Code})`);
+      } catch (error) {
+        console.error(`Error processing chunk ${i} for country ${iso3Code}: ${error}`);
+      }
+    }
   }
-}
-}
 }
 
 // Funktion zum Abfragen von Daten aus Pinecone
@@ -189,6 +201,7 @@ export async function queryPineconeData(
       warning: match.metadata?.warning,
       content: match.metadata?.content,
       chunkIndex: match.metadata?.chunkIndex,
+      totalChunks: match.metadata?.totalChunks,
       id: match.id
     }));
 
@@ -206,5 +219,16 @@ export async function queryPineconeData(
       results: [],
       totalResults: 0
     };
+  }
+}
+
+// Funktion zum Abrufen des gesamten Contents eines Landes aus der JSON-Datei anhand des ISO3-Codes
+function getFullContentFromJson(iso3Code: string): string | null {
+  const countryData = countriesData[iso3Code];  // Suche den Eintrag basierend auf dem iso3Code
+  if (countryData && countryData.content) {
+    return countryData.content;  // Rückgabe des gesamten Contents des Eintrags
+  } else {
+    console.error(`Kein Content für ISO3-Code ${iso3Code} gefunden.`);
+    return null;  // Rückgabe null, wenn kein Eintrag oder Content vorhanden ist
   }
 }
