@@ -176,6 +176,7 @@ export default defineComponent({
             <div class="text-sm text-gray-600">
               <p>ISO Code: {{ result.iso3CountryCode }}</p>
               <p>Ähnlichkeit: {{ (result.score * 100).toFixed(2) }}%</p>
+              <p>Chunk: {{ result.chunkIndex }} von {{ result.totalChunks }} Chunks</p>
               <p v-if="result.warning" class="text-red-500">
                 Warnung vorhanden!
               </p>
