@@ -16,7 +16,8 @@ export default defineComponent({
       searchResults,
       isSearching,
       iso3Code: '',
-      content: ''
+      content: '',
+      weatherData: ''
     };
   },
   methods: {
@@ -108,6 +109,27 @@ export default defineComponent({
       } catch (err) {
         this.content = `Fehler beim Abrufen des Contents: ${err.message}`;
       }
+    },
+
+    async fetchWeatherData() {
+      if (!this.iso3Code.trim()) {
+        message.value = 'Bitte geben Sie einen ISO3-Code ein';
+        return;
+      }
+
+      try {
+        const { data, error } = await useFetch(`/api/getWeatherData?iso3Code=${this.iso3Code}`);
+        if (error.value) {
+          throw new Error(error.value);
+        }
+        if (data.value && data.value.weatherData) {
+          this.weatherData = data.value.weatherData;
+        } else {
+          this.weatherData = 'Keine Wetterdaten für diesen ISO3-Code gefunden.';
+        }
+      } catch (err) {
+        this.weatherData = `Fehler beim Abrufen der Wetterdaten: ${err.message}`;
+      }
     }
   }
 });
@@ -153,7 +175,21 @@ export default defineComponent({
       </div>
 
 
+      <!-- Wetterdaten zu Iso3 Code abrufen -->
+      <div class="weather-fetcher mt-4">
+        <h2>Wetterdaten Abrufen</h2>
+        <!-- Button, um die Wetterdaten abzurufen -->
+        <button @click="fetchWeatherData">Wetterdaten abrufen</button>
 
+        <!-- Bereich zur Anzeige der Wetterdaten -->
+        <div v-if="weatherData" class="weather-display mt-2">
+          <h3>Wetterdaten für {{ iso3Code }}</h3>
+          <p class="max-h-60 overflow-y-auto break-words p-2 border rounded">{{ weatherData }}</p>
+        </div>
+      </div>
+
+
+      <!-- Pinecone Datenabfrage -->
       <div class="mt-8 space-y-4">
         <h2 class="text-lg font-semibold">Pinecone Datenabfrage</h2>
 

@@ -33,6 +33,7 @@
     "@pinia/nuxt": "^0.5.5",
     "ai": "^3.4.9",
     "axios": "^1.7.7",
+    "csv-parser": "^3.0.0",
     "gpt-3-encoder": "^1.1.4",
     "jsdom": "^25.0.1",
     "langchain": "^0.3.2",
