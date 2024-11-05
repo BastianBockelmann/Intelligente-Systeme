@@ -232,3 +232,37 @@ export function getFullContentFromJson(iso3Code: string): string | null {
     return null;  // Rückgabe null, wenn kein Eintrag oder Content vorhanden ist
   }
 }
+
+
+export async function queryRelevantTravelData(minRelevance: number, topK: number = 10, queryString: string): Promise<string> {
+  try {
+    const queryEmbedding = await getEmbedding(queryString);
+
+    const queryResponse = await pinecone.Index(indexName).query({
+      vector: queryEmbedding,
+      topK: topK,
+      includeMetadata: true,
+      // Entferne den Score-Filter, um alle möglichen Übereinstimmungen zu sehen
+    });
+
+    if (queryResponse.matches.length === 0) {
+      return `Keine Einträge gefunden.`;
+    }
+
+    // Logge die Scores, um zu prüfen, warum keine Ergebnisse mit hoher Relevanz zurückgegeben werden
+    console.log("Pinecone Query Results:", queryResponse.matches);
+
+    const results = queryResponse.matches
+      .filter(match => match.score >= minRelevance / 100) // Manuelles Filtern der relevanten Ergebnisse
+      .map(match => `${match.metadata?.countryName} (ISO: ${match.metadata?.iso3CountryCode}): ${match.metadata?.content} (Relevanz: ${(match.score * 100).toFixed(2)}%)`);
+
+    if (results.length === 0) {
+      return `Keine relevanten Reiseinformationen mit einer Relevanz über ${minRelevance}% gefunden.`;
+    }
+
+    return results.join('; ');
+  } catch (error) {
+    console.error('Fehler bei der Pinecone-Abfrage:', error);
+    return `Fehler bei der Abfrage der Reisedaten: ${error}`;
+  }
+}

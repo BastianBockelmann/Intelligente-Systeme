@@ -17,7 +17,11 @@ export default defineComponent({
       isSearching,
       iso3Code: '',
       content: '',
-      weatherData: ''
+      weatherData: '',
+      minRelevance: 50, // Standardwert für Relevanz
+      topK: 10, // Standardwert für Anzahl der Ergebnisse
+      travelQueryString: '', // Suchstring für Reiseinformationen
+      travelData: '', // Ergebniss für Reiseinformationen
     };
   },
   methods: {
@@ -56,6 +60,7 @@ export default defineComponent({
       }
     },
 
+    // Pinecone Datenabfrage
     async searchPinecone() {
       if (!searchQuery.value.trim()) {
         message.value = 'Bitte geben Sie einen Suchbegriff ein';
@@ -90,6 +95,7 @@ export default defineComponent({
       }
     },
 
+    // Laden des Contents für einen bestimmten ISO3-Code aus der Json
     async fetchContent() {
       if (!this.iso3Code.trim()) {
         message.value = 'Bitte geben Sie einen ISO3-Code ein';
@@ -111,6 +117,7 @@ export default defineComponent({
       }
     },
 
+    // Laden der Wetterdaten für einen bestimmten ISO3-Code aus der csv
     async fetchWeatherData() {
       if (!this.iso3Code.trim()) {
         message.value = 'Bitte geben Sie einen ISO3-Code ein';
@@ -129,6 +136,34 @@ export default defineComponent({
         }
       } catch (err) {
         this.weatherData = `Fehler beim Abrufen der Wetterdaten: ${err.message}`;
+      }
+    },
+
+    // Laden der Reiseinformationen für einen bestimmten Suchbegriff aus Pinecone mit definierter Relevanz und Anzahl der Ergebnisse
+    async fetchTravelData() {
+      if (!this.travelQueryString.trim()) {
+        message.value = 'Bitte geben Sie einen Suchbegriff für Reiseinformationen ein';
+        return;
+      }
+
+      try {
+        const { data, error } = await useFetch(`/api/queryRelevantData`, {
+          params: {
+            minRelevance: this.minRelevance,
+            topK: this.topK,
+            queryString: this.travelQueryString,
+          }
+        });
+        if (error.value) {
+          throw new Error(error.value);
+        }
+        if (data.value && data.value.travelData) {
+          this.travelData = data.value.travelData;
+        } else {
+          this.travelData = 'Keine Reiseinformationen gefunden.';
+        }
+      } catch (err) {
+        this.travelData = `Fehler bei der Abfrage der Reisedaten: ${err.message}`;
       }
     }
   }
@@ -160,12 +195,12 @@ export default defineComponent({
 
       <!-- Gesamten Content zu Iso3 Code abrufen -->
       <div class="content-fetcher">
-        <h2>Länder-Content Abrufen</h2>
+        <h2 class="text-lg font-semibold">Länder-Content Abrufen</h2>
         <!-- Eingabefeld für den ISO3-Code -->
         <input v-model="iso3Code" type="text" placeholder="Geben Sie den ISO3-Code ein" />
 
         <!-- Button, um den Content abzurufen -->
-        <button @click="fetchContent">Content abrufen</button>
+        <UButton class="ml-3" @click="fetchContent">Content abrufen</UButton>
 
         <!-- Bereich zur Anzeige des Inhalts -->
         <div v-if="content" class="content-display">
@@ -177,9 +212,9 @@ export default defineComponent({
 
       <!-- Wetterdaten zu Iso3 Code abrufen -->
       <div class="weather-fetcher mt-4">
-        <h2>Wetterdaten Abrufen</h2>
+        <h2 class="text-lg font-semibold">Wetterdaten Abrufen</h2>
         <!-- Button, um die Wetterdaten abzurufen -->
-        <button @click="fetchWeatherData">Wetterdaten abrufen</button>
+        <UButton class="ml-3" @click="fetchWeatherData">Wetterdaten abrufen</UButton>
 
         <!-- Bereich zur Anzeige der Wetterdaten -->
         <div v-if="weatherData" class="weather-display mt-2">
@@ -188,6 +223,24 @@ export default defineComponent({
         </div>
       </div>
 
+      <!-- Reisedaten basierend auf Suchstring und Relevanz abrufen -->
+      <div class="travel-data-fetcher mt-2">
+        <h2 class="text-lg font-semibold">Reiseinformationen Abrufen</h2>
+        <!-- Eingabefelder für die Abfrageparameter -->
+        <input v-model="travelQueryString" type="text" placeholder="Geben Sie einen Suchbegriff für Reiseinformationen ein" />
+        <input v-model.number="minRelevance" type="number" placeholder="Minimale Relevanz (%)" />
+        <input v-model.number="topK" type="number" placeholder="Maximale Anzahl an Ergebnissen" />
+
+        <!-- Button, um die Reiseinformationen abzurufen -->
+        <UButton class="ml-3" @click="fetchTravelData">Reiseinformationen abrufen</UButton>
+
+        <!-- Bereich zur Anzeige der Reiseinformationen -->
+        <div v-if="travelData" class="travel-data-display mt-8 space-y-4">
+          <h2 class="text-lg font-semibold">Reiseinformationen basierend auf der Abfrage</h2>
+          <p class="max-h-60 overflow-y-auto break-words p-2 border rounded">{{ travelData }}</p>
+        </div>
+      </div>
+      
 
       <!-- Pinecone Datenabfrage -->
       <div class="mt-8 space-y-4">
