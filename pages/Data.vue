@@ -167,7 +167,39 @@ export default defineComponent({
       } catch (err) {
         this.travelData = `Fehler bei der Abfrage der Reisedaten: ${err.message}`;
       }
+    },
+
+    // Laden der Reiseinformationen für einen bestimmten Suchbegriff aus Pinecone mit berücksichtigung der Länder und Anzahl der Ergebnisse
+    async fetchUniqueCountriesTravelData() {
+      if (!this.travelQueryString.trim()) {
+        message.value = 'Bitte geben Sie einen Suchbegriff für Reiseinformationen ein';
+        return;
+      }
+
+      try {
+        const { data, error } = await useFetch('/api/queryUniqueCountriesData', {
+          params: {
+            minRelevance: this.minRelevance,
+            topK: this.topK,
+            queryString: this.travelQueryString,
+          }
+        });
+
+        if (error.value) {
+          throw new Error(error.value);
+        }
+
+        if (data.value.success && data.value.results.length > 0) {
+          this.travelData = data.value.results;
+        } else {
+          this.travelData = data.value.message || 'Keine Reiseinformationen gefunden.';
+        }
+      } catch (err) {
+        this.travelData = `Fehler bei der Abfrage der Reisedaten: ${err.message}`;
+      }
     }
+
+
   }
 });
 </script>
@@ -236,6 +268,8 @@ export default defineComponent({
 
         <!-- Button, um die Reiseinformationen abzurufen -->
         <UButton class="ml-3" @click="fetchTravelData">Reiseinformationen abrufen</UButton>
+        <UButton class="ml-3" @click="fetchUniqueCountriesTravelData">Reiseinformationen für Länder statt Chunks abrufen</UButton>
+
 
         <!-- Bereich zur Anzeige der Reiseinformationen -->
         <div v-if="Array.isArray(travelData) && travelData.length > 0" class="travel-data-display mt-8 space-y-4">
@@ -243,11 +277,11 @@ export default defineComponent({
           <div v-for="(result, index) in travelData" :key="index" class="p-4 border rounded-lg">
             <h3 class="font-semibold">{{ result.countryName }}</h3>
             <p>ISO Code: {{ result.iso3CountryCode }}</p>
-              <p>Ähnlichkeit: {{ (result.score * 100).toFixed(2) }}%</p>
-              <p>Chunk: {{ result.chunkIndex }} von {{ result.totalChunks }} Chunks</p>
-              <p v-if="result.warning" class="text-red-500">
-                Warnung vorhanden!
-              </p>
+            <p>Ähnlichkeit: {{ (result.score * 100).toFixed(2) }}%</p>
+            <p>Chunk: {{ result.chunkIndex }} von {{ result.totalChunks }} Chunks</p>
+            <p v-if="result.warning" class="text-red-500">
+              Warnung vorhanden!
+            </p>
             <p class="font-semibold">Content</p>
             <p class="max-h-60 overflow-y-auto break-words p-2 border rounded">{{ result.content }}</p>
           </div>
@@ -256,7 +290,6 @@ export default defineComponent({
           <p>{{ travelData }}</p>
         </div>
       </div>
-
 
 
       <!-- Pinecone Datenabfrage -->

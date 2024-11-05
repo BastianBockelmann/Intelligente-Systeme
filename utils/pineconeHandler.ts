@@ -233,7 +233,7 @@ export function getFullContentFromJson(iso3Code: string): string | null {
   }
 }
 
-
+// Funktion zum laden der Chunks mit einer Mindestrelevanz und optionaler Anzahl an maximalen zurückgegebenen Chunks auf Basis eines Suchstrings
 export async function queryRelevantTravelData(
   minRelevance: number,
   topK: number = 10,
@@ -293,6 +293,88 @@ export async function queryRelevantTravelData(
       results: [],
       totalResults: 0,
       message: `Fehler bei der Abfrage der Reisedaten: ${error}`
+    };
+  }
+}
+
+// Funktion zum Laden der eindeutigen Länderdaten mit einer Mindestrelevanz und optionaler Anzahl an maximalen zurückgegebenen Ländern auf Basis eines Suchstrings
+// Diese Funktion stellt sicher, dass nur eindeutige Länderdaten zurückgegeben werden, indem sie die Ergebnisse filtert und den gesamten Inhalt jedes Landes lädt
+export async function queryUniqueCountriesTravelData(
+  minRelevance: number,
+  initialTopK: number = 10,
+  queryString: string
+) {
+  try {
+    const queryEmbedding = await getEmbedding(queryString);
+    let uniqueResults: { [key: string]: any } = {};
+    let topK = initialTopK;
+    let allResults = [];
+
+    // Schleife, um sicherzustellen, dass genügend unterschiedliche Länder enthalten sind
+    while (Object.keys(uniqueResults).length < initialTopK) {
+      const queryResponse = await pinecone.Index(indexName).query({
+        vector: queryEmbedding,
+        topK: topK,
+        includeMetadata: true,
+      });
+
+      if (queryResponse.matches.length === 0) {
+        return {
+          success: true,
+          results: [],
+          totalResults: 0,
+          message: "Keine Einträge gefunden.",
+        };
+      }
+
+      // Ergebnisse filtern und nur die relevanten behalten
+      allResults = queryResponse.matches
+        .filter((match) => match.score >= minRelevance / 100)
+        .map((match) => ({
+          score: match.score,
+          countryName: match.metadata?.countryName,
+          iso3CountryCode: match.metadata?.iso3CountryCode,
+          warning: match.metadata?.warning,
+          chunkIndex: match.metadata?.chunkIndex,
+          totalChunks: match.metadata?.totalChunks,
+          id: match.id,
+        }));
+
+      // Unique-Länder extrahieren und gesamten Content laden
+      uniqueResults = {};
+      for (const result of allResults) {
+        const iso3Code = result.iso3CountryCode;
+        if (!uniqueResults[iso3Code]) {
+          const fullContent = getFullContentFromJson(iso3Code); // Lade den gesamten Content des Landes
+          if (fullContent) {
+            uniqueResults[iso3Code] = {
+              ...result,
+              content: fullContent, // Speichere den gesamten Content
+            };
+          }
+        }
+        if (Object.keys(uniqueResults).length >= initialTopK) break;
+      }
+
+      if (Object.keys(uniqueResults).length < initialTopK) {
+        topK += 1; // TopK erhöhen, wenn nicht genügend unterschiedliche Länder gefunden wurden
+      }
+    }
+
+    // Rückgabe der eindeutigen Länderergebnisse
+    return {
+      success: true,
+      results: Object.values(uniqueResults),
+      totalResults: Object.keys(uniqueResults).length,
+      message: null,
+    };
+  } catch (error) {
+    console.error("Fehler bei der Pinecone-Abfrage:", error);
+    return {
+      success: false,
+      results: [],
+      totalResults: 0,
+      message: `Fehler bei der Abfrage der Reisedaten: ${error}`,
     };
   }
 }
