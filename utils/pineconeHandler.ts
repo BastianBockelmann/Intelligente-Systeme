@@ -7,11 +7,10 @@
 // 4. Abfrage von Daten aus Pinecone
 // 5. optional: Löschen von Daten in Pinecone
 
-
 // Importieren der benötigten Bibliotheken
 import * as fs from 'fs';
 import { join } from 'path';
-import { encode } from 'gpt-3-encoder';
+import { encode, decode } from 'gpt-3-encoder';
 import OpenAI from 'openai';
 import { Pinecone } from '@pinecone-database/pinecone';
 
@@ -46,7 +45,7 @@ async function getEmbedding(text: string) {
 }
 
 // Funktion zum Aufteilen von Text in Chunks (Abschnitte), um Token-Limits einzuhalten
-function splitTextIntoChunks(text: string, maxTokens: number, overlap: number) {
+function splitTextIntoChunks(text: string, maxTokens: number, overlap: number, countryName: string) {
   const tokens = encode(text);  // Tokenisierung des gesamten Textes
   let chunks = [];
   let start = 0;
@@ -54,13 +53,19 @@ function splitTextIntoChunks(text: string, maxTokens: number, overlap: number) {
   while (start < tokens.length) {
     const end = Math.min(start + maxTokens, tokens.length);  // Berechnen des Endes jedes Chunks
     const chunkTokens = tokens.slice(start, end);  // Erstellen des Token-Chunks
-    const chunkText = chunkTokens.map(token => token).join('');  // Zusammenführen der Tokens in einen Text-Chunk
-    chunks.push(chunkText);  // Hinzufügen des Chunks zur Liste
+    const chunkText = `${countryName}: ${decode(chunkTokens)}`;  // Dekodieren der Tokens in den ursprünglichen Text und Hinzufügen des Ländernamens
+
+    chunks.push({
+      text: chunkText,  // Speichern des Text-Chunks
+      tokens: chunkTokens  // Speichern der Tokeninformationen
+    });
+
     start += maxTokens - overlap;  // Aktualisieren des Startindex für den nächsten Chunk mit Überlappung
   }
 
   return chunks;
 }
+
 
 // Funktion zum Prüfen und ggf. Initialisieren des Pinecone-Indexes
 async function checkAndInitIndex() {
@@ -100,8 +105,12 @@ export async function processAndStoreData() {
   console.log(indexInitMessage);  // Log-Eintrag zur Index-Initialisierung
 
   const countries = Object.entries(countriesData);  // Umwandlung in Array von [key, value] Paaren
+  const totalCountries = countries.length;  // Gesamtanzahl der Länder bestimmen
 
-  for (const [iso3Code, countryData] of countries) {
+  for (let countryIndex = 0; countryIndex < totalCountries; countryIndex++) {
+    const [iso3Code, countryData] = countries[countryIndex];
+    console.log(`Verarbeite Land ${countryIndex + 1} von ${totalCountries}: ${iso3Code}`);  // Fortschritt anzeigen
+
     // Typ-Sicherstellung und Extraktion der benötigten Daten
     const country = countryData as {
       countryName: string;
@@ -110,39 +119,42 @@ export async function processAndStoreData() {
       warning: boolean;
       // ggf. weitere Felder hinzufügen
     };
-// Zusammenführen der relevanten Textdaten
-const countryText = `${country.countryName}: ${country.content}`;
-const maxTokens = 5000;
-const overlap = 1000;
-const countryChunks = splitTextIntoChunks(countryText, maxTokens, overlap);
+    
+    // Zusammenführen der relevanten Textdaten
+    const countryText = `${country.countryName}: ${country.content}`;
+    const maxTokens = 5000;
+    const overlap = 1000;
+    const countryChunks = splitTextIntoChunks(countryText, maxTokens, overlap, country.countryName);
+    const totalChunks = countryChunks.length;
 
-// Verarbeitung der Chunks
-for (let i = 0; i < countryChunks.length; i++) {
-  try {
-    const chunkText = countryChunks[i];
-    const embedding = await getEmbedding(chunkText);
+    // Verarbeitung der Chunks
+    for (let i = 0; i < countryChunks.length; i++) {
+      try {
+        const chunk = countryChunks[i];
+        const embedding = await getEmbedding(chunk.text);  // Erstellen des Embeddings für den Chunk
 
-    // Speichern in Pinecone mit korrekter ID und Metadaten
-    await pinecone.Index(indexName).upsert([
-      {
-        id: `${iso3Code}_chunk_${i}`, // Verwendung des ISO3-Codes aus der Schlüsselstruktur
-        values: embedding,
-        metadata: {
-          countryName: country.countryName,
-          iso3CountryCode: iso3Code, // Verwendung des ISO3-Codes aus der Schlüsselstruktur
-          warning: country.warning,
-          content: country.content,
-          chunkIndex: i,
-        },
-      },
-    ]);
+        // Speichern in Pinecone mit korrekter ID und Metadaten; nur der Text des Chunks wird als Content gespeichert
+        await pinecone.Index(indexName).upsert([
+          {
+            id: `${iso3Code}_chunk_${i}`, // Verwendung des ISO3-Codes aus der Schlüsselstruktur
+            values: embedding,
+            metadata: {
+              countryName: country.countryName,
+              iso3CountryCode: iso3Code, // Verwendung des ISO3-Codes aus der Schlüsselstruktur
+              warning: country.warning,
+              content: chunk.text,  // Speichern nur des jeweiligen Chunks
+              chunkIndex: i,
+              totalChunks: totalChunks,
+            },
+          },
+        ]);
 
-    console.log(`Stored chunk ${i} for country ${country.countryName} (${iso3Code})`);
-  } catch (error) {
-    console.error(`Error processing chunk ${i} for country ${iso3Code}: ${error}`);
+        console.log(`Stored chunk ${i} for country ${country.countryName} (${iso3Code})`);
+      } catch (error) {
+        console.error(`Error processing chunk ${i} for country ${iso3Code}: ${error}`);
+      }
+    }
   }
-}
-}
 }
 
 // Funktion zum Abfragen von Daten aus Pinecone
@@ -189,6 +201,7 @@ export async function queryPineconeData(
       warning: match.metadata?.warning,
       content: match.metadata?.content,
       chunkIndex: match.metadata?.chunkIndex,
+      totalChunks: match.metadata?.totalChunks,
       id: match.id
     }));
 
@@ -205,6 +218,163 @@ export async function queryPineconeData(
       error: `Fehler bei der Datenbankabfrage: ${error}`,
       results: [],
       totalResults: 0
+    };
+  }
+}
+
+// Funktion zum Abrufen des gesamten Contents eines Landes aus der JSON-Datei anhand des ISO3-Codes
+export function getFullContentFromJson(iso3Code: string): string | null {
+  const countryData = countriesData[iso3Code];  // Suche den Eintrag basierend auf dem iso3Code
+  if (countryData && countryData.content) {
+    return countryData.content;  // Rückgabe des gesamten Contents des Eintrags
+  } else {
+    console.error(`Kein Content für ISO3-Code ${iso3Code} gefunden.`);
+    return null;  // Rückgabe null, wenn kein Eintrag oder Content vorhanden ist
+  }
+}
+
+// Funktion zum laden der Chunks mit einer Mindestrelevanz und optionaler Anzahl an maximalen zurückgegebenen Chunks auf Basis eines Suchstrings
+export async function queryRelevantTravelData(
+  minRelevance: number,
+  topK: number = 10,
+  queryString: string
+) {
+  try {
+    const queryEmbedding = await getEmbedding(queryString);
+
+    const queryResponse = await pinecone.Index(indexName).query({
+      vector: queryEmbedding,
+      topK: topK,
+      includeMetadata: true,
+    });
+
+    if (queryResponse.matches.length === 0) {
+      return {
+        success: true,
+        results: [],
+        totalResults: 0,
+        message: "Keine Einträge gefunden."
+      };
+    }
+
+    // Filterung und Formatierung der Ergebnisse
+    const results = queryResponse.matches
+      .filter(match => match.score >= minRelevance / 100)
+      .map(match => ({
+        score: match.score,
+        countryName: match.metadata?.countryName,
+        iso3CountryCode: match.metadata?.iso3CountryCode,
+        warning: match.metadata?.warning,
+        content: match.metadata?.content,
+        chunkIndex: match.metadata?.chunkIndex,
+        totalChunks: match.metadata?.totalChunks,
+        id: match.id
+      }));
+
+    if (results.length === 0) {
+      return {
+        success: true,
+        results: [],
+        totalResults: 0,
+        message: `Keine relevanten Reiseinformationen mit einer Relevanz über ${minRelevance}% gefunden.`
+      };
+    }
+
+    return {
+      success: true,
+      results,
+      totalResults: results.length,
+      message: null
+    };
+  } catch (error) {
+    console.error('Fehler bei der Pinecone-Abfrage:', error);
+    return {
+      success: false,
+      results: [],
+      totalResults: 0,
+      message: `Fehler bei der Abfrage der Reisedaten: ${error}`
+    };
+  }
+}
+
+// Funktion zum Laden der eindeutigen Länderdaten mit einer Mindestrelevanz und optionaler Anzahl an maximalen zurückgegebenen Ländern auf Basis eines Suchstrings
+// Diese Funktion stellt sicher, dass nur eindeutige Länderdaten zurückgegeben werden, indem sie die Ergebnisse filtert und den gesamten Inhalt jedes Landes lädt
+export async function queryUniqueCountriesTravelData(
+  minRelevance: number,
+  initialTopK: number = 10,
+  queryString: string
+) {
+  try {
+    const queryEmbedding = await getEmbedding(queryString);
+    let uniqueResults: { [key: string]: any } = {};
+    let topK = initialTopK;
+    let allResults = [];
+
+    // Schleife, um sicherzustellen, dass genügend unterschiedliche Länder enthalten sind
+    while (Object.keys(uniqueResults).length < initialTopK) {
+      const queryResponse = await pinecone.Index(indexName).query({
+        vector: queryEmbedding,
+        topK: topK,
+        includeMetadata: true,
+      });
+
+      if (queryResponse.matches.length === 0) {
+        return {
+          success: true,
+          results: [],
+          totalResults: 0,
+          message: "Keine Einträge gefunden.",
+        };
+      }
+
+      // Ergebnisse filtern und nur die relevanten behalten
+      allResults = queryResponse.matches
+        .filter((match) => match.score >= minRelevance / 100)
+        .map((match) => ({
+          score: match.score,
+          countryName: match.metadata?.countryName,
+          iso3CountryCode: match.metadata?.iso3CountryCode,
+          warning: match.metadata?.warning,
+          chunkIndex: match.metadata?.chunkIndex,
+          totalChunks: match.metadata?.totalChunks,
+          id: match.id,
+        }));
+
+      // Unique-Länder extrahieren und gesamten Content laden
+      uniqueResults = {};
+      for (const result of allResults) {
+        const iso3Code = result.iso3CountryCode;
+        if (!uniqueResults[iso3Code]) {
+          const fullContent = getFullContentFromJson(iso3Code); // Lade den gesamten Content des Landes
+          if (fullContent) {
+            uniqueResults[iso3Code] = {
+              ...result,
+              content: fullContent, // Speichere den gesamten Content
+            };
+          }
+        }
+        if (Object.keys(uniqueResults).length >= initialTopK) break;
+      }
+
+      if (Object.keys(uniqueResults).length < initialTopK) {
+        topK += 1; // TopK erhöhen, wenn nicht genügend unterschiedliche Länder gefunden wurden
+      }
+    }
+
+    // Rückgabe der eindeutigen Länderergebnisse
+    return {
+      success: true,
+      results: Object.values(uniqueResults),
+      totalResults: Object.keys(uniqueResults).length,
+      message: null,
+    };
+  } catch (error) {
+    console.error("Fehler bei der Pinecone-Abfrage:", error);
+    return {
+      success: false,
+      results: [],
+      totalResults: 0,
+      message: `Fehler bei der Abfrage der Reisedaten: ${error}`,
     };
   }
 }
