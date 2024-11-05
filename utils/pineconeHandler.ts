@@ -234,7 +234,11 @@ export function getFullContentFromJson(iso3Code: string): string | null {
 }
 
 
-export async function queryRelevantTravelData(minRelevance: number, topK: number = 10, queryString: string): Promise<string> {
+export async function queryRelevantTravelData(
+  minRelevance: number,
+  topK: number = 10,
+  queryString: string
+) {
   try {
     const queryEmbedding = await getEmbedding(queryString);
 
@@ -242,27 +246,53 @@ export async function queryRelevantTravelData(minRelevance: number, topK: number
       vector: queryEmbedding,
       topK: topK,
       includeMetadata: true,
-      // Entferne den Score-Filter, um alle möglichen Übereinstimmungen zu sehen
     });
 
     if (queryResponse.matches.length === 0) {
-      return `Keine Einträge gefunden.`;
+      return {
+        success: true,
+        results: [],
+        totalResults: 0,
+        message: "Keine Einträge gefunden."
+      };
     }
 
-    // Logge die Scores, um zu prüfen, warum keine Ergebnisse mit hoher Relevanz zurückgegeben werden
-    console.log("Pinecone Query Results:", queryResponse.matches);
-
+    // Filterung und Formatierung der Ergebnisse
     const results = queryResponse.matches
-      .filter(match => match.score >= minRelevance / 100) // Manuelles Filtern der relevanten Ergebnisse
-      .map(match => `${match.metadata?.countryName} (ISO: ${match.metadata?.iso3CountryCode}): ${match.metadata?.content} (Relevanz: ${(match.score * 100).toFixed(2)}%)`);
+      .filter(match => match.score >= minRelevance / 100)
+      .map(match => ({
+        score: match.score,
+        countryName: match.metadata?.countryName,
+        iso3CountryCode: match.metadata?.iso3CountryCode,
+        warning: match.metadata?.warning,
+        content: match.metadata?.content,
+        chunkIndex: match.metadata?.chunkIndex,
+        totalChunks: match.metadata?.totalChunks,
+        id: match.id
+      }));
 
     if (results.length === 0) {
-      return `Keine relevanten Reiseinformationen mit einer Relevanz über ${minRelevance}% gefunden.`;
+      return {
+        success: true,
+        results: [],
+        totalResults: 0,
+        message: `Keine relevanten Reiseinformationen mit einer Relevanz über ${minRelevance}% gefunden.`
+      };
     }
 
-    return results.join('; ');
+    return {
+      success: true,
+      results,
+      totalResults: results.length,
+      message: null
+    };
   } catch (error) {
     console.error('Fehler bei der Pinecone-Abfrage:', error);
-    return `Fehler bei der Abfrage der Reisedaten: ${error}`;
+    return {
+      success: false,
+      results: [],
+      totalResults: 0,
+      message: `Fehler bei der Abfrage der Reisedaten: ${error}`
+    };
   }
 }

@@ -147,20 +147,22 @@ export default defineComponent({
       }
 
       try {
-        const { data, error } = await useFetch(`/api/queryRelevantData`, {
+        const { data, error } = await useFetch('/api/queryRelevantData', {
           params: {
             minRelevance: this.minRelevance,
             topK: this.topK,
             queryString: this.travelQueryString,
           }
         });
+
         if (error.value) {
           throw new Error(error.value);
         }
-        if (data.value && data.value.travelData) {
-          this.travelData = data.value.travelData;
+
+        if (data.value.success && data.value.results.length > 0) {
+          this.travelData = data.value.results;
         } else {
-          this.travelData = 'Keine Reiseinformationen gefunden.';
+          this.travelData = data.value.message || 'Keine Reiseinformationen gefunden.';
         }
       } catch (err) {
         this.travelData = `Fehler bei der Abfrage der Reisedaten: ${err.message}`;
@@ -227,7 +229,8 @@ export default defineComponent({
       <div class="travel-data-fetcher mt-2">
         <h2 class="text-lg font-semibold">Reiseinformationen Abrufen</h2>
         <!-- Eingabefelder für die Abfrageparameter -->
-        <input v-model="travelQueryString" type="text" placeholder="Geben Sie einen Suchbegriff für Reiseinformationen ein" />
+        <input v-model="travelQueryString" type="text"
+          placeholder="Geben Sie einen Suchbegriff für Reiseinformationen ein" />
         <input v-model.number="minRelevance" type="number" placeholder="Minimale Relevanz (%)" />
         <input v-model.number="topK" type="number" placeholder="Maximale Anzahl an Ergebnissen" />
 
@@ -235,12 +238,26 @@ export default defineComponent({
         <UButton class="ml-3" @click="fetchTravelData">Reiseinformationen abrufen</UButton>
 
         <!-- Bereich zur Anzeige der Reiseinformationen -->
-        <div v-if="travelData" class="travel-data-display mt-8 space-y-4">
+        <div v-if="Array.isArray(travelData) && travelData.length > 0" class="travel-data-display mt-8 space-y-4">
           <h2 class="text-lg font-semibold">Reiseinformationen basierend auf der Abfrage</h2>
-          <p class="max-h-60 overflow-y-auto break-words p-2 border rounded">{{ travelData }}</p>
+          <div v-for="(result, index) in travelData" :key="index" class="p-4 border rounded-lg">
+            <h3 class="font-semibold">{{ result.countryName }}</h3>
+            <p>ISO Code: {{ result.iso3CountryCode }}</p>
+              <p>Ähnlichkeit: {{ (result.score * 100).toFixed(2) }}%</p>
+              <p>Chunk: {{ result.chunkIndex }} von {{ result.totalChunks }} Chunks</p>
+              <p v-if="result.warning" class="text-red-500">
+                Warnung vorhanden!
+              </p>
+            <p class="font-semibold">Content</p>
+            <p class="max-h-60 overflow-y-auto break-words p-2 border rounded">{{ result.content }}</p>
+          </div>
+        </div>
+        <div v-else-if="typeof travelData === 'string'" class="mt-2">
+          <p>{{ travelData }}</p>
         </div>
       </div>
-      
+
+
 
       <!-- Pinecone Datenabfrage -->
       <div class="mt-8 space-y-4">
