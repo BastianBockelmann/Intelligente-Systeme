@@ -18,6 +18,7 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@nuxtjs/tailwindcss",
     "@pinia/nuxt",
+    "@nuxt/image",
   ],
   devtools: { enabled: true },
   typescript: {

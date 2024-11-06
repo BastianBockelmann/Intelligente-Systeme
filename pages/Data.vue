@@ -279,8 +279,8 @@ export default defineComponent({
 
 
         <!-- Bereich zur Anzeige der Reiseinformationen -->
-        <div v-if="Array.isArray(travelData) && travelData.length > 0" class="travel-data-display mt-8 space-y-4">
-          <h2 class="text-lg font-semibold">Reiseinformationen basierend auf der Abfrage</h2>
+        <div v-if="Array.isArray(travelData) && travelData.length > 0" class="dark:text-gray-300 travel-data-display mt-8 space-y-4">
+          <h2 class="text-lg dark:text-gray-300 font-semibold">Reiseinformationen basierend auf der Abfrage</h2>
           <div v-for="(result, index) in travelData" :key="index" class="p-4 border rounded-lg">
             <h3 class="font-semibold">{{ result.countryName }}</h3>
             <p>ISO Code: {{ result.iso3CountryCode }}</p>
@@ -300,8 +300,8 @@ export default defineComponent({
 
 
       <!-- Pinecone Datenabfrage -->
-      <div class="mt-8 space-y-4">
-        <h2 class="text-lg font-semibold">Pinecone Datenabfrage</h2>
+      <div class="mt-8 space-y-4 dark:text-gray-300">
+        <h2 class="text-lg dark:text-gray-300 font-semibold">Pinecone Datenabfrage</h2>
 
         <div class="flex space-x-2">
           <UInput v-model="searchQuery" placeholder="Geben Sie Ihren Suchbegriff ein..." class="flex-grow"
@@ -319,7 +319,7 @@ export default defineComponent({
         <div v-if="searchResults.length > 0" class="space-y-4">
           <div v-for="(result, index) in searchResults" :key="index" class="p-4 border rounded-lg">
             <h3 class="font-semibold">{{ result.countryName }}</h3>
-            <div class="text-sm text-gray-600">
+            <div class="text-sm text-gray-600 dark:text-gray-300">
               <p>ISO Code: {{ result.iso3CountryCode }}</p>
               <p>Ähnlichkeit: {{ (result.score * 100).toFixed(2) }}%</p>
               <p>Chunk: {{ result.chunkIndex }} von {{ result.totalChunks }} Chunks</p>
