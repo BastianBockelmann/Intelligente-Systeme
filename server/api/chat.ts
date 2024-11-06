@@ -36,9 +36,26 @@ export default defineLazyEventHandler(() => {
     streaming: true,
   });
 
+  // Klassifizierung der Frage (Wetterdaten, Auswertiges Amt Daten)
+  const themePrompt = new PromptTemplate({
+    template: `
+      Du bist ein Assistent, der Informationen und Hilfe zu Auslandsreisen und relevanten Vorgaben des Auswärtigen Amts in Deutschland bereitstellt.
+      Deine Aufgabe ist es, präzise und hilfreiche Informationen zu liefern, die für jemanden, der ins Ausland reisen möchte, wichtig sind.
+      Dazu gehören Reisehinweise, Sicherheitswarnungen und Empfehlungen des Auswärtigen Amts.
+
+      Benutzerfrage: {userQuestion}
+
+      Bitte klassifiziere die Nutzerfrage zu einer Wahl zwischen "Wetterabfrage", "Auswertiges Amt Daten" oder "Beide"
+
+      Antworte nur mit der Auswahl zwischen den beiden klassifizierungen, die gegeben sind!
+    `,
+    inputVariables: ["userQuestion"]
+  })
+
+  
+  // Alle Prompt
   const promptTemplate = new PromptTemplate({
     template: `
-
         Du hast folgende Daten zu verfügung:
 
         Daten vom Auswertigen Amt: {auswertigesAmtData}
@@ -51,7 +68,7 @@ export default defineLazyEventHandler(() => {
         Bitte beantworte die folgende Frage: {userQuestion}
 
         Gib eine detaillierte Antwort basierend auf den offiziellen Richtlinien und Informationen des Auswärtigen Amts. Beantworte die Frage nur wenn du relevante Informationen findest. Wenn nicht, antworte mit 'Entschuldigen Sie ich habe dazu keine genaue Antwort.'`,
-    inputVariables: ["userQuestion"],
+    inputVariables: ["userQuestion"], ["auswertigesAmtData"], ["weatherData"],
   });
 
   return defineEventHandler(async (event) => {
