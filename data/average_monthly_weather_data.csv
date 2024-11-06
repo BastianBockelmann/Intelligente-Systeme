@@ -1,0 +1,2074 @@
+Country,ISO3_Code,Month,tmin,tmax
+Albania,ALB,April,-18,33
+Albania,ALB,August,12,41
+Albania,ALB,December,-7,25
+Albania,ALB,February,-6,27
+Albania,ALB,January,-10,20
+Albania,ALB,July,13,41
+Albania,ALB,June,9,38
+Albania,ALB,March,-6,26
+Albania,ALB,May,5,36
+Albania,ALB,November,-3,31
+Albania,ALB,October,0,34
+Albania,ALB,September,6,37
+Algeria,DZA,April,5,36
+Algeria,DZA,August,17,43
+Algeria,DZA,December,4,28
+Algeria,DZA,February,3,31
+Algeria,DZA,January,2,25
+Algeria,DZA,July,16,46
+Algeria,DZA,June,12,41
+Algeria,DZA,March,4,32
+Algeria,DZA,May,7,37
+Algeria,DZA,November,6,33
+Algeria,DZA,October,10,39
+Algeria,DZA,September,13,41
+Angola,AGO,April,17,38
+Angola,AGO,August,13,31
+Angola,AGO,December,18,37
+Angola,AGO,February,21,37
+Angola,AGO,January,18,38
+Angola,AGO,July,17,35
+Angola,AGO,June,18,32
+Angola,AGO,March,21,39
+Angola,AGO,May,20,36
+Angola,AGO,November,18,34
+Angola,AGO,October,19,36
+Angola,AGO,September,18,32
+Antarctica,ATA,April,-24,13
+Antarctica,ATA,August,-29,11
+Antarctica,ATA,December,-7,15
+Antarctica,ATA,February,-13,18
+Antarctica,ATA,January,-7,15
+Antarctica,ATA,July,-30,11
+Antarctica,ATA,June,-29,13
+Antarctica,ATA,March,-18,18
+Antarctica,ATA,May,-24,17
+Antarctica,ATA,November,-14,13
+Antarctica,ATA,October,-23,14
+Antarctica,ATA,September,-28,10
+Argentina,ARG,April,-6,25
+Argentina,ARG,August,-11,24
+Argentina,ARG,December,1,27
+Argentina,ARG,February,2,28
+Argentina,ARG,January,2,28
+Argentina,ARG,July,-12,22
+Argentina,ARG,June,-13,22
+Argentina,ARG,March,-1,27
+Argentina,ARG,May,-10,24
+Argentina,ARG,November,-2,28
+Argentina,ARG,October,-5,28
+Argentina,ARG,September,-8,27
+Armenia,ARM,April,-7,20
+Armenia,ARM,August,4,31
+Armenia,ARM,December,-15,16
+Armenia,ARM,February,-20,17
+Armenia,ARM,January,-19,13
+Armenia,ARM,July,3,28
+Armenia,ARM,June,3,28
+Armenia,ARM,March,-7,16
+Armenia,ARM,May,-3,24
+Armenia,ARM,November,-10,22
+Armenia,ARM,October,-6,28
+Armenia,ARM,September,-3,32
+Australia,AUS,April,2,40
+Australia,AUS,August,7,39
+Australia,AUS,December,22,43
+Australia,AUS,February,21,40
+Australia,AUS,January,21,40
+Australia,AUS,July,5,38
+Australia,AUS,June,6,37
+Australia,AUS,March,14,38
+Australia,AUS,May,8,39
+Australia,AUS,November,20,42
+Australia,AUS,October,17,43
+Australia,AUS,September,10,41
+Austria,AUT,April,-4,28
+Austria,AUT,August,7,36
+Austria,AUT,December,-14,15
+Austria,AUT,February,-15,20
+Austria,AUT,January,-14,18
+Austria,AUT,July,9,36
+Austria,AUT,June,7,36
+Austria,AUT,March,-13,23
+Austria,AUT,May,1,32
+Austria,AUT,November,-7,22
+Austria,AUT,October,0,27
+Austria,AUT,September,1,35
+Azerbaijan,AZE,April,1,31
+Azerbaijan,AZE,August,14,41
+Azerbaijan,AZE,December,-4,22
+Azerbaijan,AZE,February,-8,22
+Azerbaijan,AZE,January,-8,19
+Azerbaijan,AZE,July,14,39
+Azerbaijan,AZE,June,12,38
+Azerbaijan,AZE,March,-5,26
+Azerbaijan,AZE,May,7,34
+Azerbaijan,AZE,November,-2,29
+Azerbaijan,AZE,October,3,30
+Azerbaijan,AZE,September,9,38
+Bahamas,BHS,April,13,34
+Bahamas,BHS,August,19,38
+Bahamas,BHS,December,11,31
+Bahamas,BHS,February,10,33
+Bahamas,BHS,January,12,32
+Bahamas,BHS,July,20,36
+Bahamas,BHS,June,20,36
+Bahamas,BHS,March,12,33
+Bahamas,BHS,May,16,34
+Bahamas,BHS,November,15,33
+Bahamas,BHS,October,18,35
+Bahamas,BHS,September,7,35
+Bahrain,BHR,April,18,41
+Bahrain,BHR,August,29,46
+Bahrain,BHR,December,12,30
+Bahrain,BHR,February,8,31
+Bahrain,BHR,January,10,30
+Bahrain,BHR,July,30,46
+Bahrain,BHR,June,26,47
+Bahrain,BHR,March,14,40
+Bahrain,BHR,May,21,44
+Bahrain,BHR,November,17,36
+Bahrain,BHR,October,21,42
+Bahrain,BHR,September,27,46
+Bangladesh,BGD,April,16,39
+Bangladesh,BGD,August,24,38
+Bangladesh,BGD,December,9,30
+Bangladesh,BGD,February,7,32
+Bangladesh,BGD,January,6,28
+Bangladesh,BGD,July,24,38
+Bangladesh,BGD,June,22,39
+Bangladesh,BGD,March,13,36
+Bangladesh,BGD,May,14,38
+Bangladesh,BGD,November,13,34
+Bangladesh,BGD,October,18,36
+Bangladesh,BGD,September,22,38
+Belarus,BLR,April,-8,26
+Belarus,BLR,August,4,34
+Belarus,BLR,December,-22,11
+Belarus,BLR,February,-25,9
+Belarus,BLR,January,-30,10
+Belarus,BLR,July,5,32
+Belarus,BLR,June,3,32
+Belarus,BLR,March,-21,18
+Belarus,BLR,May,-3,30
+Belarus,BLR,November,-14,13
+Belarus,BLR,October,-11,21
+Belarus,BLR,September,-1,27
+Belgium,BEL,April,-3,28
+Belgium,BEL,August,8,36
+Belgium,BEL,December,-6,16
+Belgium,BEL,February,-9,20
+Belgium,BEL,January,-8,16
+Belgium,BEL,July,8,40
+Belgium,BEL,June,6,33
+Belgium,BEL,March,-10,24
+Belgium,BEL,May,1,31
+Belgium,BEL,November,-4,20
+Belgium,BEL,October,1,26
+Belgium,BEL,September,4,34
+Belize,BLZ,April,18,37
+Belize,BLZ,August,22,34
+Belize,BLZ,December,14,32
+Belize,BLZ,February,13,32
+Belize,BLZ,January,14,31
+Belize,BLZ,July,21,33
+Belize,BLZ,June,23,36
+Belize,BLZ,March,18,34
+Belize,BLZ,May,21,36
+Belize,BLZ,November,17,33
+Belize,BLZ,October,19,35
+Belize,BLZ,September,21,34
+Benin,BEN,April,22,43
+Benin,BEN,August,19,34
+Benin,BEN,December,12,38
+Benin,BEN,February,14,42
+Benin,BEN,January,13,39
+Benin,BEN,July,20,39
+Benin,BEN,June,19,40
+Benin,BEN,March,19,43
+Benin,BEN,May,18,42
+Benin,BEN,November,16,39
+Benin,BEN,October,17,44
+Benin,BEN,September,17,35
+Bermuda,BMU,April,13,27
+Bermuda,BMU,August,21,32
+Bermuda,BMU,December,10,26
+Bermuda,BMU,February,11,24
+Bermuda,BMU,January,10,25
+Bermuda,BMU,July,20,32
+Bermuda,BMU,June,17,31
+Bermuda,BMU,March,9,26
+Bermuda,BMU,May,14,28
+Bermuda,BMU,November,12,27
+Bermuda,BMU,October,15,30
+Bermuda,BMU,September,20,31
+"Bolivia, Plurinational State of",BOL,April,15,36
+"Bolivia, Plurinational State of",BOL,August,10,38
+"Bolivia, Plurinational State of",BOL,December,19,37
+"Bolivia, Plurinational State of",BOL,February,18,36
+"Bolivia, Plurinational State of",BOL,January,18,37
+"Bolivia, Plurinational State of",BOL,July,8,37
+"Bolivia, Plurinational State of",BOL,June,9,36
+"Bolivia, Plurinational State of",BOL,March,17,35
+"Bolivia, Plurinational State of",BOL,May,12,36
+"Bolivia, Plurinational State of",BOL,November,14,39
+"Bolivia, Plurinational State of",BOL,October,15,40
+"Bolivia, Plurinational State of",BOL,September,14,40
+Bosnia and Herzegovina,BIH,April,-5,32
+Bosnia and Herzegovina,BIH,August,7,41
+Bosnia and Herzegovina,BIH,December,-9,23
+Bosnia and Herzegovina,BIH,February,-8,27
+Bosnia and Herzegovina,BIH,January,-18,27
+Bosnia and Herzegovina,BIH,July,9,42
+Bosnia and Herzegovina,BIH,June,7,39
+Bosnia and Herzegovina,BIH,March,-14,27
+Bosnia and Herzegovina,BIH,May,0,33
+Bosnia and Herzegovina,BIH,November,-8,29
+Bosnia and Herzegovina,BIH,October,-2,30
+Bosnia and Herzegovina,BIH,September,-40,54
+Botswana,BWA,April,5,34
+Botswana,BWA,August,0,35
+Botswana,BWA,December,14,39
+Botswana,BWA,February,15,38
+Botswana,BWA,January,16,41
+Botswana,BWA,July,-2,30
+Botswana,BWA,June,-3,30
+Botswana,BWA,March,13,40
+Botswana,BWA,May,2,33
+Botswana,BWA,November,9,41
+Botswana,BWA,October,8,39
+Botswana,BWA,September,1,37
+Brunei Darussalam,BRN,April,21,36
+Brunei Darussalam,BRN,August,22,36
+Brunei Darussalam,BRN,December,20,34
+Brunei Darussalam,BRN,February,21,34
+Brunei Darussalam,BRN,January,21,36
+Brunei Darussalam,BRN,July,21,36
+Brunei Darussalam,BRN,June,21,36
+Brunei Darussalam,BRN,March,21,35
+Brunei Darussalam,BRN,May,22,36
+Brunei Darussalam,BRN,November,22,35
+Brunei Darussalam,BRN,October,22,35
+Brunei Darussalam,BRN,September,21,37
+Bulgaria,BGR,April,-5,32
+Bulgaria,BGR,August,8,40
+Bulgaria,BGR,December,-19,23
+Bulgaria,BGR,February,-14,24
+Bulgaria,BGR,January,-23,20
+Bulgaria,BGR,July,9,39
+Bulgaria,BGR,June,7,39
+Bulgaria,BGR,March,-14,27
+Bulgaria,BGR,May,1,33
+Bulgaria,BGR,November,-12,29
+Bulgaria,BGR,October,-3,30
+Bulgaria,BGR,September,-1,36
+Burkina Faso,BFA,April,19,48
+Burkina Faso,BFA,August,20,45
+Burkina Faso,BFA,December,12,39
+Burkina Faso,BFA,February,12,43
+Burkina Faso,BFA,January,9,39
+Burkina Faso,BFA,July,20,41
+Burkina Faso,BFA,June,21,44
+Burkina Faso,BFA,March,14,44
+Burkina Faso,BFA,May,22,46
+Burkina Faso,BFA,November,16,41
+Burkina Faso,BFA,October,18,42
+Burkina Faso,BFA,September,20,42
+Cabo Verde,CPV,April,19,32
+Cabo Verde,CPV,August,21,35
+Cabo Verde,CPV,December,16,32
+Cabo Verde,CPV,February,16,30
+Cabo Verde,CPV,January,16,33
+Cabo Verde,CPV,July,22,35
+Cabo Verde,CPV,June,20,33
+Cabo Verde,CPV,March,14,32
+Cabo Verde,CPV,May,19,34
+Cabo Verde,CPV,November,19,33
+Cabo Verde,CPV,October,20,36
+Cabo Verde,CPV,September,23,35
+Cambodia,KHM,April,21,41
+Cambodia,KHM,August,19,37
+Cambodia,KHM,December,16,34
+Cambodia,KHM,February,16,36
+Cambodia,KHM,January,14,35
+Cambodia,KHM,July,20,37
+Cambodia,KHM,June,21,38
+Cambodia,KHM,March,22,39
+Cambodia,KHM,May,22,40
+Cambodia,KHM,November,22,37
+Cambodia,KHM,October,22,36
+Cambodia,KHM,September,19,39
+Cameroon,CMR,April,21,45
+Cameroon,CMR,August,20,37
+Cameroon,CMR,December,13,40
+Cameroon,CMR,February,15,43
+Cameroon,CMR,January,12,41
+Cameroon,CMR,July,20,38
+Cameroon,CMR,June,20,43
+Cameroon,CMR,March,20,44
+Cameroon,CMR,May,21,44
+Cameroon,CMR,November,17,40
+Cameroon,CMR,October,15,39
+Cameroon,CMR,September,20,36
+Canada,CAN,April,-30,26
+Canada,CAN,August,1,36
+Canada,CAN,December,-42,8
+Canada,CAN,February,-43,10
+Canada,CAN,January,-42,9
+Canada,CAN,July,4,35
+Canada,CAN,June,0,36
+Canada,CAN,March,-39,19
+Canada,CAN,May,-9,30
+Canada,CAN,November,-33,18
+Canada,CAN,October,-18,25
+Canada,CAN,September,-5,34
+Cayman Islands,CYM,April,21,33
+Cayman Islands,CYM,August,22,35
+Cayman Islands,CYM,December,18,32
+Cayman Islands,CYM,February,19,31
+Cayman Islands,CYM,January,18,32
+Cayman Islands,CYM,July,22,35
+Cayman Islands,CYM,June,21,34
+Cayman Islands,CYM,March,19,32
+Cayman Islands,CYM,May,21,33
+Cayman Islands,CYM,November,21,34
+Cayman Islands,CYM,October,22,34
+Cayman Islands,CYM,September,22,35
+Central African Republic,CAF,April,11,39
+Central African Republic,CAF,August,14,36
+Central African Republic,CAF,December,12,36
+Central African Republic,CAF,February,12,38
+Central African Republic,CAF,January,10,36
+Central African Republic,CAF,July,12,35
+Central African Republic,CAF,June,15,35
+Central African Republic,CAF,March,17,38
+Central African Republic,CAF,May,18,37
+Central African Republic,CAF,November,12,34
+Central African Republic,CAF,October,16,34
+Central African Republic,CAF,September,10,35
+Chad,TCD,April,19,48
+Chad,TCD,August,16,39
+Chad,TCD,December,10,40
+Chad,TCD,February,10,44
+Chad,TCD,January,9,42
+Chad,TCD,July,20,40
+Chad,TCD,June,15,50
+Chad,TCD,March,13,46
+Chad,TCD,May,21,49
+Chad,TCD,November,12,44
+Chad,TCD,October,16,44
+Chad,TCD,September,16,40
+Chile,CHL,April,12,28
+Chile,CHL,August,9,22
+Chile,CHL,December,14,26
+Chile,CHL,February,15,30
+Chile,CHL,January,16,29
+Chile,CHL,July,9,28
+Chile,CHL,June,8,25
+Chile,CHL,March,14,30
+Chile,CHL,May,10,29
+Chile,CHL,November,11,25
+Chile,CHL,October,10,23
+Chile,CHL,September,9,24
+China,CHN,April,-19,32
+China,CHN,August,-1,32
+China,CHN,December,-42,-4
+China,CHN,February,-45,2
+China,CHN,January,-48,-10
+China,CHN,July,6,37
+China,CHN,June,2,36
+China,CHN,March,-35,16
+China,CHN,May,-9,31
+China,CHN,November,-35,9
+China,CHN,October,-17,26
+China,CHN,September,-7,31
+Colombia,COL,April,22,37
+Colombia,COL,August,12,34
+Colombia,COL,December,16,35
+Colombia,COL,February,22,36
+Colombia,COL,January,22,37
+Colombia,COL,July,19,34
+Colombia,COL,June,22,35
+Colombia,COL,March,18,39
+Colombia,COL,May,20,36
+Colombia,COL,November,22,33
+Colombia,COL,October,15,35
+Colombia,COL,September,18,39
+Comoros,COM,April,1,34
+Comoros,COM,August,18,31
+Comoros,COM,December,0,34
+Comoros,COM,February,1,33
+Comoros,COM,January,1,34
+Comoros,COM,July,19,31
+Comoros,COM,June,20,32
+Comoros,COM,March,0,34
+Comoros,COM,May,1,33
+Comoros,COM,November,1,34
+Comoros,COM,October,4,34
+Comoros,COM,September,19,32
+Congo,COG,April,19,38
+Congo,COG,August,16,30
+Congo,COG,December,20,32
+Congo,COG,February,17,42
+Congo,COG,January,20,34
+Congo,COG,July,10,30
+Congo,COG,June,12,32
+Congo,COG,March,21,35
+Congo,COG,May,20,33
+Congo,COG,November,20,32
+Congo,COG,October,21,32
+Congo,COG,September,18,32
+"Congo, The Democratic Republic of the",COD,April,20,37
+"Congo, The Democratic Republic of the",COD,August,12,35
+"Congo, The Democratic Republic of the",COD,December,14,35
+"Congo, The Democratic Republic of the",COD,February,20,36
+"Congo, The Democratic Republic of the",COD,January,17,39
+"Congo, The Democratic Republic of the",COD,July,16,38
+"Congo, The Democratic Republic of the",COD,June,17,35
+"Congo, The Democratic Republic of the",COD,March,19,37
+"Congo, The Democratic Republic of the",COD,May,18,37
+"Congo, The Democratic Republic of the",COD,November,19,35
+"Congo, The Democratic Republic of the",COD,October,20,37
+"Congo, The Democratic Republic of the",COD,September,13,36
+Cook Islands,COK,April,17,33
+Cook Islands,COK,August,12,32
+Cook Islands,COK,December,18,33
+Cook Islands,COK,February,20,35
+Cook Islands,COK,January,18,33
+Cook Islands,COK,July,14,31
+Cook Islands,COK,June,14,32
+Cook Islands,COK,March,17,34
+Cook Islands,COK,May,15,32
+Cook Islands,COK,November,16,32
+Cook Islands,COK,October,14,31
+Cook Islands,COK,September,14,31
+Costa Rica,CRI,April,15,40
+Costa Rica,CRI,August,12,32
+Costa Rica,CRI,December,14,32
+Costa Rica,CRI,February,12,33
+Costa Rica,CRI,January,13,31
+Costa Rica,CRI,July,16,32
+Costa Rica,CRI,June,17,32
+Costa Rica,CRI,March,13,33
+Costa Rica,CRI,May,14,33
+Costa Rica,CRI,November,15,32
+Costa Rica,CRI,October,15,36
+Costa Rica,CRI,September,15,32
+Croatia,HRV,April,-6,28
+Croatia,HRV,August,8,39
+Croatia,HRV,December,-8,17
+Croatia,HRV,February,-14,22
+Croatia,HRV,January,-15,16
+Croatia,HRV,July,9,38
+Croatia,HRV,June,7,35
+Croatia,HRV,March,-16,24
+Croatia,HRV,May,2,30
+Croatia,HRV,November,-8,23
+Croatia,HRV,October,-1,28
+Croatia,HRV,September,1,32
+Cuba,CUB,April,19,34
+Cuba,CUB,August,21,39
+Cuba,CUB,December,18,35
+Cuba,CUB,February,16,34
+Cuba,CUB,January,16,34
+Cuba,CUB,July,22,40
+Cuba,CUB,June,21,35
+Cuba,CUB,March,16,35
+Cuba,CUB,May,19,36
+Cuba,CUB,November,19,35
+Cuba,CUB,October,22,38
+Cuba,CUB,September,22,38
+Cyprus,CYP,April,7,34
+Cyprus,CYP,August,20,40
+Cyprus,CYP,December,2,25
+Cyprus,CYP,February,0,26
+Cyprus,CYP,January,0,22
+Cyprus,CYP,July,19,40
+Cyprus,CYP,June,15,38
+Cyprus,CYP,March,1,27
+Cyprus,CYP,May,11,40
+Cyprus,CYP,November,8,30
+Cyprus,CYP,October,12,34
+Cyprus,CYP,September,15,39
+Czechia,CZE,April,-8,26
+Czechia,CZE,August,4,35
+Czechia,CZE,December,-13,14
+Czechia,CZE,February,-20,17
+Czechia,CZE,January,-20,20
+Czechia,CZE,July,5,36
+Czechia,CZE,June,4,35
+Czechia,CZE,March,-14,22
+Czechia,CZE,May,-4,30
+Czechia,CZE,November,-8,17
+Czechia,CZE,October,-4,25
+Czechia,CZE,September,-2,29
+Côte d'Ivoire,CIV,April,20,40
+Côte d'Ivoire,CIV,August,19,34
+Côte d'Ivoire,CIV,December,10,41
+Côte d'Ivoire,CIV,February,12,40
+Côte d'Ivoire,CIV,January,6,39
+Côte d'Ivoire,CIV,July,15,39
+Côte d'Ivoire,CIV,June,19,38
+Côte d'Ivoire,CIV,March,18,42
+Côte d'Ivoire,CIV,May,20,39
+Côte d'Ivoire,CIV,November,13,38
+Côte d'Ivoire,CIV,October,10,36
+Côte d'Ivoire,CIV,September,3,35
+Denmark,DNK,April,-6,24
+Denmark,DNK,August,4,30
+Denmark,DNK,December,-14,13
+Denmark,DNK,February,-13,12
+Denmark,DNK,January,-14,11
+Denmark,DNK,July,7,34
+Denmark,DNK,June,5,30
+Denmark,DNK,March,-11,20
+Denmark,DNK,May,-1,28
+Denmark,DNK,November,-11,16
+Denmark,DNK,October,-2,22
+Denmark,DNK,September,1,28
+Dominican Republic,DOM,April,16,36
+Dominican Republic,DOM,August,21,38
+Dominican Republic,DOM,December,17,34
+Dominican Republic,DOM,February,14,33
+Dominican Republic,DOM,January,15,34
+Dominican Republic,DOM,July,18,38
+Dominican Republic,DOM,June,20,39
+Dominican Republic,DOM,March,15,35
+Dominican Republic,DOM,May,19,37
+Dominican Republic,DOM,November,16,36
+Dominican Republic,DOM,October,20,38
+Dominican Republic,DOM,September,21,38
+Ecuador,ECU,April,21,39
+Ecuador,ECU,August,10,30
+Ecuador,ECU,December,16,31
+Ecuador,ECU,February,12,34
+Ecuador,ECU,January,9,33
+Ecuador,ECU,July,10,31
+Ecuador,ECU,June,19,31
+Ecuador,ECU,March,14,34
+Ecuador,ECU,May,20,32
+Ecuador,ECU,November,10,31
+Ecuador,ECU,October,17,31
+Ecuador,ECU,September,17,30
+Egypt,EGY,April,7,39
+Egypt,EGY,August,13,39
+Egypt,EGY,December,5,28
+Egypt,EGY,February,3,28
+Egypt,EGY,January,0,27
+Egypt,EGY,July,18,46
+Egypt,EGY,June,15,44
+Egypt,EGY,March,5,36
+Egypt,EGY,May,11,43
+Egypt,EGY,November,8,36
+Egypt,EGY,October,13,40
+Egypt,EGY,September,14,40
+El Salvador,SLV,April,21,39
+El Salvador,SLV,August,20,36
+El Salvador,SLV,December,18,36
+El Salvador,SLV,February,22,37
+El Salvador,SLV,January,20,37
+El Salvador,SLV,July,21,37
+El Salvador,SLV,June,21,35
+El Salvador,SLV,March,21,37
+El Salvador,SLV,May,23,38
+El Salvador,SLV,November,21,36
+El Salvador,SLV,October,22,35
+El Salvador,SLV,September,21,35
+Equatorial Guinea,GNQ,April,22,36
+Equatorial Guinea,GNQ,August,13,31
+Equatorial Guinea,GNQ,December,20,33
+Equatorial Guinea,GNQ,February,21,34
+Equatorial Guinea,GNQ,January,18,40
+Equatorial Guinea,GNQ,July,21,36
+Equatorial Guinea,GNQ,June,21,32
+Equatorial Guinea,GNQ,March,18,41
+Equatorial Guinea,GNQ,May,22,33
+Equatorial Guinea,GNQ,November,20,32
+Equatorial Guinea,GNQ,October,21,32
+Equatorial Guinea,GNQ,September,13,34
+Estonia,EST,April,-9,22
+Estonia,EST,August,5,33
+Estonia,EST,December,-20,12
+Estonia,EST,February,-20,9
+Estonia,EST,January,-19,8
+Estonia,EST,July,5,34
+Estonia,EST,June,0,33
+Estonia,EST,March,-21,15
+Estonia,EST,May,-5,31
+Estonia,EST,November,-12,14
+Estonia,EST,October,-6,20
+Estonia,EST,September,0,28
+Ethiopia,ETH,April,7,32
+Ethiopia,ETH,August,12,32
+Ethiopia,ETH,December,4,28
+Ethiopia,ETH,February,4,30
+Ethiopia,ETH,January,2,30
+Ethiopia,ETH,July,13,33
+Ethiopia,ETH,June,9,33
+Ethiopia,ETH,March,8,32
+Ethiopia,ETH,May,12,32
+Ethiopia,ETH,November,4,29
+Ethiopia,ETH,October,6,29
+Ethiopia,ETH,September,10,33
+Fiji,FJI,April,21,33
+Fiji,FJI,August,20,32
+Fiji,FJI,December,22,34
+Fiji,FJI,February,20,34
+Fiji,FJI,January,20,33
+Fiji,FJI,July,22,31
+Fiji,FJI,June,14,34
+Fiji,FJI,March,22,33
+Fiji,FJI,May,18,33
+Fiji,FJI,November,20,40
+Fiji,FJI,October,22,39
+Fiji,FJI,September,19,32
+Finland,FIN,April,-14,21
+Finland,FIN,August,4,32
+Finland,FIN,December,-22,11
+Finland,FIN,February,-26,8
+Finland,FIN,January,-30,8
+Finland,FIN,July,5,34
+Finland,FIN,June,-1,33
+Finland,FIN,March,-24,14
+Finland,FIN,May,-5,31
+Finland,FIN,November,-18,13
+Finland,FIN,October,-9,20
+Finland,FIN,September,-2,24
+France,FRA,April,-3,26
+France,FRA,August,7,36
+France,FRA,December,-6,16
+France,FRA,February,-8,19
+France,FRA,January,-10,16
+France,FRA,July,7,41
+France,FRA,June,6,35
+France,FRA,March,-7,25
+France,FRA,May,0,28
+France,FRA,November,-4,21
+France,FRA,October,1,28
+France,FRA,September,2,33
+French Guiana,GUF,April,20,34
+French Guiana,GUF,August,20,36
+French Guiana,GUF,December,20,34
+French Guiana,GUF,February,20,33
+French Guiana,GUF,January,19,33
+French Guiana,GUF,July,21,37
+French Guiana,GUF,June,21,34
+French Guiana,GUF,March,20,34
+French Guiana,GUF,May,20,34
+French Guiana,GUF,November,20,38
+French Guiana,GUF,October,20,38
+French Guiana,GUF,September,21,37
+French Polynesia,PYF,April,22,35
+French Polynesia,PYF,August,20,32
+French Polynesia,PYF,December,21,35
+French Polynesia,PYF,February,22,35
+French Polynesia,PYF,January,22,35
+French Polynesia,PYF,July,21,32
+French Polynesia,PYF,June,21,33
+French Polynesia,PYF,March,22,35
+French Polynesia,PYF,May,21,35
+French Polynesia,PYF,November,21,36
+French Polynesia,PYF,October,20,35
+French Polynesia,PYF,September,20,34
+French Southern Territories,ATF,April,-2,19
+French Southern Territories,ATF,August,-10,13
+French Southern Territories,ATF,December,-1,21
+French Southern Territories,ATF,February,0,24
+French Southern Territories,ATF,January,0,22
+French Southern Territories,ATF,July,-7,12
+French Southern Territories,ATF,June,-6,14
+French Southern Territories,ATF,March,-2,22
+French Southern Territories,ATF,May,-5,15
+French Southern Territories,ATF,November,-3,19
+French Southern Territories,ATF,October,-4,16
+French Southern Territories,ATF,September,-6,15
+Gabon,GAB,April,20,33
+Gabon,GAB,August,14,30
+Gabon,GAB,December,20,32
+Gabon,GAB,February,20,33
+Gabon,GAB,January,19,33
+Gabon,GAB,July,20,30
+Gabon,GAB,June,21,32
+Gabon,GAB,March,15,33
+Gabon,GAB,May,20,39
+Gabon,GAB,November,20,32
+Gabon,GAB,October,21,32
+Gabon,GAB,September,22,42
+Gambia,GMB,April,15,44
+Gambia,GMB,August,14,60
+Gambia,GMB,December,11,39
+Gambia,GMB,February,10,42
+Gambia,GMB,January,12,40
+Gambia,GMB,July,19,37
+Gambia,GMB,June,15,39
+Gambia,GMB,March,15,43
+Gambia,GMB,May,12,41
+Gambia,GMB,November,12,41
+Gambia,GMB,October,12,37
+Gambia,GMB,September,2,38
+Georgia,GEO,April,2,32
+Georgia,GEO,August,16,32
+Georgia,GEO,December,-3,25
+Georgia,GEO,February,-5,26
+Georgia,GEO,January,-6,25
+Georgia,GEO,July,15,34
+Georgia,GEO,June,14,35
+Georgia,GEO,March,0,30
+Georgia,GEO,May,6,36
+Georgia,GEO,November,1,29
+Georgia,GEO,October,4,32
+Georgia,GEO,September,10,36
+Germany,DEU,April,0,15
+Germany,DEU,August,12,28
+Germany,DEU,December,0,13
+Germany,DEU,February,-6,11
+Germany,DEU,January,-4,17
+Germany,DEU,July,12,25
+Germany,DEU,June,8,22
+Germany,DEU,March,-5,11
+Germany,DEU,May,4,22
+Germany,DEU,November,0,16
+Germany,DEU,October,6,20
+Germany,DEU,September,8,23
+Ghana,GHA,April,20,45
+Ghana,GHA,August,20,39
+Ghana,GHA,December,12,40
+Ghana,GHA,February,18,43
+Ghana,GHA,January,16,41
+Ghana,GHA,July,20,37
+Ghana,GHA,June,20,40
+Ghana,GHA,March,20,44
+Ghana,GHA,May,21,42
+Ghana,GHA,November,13,41
+Ghana,GHA,October,18,40
+Ghana,GHA,September,20,36
+Gibraltar,GIB,April,9,29
+Gibraltar,GIB,August,17,37
+Gibraltar,GIB,December,7,25
+Gibraltar,GIB,February,6,22
+Gibraltar,GIB,January,4,22
+Gibraltar,GIB,July,17,38
+Gibraltar,GIB,June,15,33
+Gibraltar,GIB,March,7,27
+Gibraltar,GIB,May,10,33
+Gibraltar,GIB,November,8,26
+Gibraltar,GIB,October,11,32
+Gibraltar,GIB,September,16,34
+Greece,GRC,April,-1,31
+Greece,GRC,August,12,41
+Greece,GRC,December,-5,21
+Greece,GRC,February,-6,20
+Greece,GRC,January,-10,21
+Greece,GRC,July,12,40
+Greece,GRC,June,12,39
+Greece,GRC,March,-3,24
+Greece,GRC,May,8,34
+Greece,GRC,November,-2,27
+Greece,GRC,October,5,30
+Greece,GRC,September,8,37
+Greenland,GRL,April,-31,10
+Greenland,GRL,August,-3,17
+Greenland,GRL,December,-37,6
+Greenland,GRL,February,-37,4
+Greenland,GRL,January,-42,3
+Greenland,GRL,July,-2,19
+Greenland,GRL,June,-6,18
+Greenland,GRL,March,-38,6
+Greenland,GRL,May,-20,13
+Greenland,GRL,November,-30,4
+Greenland,GRL,October,-26,7
+Greenland,GRL,September,-16,15
+Guinea,GIN,April,16,40
+Guinea,GIN,August,16,47
+Guinea,GIN,December,8,39
+Guinea,GIN,February,10,35
+Guinea,GIN,January,9,33
+Guinea,GIN,July,10,30
+Guinea,GIN,June,16,33
+Guinea,GIN,March,15,35
+Guinea,GIN,May,15,36
+Guinea,GIN,November,8,40
+Guinea,GIN,October,13,31
+Guinea,GIN,September,15,38
+Guyana,GUY,April,19,32
+Guyana,GUY,August,20,35
+Guyana,GUY,December,13,33
+Guyana,GUY,February,20,31
+Guyana,GUY,January,20,32
+Guyana,GUY,July,21,33
+Guyana,GUY,June,19,32
+Guyana,GUY,March,18,33
+Guyana,GUY,May,20,32
+Guyana,GUY,November,20,33
+Guyana,GUY,October,20,36
+Guyana,GUY,September,21,35
+Honduras,HND,April,3,36
+Honduras,HND,August,20,36
+Honduras,HND,December,17,32
+Honduras,HND,February,15,32
+Honduras,HND,January,12,31
+Honduras,HND,July,8,34
+Honduras,HND,June,2,36
+Honduras,HND,March,13,34
+Honduras,HND,May,16,34
+Honduras,HND,November,16,34
+Honduras,HND,October,19,34
+Honduras,HND,September,19,36
+Hungary,HUN,April,-4,28
+Hungary,HUN,August,8,38
+Hungary,HUN,December,-12,16
+Hungary,HUN,February,-14,19
+Hungary,HUN,January,-18,14
+Hungary,HUN,July,8,38
+Hungary,HUN,June,6,37
+Hungary,HUN,March,-13,25
+Hungary,HUN,May,1,32
+Hungary,HUN,November,-7,22
+Hungary,HUN,October,-3,25
+Hungary,HUN,September,2,35
+Iceland,ISL,April,-10,16
+Iceland,ISL,August,3,20
+Iceland,ISL,December,-13,10
+Iceland,ISL,February,-11,10
+Iceland,ISL,January,-11,10
+Iceland,ISL,July,0,21
+Iceland,ISL,June,1,19
+Iceland,ISL,March,-10,11
+Iceland,ISL,May,-4,18
+Iceland,ISL,November,-10,13
+Iceland,ISL,October,-4,14
+Iceland,ISL,September,-2,17
+India,IND,April,0,28
+India,IND,August,12,34
+India,IND,December,-12,15
+India,IND,February,-7,19
+India,IND,January,-13,14
+India,IND,July,13,35
+India,IND,June,9,35
+India,IND,March,-3,27
+India,IND,May,3,32
+India,IND,November,-8,20
+India,IND,October,0,30
+India,IND,September,7,33
+Indonesia,IDN,April,20,35
+Indonesia,IDN,August,21,35
+Indonesia,IDN,December,20,33
+Indonesia,IDN,February,20,33
+Indonesia,IDN,January,20,36
+Indonesia,IDN,July,19,35
+Indonesia,IDN,June,19,35
+Indonesia,IDN,March,21,40
+Indonesia,IDN,May,21,35
+Indonesia,IDN,November,21,33
+Indonesia,IDN,October,21,34
+Indonesia,IDN,September,21,35
+"Iran, Islamic Republic of",IRN,April,-6,28
+"Iran, Islamic Republic of",IRN,August,13,40
+"Iran, Islamic Republic of",IRN,December,-18,16
+"Iran, Islamic Republic of",IRN,February,-16,19
+"Iran, Islamic Republic of",IRN,January,-19,14
+"Iran, Islamic Republic of",IRN,July,14,41
+"Iran, Islamic Republic of",IRN,June,10,40
+"Iran, Islamic Republic of",IRN,March,-8,24
+"Iran, Islamic Republic of",IRN,May,5,34
+"Iran, Islamic Republic of",IRN,November,-11,22
+"Iran, Islamic Republic of",IRN,October,-4,30
+"Iran, Islamic Republic of",IRN,September,7,37
+Iraq,IRQ,April,6,42
+Iraq,IRQ,August,26,51
+Iraq,IRQ,December,1,27
+Iraq,IRQ,February,-1,29
+Iraq,IRQ,January,-2,29
+Iraq,IRQ,July,24,51
+Iraq,IRQ,June,22,50
+Iraq,IRQ,March,6,34
+Iraq,IRQ,May,17,46
+Iraq,IRQ,November,6,35
+Iraq,IRQ,October,12,43
+Iraq,IRQ,September,20,48
+Ireland,IRL,April,-1,20
+Ireland,IRL,August,6,26
+Ireland,IRL,December,-4,14
+Ireland,IRL,February,-3,17
+Ireland,IRL,January,-2,21
+Ireland,IRL,July,6,28
+Ireland,IRL,June,4,28
+Ireland,IRL,March,-5,18
+Ireland,IRL,May,2,24
+Ireland,IRL,November,-2,16
+Ireland,IRL,October,2,20
+Ireland,IRL,September,0,28
+Israel,ISR,April,3,32
+Israel,ISR,August,16,39
+Israel,ISR,December,-1,23
+Israel,ISR,February,-2,23
+Israel,ISR,January,-4,20
+Israel,ISR,July,15,37
+Israel,ISR,June,11,37
+Israel,ISR,March,-1,27
+Israel,ISR,May,7,37
+Israel,ISR,November,5,28
+Israel,ISR,October,10,34
+Israel,ISR,September,14,38
+Italy,ITA,April,-7,21
+Italy,ITA,August,5,29
+Italy,ITA,December,-13,12
+Italy,ITA,February,-20,15
+Italy,ITA,January,-16,12
+Italy,ITA,July,5,59
+Italy,ITA,June,3,31
+Italy,ITA,March,-13,18
+Italy,ITA,May,-2,24
+Italy,ITA,November,-10,20
+Italy,ITA,October,-2,23
+Italy,ITA,September,1,25
+Jamaica,JAM,April,20,35
+Jamaica,JAM,August,21,37
+Jamaica,JAM,December,19,34
+Jamaica,JAM,February,18,33
+Jamaica,JAM,January,17,34
+Jamaica,JAM,July,21,36
+Jamaica,JAM,June,23,36
+Jamaica,JAM,March,20,34
+Jamaica,JAM,May,20,37
+Jamaica,JAM,November,22,34
+Jamaica,JAM,October,21,37
+Jamaica,JAM,September,22,36
+Japan,JPN,April,-4,20
+Japan,JPN,August,13,31
+Japan,JPN,December,-10,12
+Japan,JPN,February,-15,6
+Japan,JPN,January,-14,5
+Japan,JPN,July,8,30
+Japan,JPN,June,4,25
+Japan,JPN,March,-10,13
+Japan,JPN,May,0,24
+Japan,JPN,November,-9,16
+Japan,JPN,October,0,22
+Japan,JPN,September,7,30
+Jordan,JOR,April,0,36
+Jordan,JOR,August,16,45
+Jordan,JOR,December,-2,24
+Jordan,JOR,February,-5,28
+Jordan,JOR,January,-6,24
+Jordan,JOR,July,16,46
+Jordan,JOR,June,14,44
+Jordan,JOR,March,-3,35
+Jordan,JOR,May,8,42
+Jordan,JOR,November,-2,31
+Jordan,JOR,October,7,39
+Jordan,JOR,September,12,44
+Kazakhstan,KAZ,April,-16,28
+Kazakhstan,KAZ,August,3,36
+Kazakhstan,KAZ,December,-39,3
+Kazakhstan,KAZ,February,-40,7
+Kazakhstan,KAZ,January,-39,3
+Kazakhstan,KAZ,July,5,40
+Kazakhstan,KAZ,June,3,38
+Kazakhstan,KAZ,March,-29,13
+Kazakhstan,KAZ,May,-4,36
+Kazakhstan,KAZ,November,-29,10
+Kazakhstan,KAZ,October,-16,27
+Kazakhstan,KAZ,September,-4,32
+Kenya,KEN,April,19,40
+Kenya,KEN,August,3,37
+Kenya,KEN,December,17,46
+Kenya,KEN,February,17,40
+Kenya,KEN,January,16,39
+Kenya,KEN,July,17,36
+Kenya,KEN,June,18,37
+Kenya,KEN,March,15,40
+Kenya,KEN,May,20,39
+Kenya,KEN,November,18,39
+Kenya,KEN,October,13,39
+Kenya,KEN,September,20,38
+Kiribati,KIR,April,22,34
+Kiribati,KIR,August,20,39
+Kiribati,KIR,December,20,34
+Kiribati,KIR,February,22,38
+Kiribati,KIR,January,22,33
+Kiribati,KIR,July,18,34
+Kiribati,KIR,June,20,34
+Kiribati,KIR,March,18,34
+Kiribati,KIR,May,17,34
+Kiribati,KIR,November,22,37
+Kiribati,KIR,October,22,34
+Kiribati,KIR,September,19,34
+"Korea, Democratic People's Republic of",PRK,April,-11,31
+"Korea, Democratic People's Republic of",PRK,August,4,39
+"Korea, Democratic People's Republic of",PRK,December,-31,10
+"Korea, Democratic People's Republic of",PRK,February,-33,14
+"Korea, Democratic People's Republic of",PRK,January,-36,7
+"Korea, Democratic People's Republic of",PRK,July,10,40
+"Korea, Democratic People's Republic of",PRK,June,4,35
+"Korea, Democratic People's Republic of",PRK,March,-22,21
+"Korea, Democratic People's Republic of",PRK,May,-2,33
+"Korea, Democratic People's Republic of",PRK,November,-25,20
+"Korea, Democratic People's Republic of",PRK,October,-13,28
+"Korea, Democratic People's Republic of",PRK,September,-2,32
+"Korea, Republic of",KOR,April,-5,30
+"Korea, Republic of",KOR,August,13,36
+"Korea, Republic of",KOR,December,-20,14
+"Korea, Republic of",KOR,February,-19,16
+"Korea, Republic of",KOR,January,-23,11
+"Korea, Republic of",KOR,July,15,36
+"Korea, Republic of",KOR,June,10,35
+"Korea, Republic of",KOR,March,-12,24
+"Korea, Republic of",KOR,May,3,34
+"Korea, Republic of",KOR,November,-9,23
+"Korea, Republic of",KOR,October,-4,28
+"Korea, Republic of",KOR,September,6,32
+Kuwait,KWT,April,9,44
+Kuwait,KWT,August,24,52
+Kuwait,KWT,December,2,31
+Kuwait,KWT,February,-3,34
+Kuwait,KWT,January,0,32
+Kuwait,KWT,July,25,52
+Kuwait,KWT,June,22,52
+Kuwait,KWT,March,4,44
+Kuwait,KWT,May,16,48
+Kuwait,KWT,November,4,40
+Kuwait,KWT,October,11,45
+Kuwait,KWT,September,18,50
+Kyrgyzstan,KGZ,April,-13,26
+Kyrgyzstan,KGZ,August,3,33
+Kyrgyzstan,KGZ,December,-28,15
+Kyrgyzstan,KGZ,February,-30,9
+Kyrgyzstan,KGZ,January,-31,3
+Kyrgyzstan,KGZ,July,5,35
+Kyrgyzstan,KGZ,June,1,31
+Kyrgyzstan,KGZ,March,-24,19
+Kyrgyzstan,KGZ,May,-3,28
+Kyrgyzstan,KGZ,November,-22,19
+Kyrgyzstan,KGZ,October,-11,26
+Kyrgyzstan,KGZ,September,-1,31
+Lao People's Democratic Republic,LAO,April,14,43
+Lao People's Democratic Republic,LAO,August,21,37
+Lao People's Democratic Republic,LAO,December,5,34
+Lao People's Democratic Republic,LAO,February,8,37
+Lao People's Democratic Republic,LAO,January,5,35
+Lao People's Democratic Republic,LAO,July,21,39
+Lao People's Democratic Republic,LAO,June,19,41
+Lao People's Democratic Republic,LAO,March,13,39
+Lao People's Democratic Republic,LAO,May,14,44
+Lao People's Democratic Republic,LAO,November,12,35
+Lao People's Democratic Republic,LAO,October,14,37
+Lao People's Democratic Republic,LAO,September,14,37
+Latvia,LVA,April,-7,20
+Latvia,LVA,August,9,30
+Latvia,LVA,December,-10,10
+Latvia,LVA,February,-14,8
+Latvia,LVA,January,-14,8
+Latvia,LVA,July,9,30
+Latvia,LVA,June,4,29
+Latvia,LVA,March,-13,10
+Latvia,LVA,May,-2,27
+Latvia,LVA,November,-6,13
+Latvia,LVA,October,-2,18
+Latvia,LVA,September,2,23
+Lebanon,LBN,April,8,33
+Lebanon,LBN,August,14,39
+Lebanon,LBN,December,2,26
+Lebanon,LBN,February,2,26
+Lebanon,LBN,January,-1,25
+Lebanon,LBN,July,19,36
+Lebanon,LBN,June,12,37
+Lebanon,LBN,March,4,32
+Lebanon,LBN,May,12,38
+Lebanon,LBN,November,8,30
+Lebanon,LBN,October,12,35
+Lebanon,LBN,September,18,36
+Liberia,LBR,April,22,35
+Liberia,LBR,August,19,31
+Liberia,LBR,December,19,38
+Liberia,LBR,February,20,35
+Liberia,LBR,January,18,35
+Liberia,LBR,July,21,32
+Liberia,LBR,June,21,33
+Liberia,LBR,March,21,36
+Liberia,LBR,May,21,34
+Liberia,LBR,November,22,34
+Liberia,LBR,October,14,33
+Liberia,LBR,September,21,32
+Libya,LBY,April,6,36
+Libya,LBY,August,14,43
+Libya,LBY,December,0,27
+Libya,LBY,February,1,28
+Libya,LBY,January,0,29
+Libya,LBY,July,15,46
+Libya,LBY,June,9,43
+Libya,LBY,March,1,34
+Libya,LBY,May,9,40
+Libya,LBY,November,2,33
+Libya,LBY,October,9,36
+Libya,LBY,September,14,40
+Lithuania,LTU,April,-6,27
+Lithuania,LTU,August,6,36
+Lithuania,LTU,December,-17,10
+Lithuania,LTU,February,-21,10
+Lithuania,LTU,January,-20,9
+Lithuania,LTU,July,7,33
+Lithuania,LTU,June,0,33
+Lithuania,LTU,March,-15,17
+Lithuania,LTU,May,-5,30
+Lithuania,LTU,November,-11,14
+Lithuania,LTU,October,-4,23
+Lithuania,LTU,September,2,29
+Luxembourg,LUX,April,-4,28
+Luxembourg,LUX,August,-1,36
+Luxembourg,LUX,December,-10,16
+Luxembourg,LUX,February,-12,20
+Luxembourg,LUX,January,-11,13
+Luxembourg,LUX,July,7,39
+Luxembourg,LUX,June,6,35
+Luxembourg,LUX,March,-11,24
+Luxembourg,LUX,May,0,32
+Luxembourg,LUX,November,-6,20
+Luxembourg,LUX,October,0,24
+Luxembourg,LUX,September,3,32
+Macao,MAC,April,13,31
+Macao,MAC,August,22,38
+Macao,MAC,December,7,29
+Macao,MAC,February,5,28
+Macao,MAC,January,2,27
+Macao,MAC,July,22,37
+Macao,MAC,June,22,39
+Macao,MAC,March,8,30
+Macao,MAC,May,16,36
+Macao,MAC,November,11,31
+Macao,MAC,October,15,35
+Macao,MAC,September,22,36
+Madagascar,MDG,April,18,37
+Madagascar,MDG,August,14,33
+Madagascar,MDG,December,15,36
+Madagascar,MDG,February,16,35
+Madagascar,MDG,January,15,35
+Madagascar,MDG,July,14,32
+Madagascar,MDG,June,14,33
+Madagascar,MDG,March,14,35
+Madagascar,MDG,May,14,34
+Madagascar,MDG,November,13,39
+Madagascar,MDG,October,15,35
+Madagascar,MDG,September,12,34
+Malawi,MWI,April,13,33
+Malawi,MWI,August,10,36
+Malawi,MWI,December,16,39
+Malawi,MWI,February,13,33
+Malawi,MWI,January,14,32
+Malawi,MWI,July,7,31
+Malawi,MWI,June,6,32
+Malawi,MWI,March,16,32
+Malawi,MWI,May,9,32
+Malawi,MWI,November,12,38
+Malawi,MWI,October,10,39
+Malawi,MWI,September,4,35
+Malaysia,MYS,April,23,35
+Malaysia,MYS,August,22,34
+Malaysia,MYS,December,23,34
+Malaysia,MYS,February,21,36
+Malaysia,MYS,January,22,35
+Malaysia,MYS,July,15,35
+Malaysia,MYS,June,22,34
+Malaysia,MYS,March,23,36
+Malaysia,MYS,May,23,35
+Malaysia,MYS,November,23,34
+Malaysia,MYS,October,22,34
+Malaysia,MYS,September,21,34
+Maldives,MDV,April,23,34
+Maldives,MDV,August,22,34
+Maldives,MDV,December,22,33
+Maldives,MDV,February,24,33
+Maldives,MDV,January,20,34
+Maldives,MDV,July,22,33
+Maldives,MDV,June,23,34
+Maldives,MDV,March,21,33
+Maldives,MDV,May,22,34
+Maldives,MDV,November,21,36
+Maldives,MDV,October,23,33
+Maldives,MDV,September,20,33
+Mali,MLI,April,17,45
+Mali,MLI,August,20,40
+Mali,MLI,December,7,40
+Mali,MLI,February,10,42
+Mali,MLI,January,6,39
+Mali,MLI,July,15,44
+Mali,MLI,June,21,46
+Mali,MLI,March,10,44
+Mali,MLI,May,21,46
+Mali,MLI,November,11,41
+Mali,MLI,October,17,43
+Mali,MLI,September,18,43
+Malta,MLT,April,7,29
+Malta,MLT,August,20,41
+Malta,MLT,December,5,23
+Malta,MLT,February,4,24
+Malta,MLT,January,2,23
+Malta,MLT,July,19,43
+Malta,MLT,June,14,42
+Malta,MLT,March,6,25
+Malta,MLT,May,10,32
+Malta,MLT,November,10,29
+Malta,MLT,October,12,32
+Malta,MLT,September,17,36
+Marshall Islands,MHL,April,22,33
+Marshall Islands,MHL,August,23,33
+Marshall Islands,MHL,December,23,32
+Marshall Islands,MHL,February,23,32
+Marshall Islands,MHL,January,23,32
+Marshall Islands,MHL,July,23,33
+Marshall Islands,MHL,June,23,32
+Marshall Islands,MHL,March,19,32
+Marshall Islands,MHL,May,23,33
+Marshall Islands,MHL,November,17,32
+Marshall Islands,MHL,October,23,33
+Marshall Islands,MHL,September,23,33
+Mauritania,MRT,April,16,42
+Mauritania,MRT,August,23,47
+Mauritania,MRT,December,9,37
+Mauritania,MRT,February,11,41
+Mauritania,MRT,January,9,35
+Mauritania,MRT,July,23,47
+Mauritania,MRT,June,22,47
+Mauritania,MRT,March,12,40
+Mauritania,MRT,May,20,47
+Mauritania,MRT,November,13,41
+Mauritania,MRT,October,18,43
+Mauritania,MRT,September,22,45
+Mauritius,MUS,April,21,35
+Mauritius,MUS,August,21,32
+Mauritius,MUS,December,20,36
+Mauritius,MUS,February,22,34
+Mauritius,MUS,January,21,34
+Mauritius,MUS,July,18,32
+Mauritius,MUS,June,20,33
+Mauritius,MUS,March,22,35
+Mauritius,MUS,May,21,35
+Mauritius,MUS,November,20,35
+Mauritius,MUS,October,20,35
+Mauritius,MUS,September,17,34
+Mexico,MEX,April,4,42
+Mexico,MEX,August,18,48
+Mexico,MEX,December,-2,30
+Mexico,MEX,February,0,33
+Mexico,MEX,January,-3,30
+Mexico,MEX,July,16,50
+Mexico,MEX,June,14,50
+Mexico,MEX,March,1,37
+Mexico,MEX,May,9,44
+Mexico,MEX,November,2,36
+Mexico,MEX,October,7,46
+Mexico,MEX,September,13,49
+"Micronesia, Federated States of",FSM,April,22,33
+"Micronesia, Federated States of",FSM,August,23,34
+"Micronesia, Federated States of",FSM,December,23,33
+"Micronesia, Federated States of",FSM,February,22,32
+"Micronesia, Federated States of",FSM,January,23,33
+"Micronesia, Federated States of",FSM,July,21,34
+"Micronesia, Federated States of",FSM,June,23,33
+"Micronesia, Federated States of",FSM,March,22,34
+"Micronesia, Federated States of",FSM,May,23,33
+"Micronesia, Federated States of",FSM,November,23,33
+"Micronesia, Federated States of",FSM,October,23,33
+"Micronesia, Federated States of",FSM,September,23,34
+"Moldova, Republic of",MDA,April,-7,26
+"Moldova, Republic of",MDA,August,7,36
+"Moldova, Republic of",MDA,December,-14,13
+"Moldova, Republic of",MDA,February,-19,16
+"Moldova, Republic of",MDA,January,-20,14
+"Moldova, Republic of",MDA,July,9,34
+"Moldova, Republic of",MDA,June,3,34
+"Moldova, Republic of",MDA,March,-21,23
+"Moldova, Republic of",MDA,May,0,30
+"Moldova, Republic of",MDA,November,-15,22
+"Moldova, Republic of",MDA,October,-3,28
+"Moldova, Republic of",MDA,September,1,32
+Mongolia,MNG,April,-26,24
+Mongolia,MNG,August,-3,31
+Mongolia,MNG,December,-46,-4
+Mongolia,MNG,February,-43,-3
+Mongolia,MNG,January,-47,-4
+Mongolia,MNG,July,-1,32
+Mongolia,MNG,June,-7,30
+Mongolia,MNG,March,-37,10
+Mongolia,MNG,May,-12,28
+Mongolia,MNG,November,-44,5
+Mongolia,MNG,October,-30,16
+Mongolia,MNG,September,-17,29
+Morocco,MAR,April,5,35
+Morocco,MAR,August,14,41
+Morocco,MAR,December,2,24
+Morocco,MAR,February,1,24
+Morocco,MAR,January,1,22
+Morocco,MAR,July,14,42
+Morocco,MAR,June,5,38
+Morocco,MAR,March,3,28
+Morocco,MAR,May,6,34
+Morocco,MAR,November,4,29
+Morocco,MAR,October,9,36
+Morocco,MAR,September,13,39
+Mozambique,MOZ,April,20,34
+Mozambique,MOZ,August,16,35
+Mozambique,MOZ,December,16,80
+Mozambique,MOZ,February,20,34
+Mozambique,MOZ,January,15,36
+Mozambique,MOZ,July,14,31
+Mozambique,MOZ,June,15,31
+Mozambique,MOZ,March,-26,34
+Mozambique,MOZ,May,14,56
+Mozambique,MOZ,November,20,39
+Mozambique,MOZ,October,19,35
+Mozambique,MOZ,September,17,32
+Myanmar,MMR,April,16,40
+Myanmar,MMR,August,22,38
+Myanmar,MMR,December,8,30
+Myanmar,MMR,February,10,34
+Myanmar,MMR,January,7,30
+Myanmar,MMR,July,21,38
+Myanmar,MMR,June,21,40
+Myanmar,MMR,March,12,38
+Myanmar,MMR,May,18,42
+Myanmar,MMR,November,10,34
+Myanmar,MMR,October,15,38
+Myanmar,MMR,September,20,38
+Nepal,NPL,April,8,34
+Nepal,NPL,August,18,33
+Nepal,NPL,December,0,26
+Nepal,NPL,February,1,28
+Nepal,NPL,January,0,25
+Nepal,NPL,July,18,35
+Nepal,NPL,June,14,35
+Nepal,NPL,March,3,32
+Nepal,NPL,May,10,34
+Nepal,NPL,November,0,28
+Nepal,NPL,October,9,32
+Nepal,NPL,September,16,33
+Netherlands,NLD,April,-2,27
+Netherlands,NLD,August,8,32
+Netherlands,NLD,December,-7,15
+Netherlands,NLD,February,-8,17
+Netherlands,NLD,January,-10,14
+Netherlands,NLD,July,8,36
+Netherlands,NLD,June,6,31
+Netherlands,NLD,March,-8,20
+Netherlands,NLD,May,1,31
+Netherlands,NLD,November,-5,18
+Netherlands,NLD,October,3,25
+Netherlands,NLD,September,5,30
+New Caledonia,NCL,April,20,32
+New Caledonia,NCL,August,14,29
+New Caledonia,NCL,December,20,33
+New Caledonia,NCL,February,21,35
+New Caledonia,NCL,January,20,33
+New Caledonia,NCL,July,15,28
+New Caledonia,NCL,June,16,29
+New Caledonia,NCL,March,21,33
+New Caledonia,NCL,May,14,31
+New Caledonia,NCL,November,17,32
+New Caledonia,NCL,October,15,30
+New Caledonia,NCL,September,16,29
+New Zealand,NZL,April,24,36
+New Zealand,NZL,August,23,35
+New Zealand,NZL,December,22,35
+New Zealand,NZL,February,22,34
+New Zealand,NZL,January,23,34
+New Zealand,NZL,July,23,35
+New Zealand,NZL,June,24,36
+New Zealand,NZL,March,22,35
+New Zealand,NZL,May,23,35
+New Zealand,NZL,November,24,34
+New Zealand,NZL,October,23,34
+New Zealand,NZL,September,23,35
+Nicaragua,NIC,April,21,36
+Nicaragua,NIC,August,20,36
+Nicaragua,NIC,December,21,34
+Nicaragua,NIC,February,20,39
+Nicaragua,NIC,January,2,35
+Nicaragua,NIC,July,22,38
+Nicaragua,NIC,June,21,36
+Nicaragua,NIC,March,18,35
+Nicaragua,NIC,May,21,37
+Nicaragua,NIC,November,21,34
+Nicaragua,NIC,October,20,36
+Nicaragua,NIC,September,21,36
+Niger,NER,April,8,47
+Niger,NER,August,20,47
+Niger,NER,December,1,36
+Niger,NER,February,2,40
+Niger,NER,January,0,36
+Niger,NER,July,19,47
+Niger,NER,June,19,49
+Niger,NER,March,3,43
+Niger,NER,May,15,47
+Niger,NER,November,5,38
+Niger,NER,October,9,44
+Niger,NER,September,17,45
+Nigeria,NGA,April,12,43
+Nigeria,NGA,August,18,39
+Nigeria,NGA,December,5,38
+Nigeria,NGA,February,8,40
+Nigeria,NGA,January,6,39
+Nigeria,NGA,July,15,37
+Nigeria,NGA,June,18,40
+Nigeria,NGA,March,14,43
+Nigeria,NGA,May,19,43
+Nigeria,NGA,November,8,38
+Nigeria,NGA,October,14,37
+Nigeria,NGA,September,6,36
+North Macedonia,MKD,April,-8,24
+North Macedonia,MKD,August,3,35
+North Macedonia,MKD,December,-20,16
+North Macedonia,MKD,February,-16,17
+North Macedonia,MKD,January,-23,15
+North Macedonia,MKD,July,4,32
+North Macedonia,MKD,June,-1,30
+North Macedonia,MKD,March,-19,19
+North Macedonia,MKD,May,-2,27
+North Macedonia,MKD,November,-10,22
+North Macedonia,MKD,October,-5,24
+North Macedonia,MKD,September,-2,31
+Norway,NOR,April,-13,9
+Norway,NOR,August,0,17
+Norway,NOR,December,-14,6
+Norway,NOR,February,-14,8
+Norway,NOR,January,-14,8
+Norway,NOR,July,0,18
+Norway,NOR,June,-3,12
+Norway,NOR,March,-14,8
+Norway,NOR,May,-8,14
+Norway,NOR,November,-11,6
+Norway,NOR,October,-7,10
+Norway,NOR,September,-2,14
+Oman,OMN,April,18,44
+Oman,OMN,August,26,46
+Oman,OMN,December,12,32
+Oman,OMN,February,10,35
+Oman,OMN,January,8,30
+Oman,OMN,July,26,52
+Oman,OMN,June,25,50
+Oman,OMN,March,12,39
+Oman,OMN,May,21,52
+Oman,OMN,November,15,37
+Oman,OMN,October,16,43
+Oman,OMN,September,23,44
+Pakistan,PAK,April,-5,35
+Pakistan,PAK,August,12,41
+Pakistan,PAK,December,-6,20
+Pakistan,PAK,February,-5,19
+Pakistan,PAK,January,-6,15
+Pakistan,PAK,July,15,44
+Pakistan,PAK,June,11,43
+Pakistan,PAK,March,-4,26
+Pakistan,PAK,May,6,38
+Pakistan,PAK,November,0,26
+Pakistan,PAK,October,4,34
+Pakistan,PAK,September,9,38
+Panama,PAN,April,6,38
+Panama,PAN,August,-1,40
+Panama,PAN,December,15,43
+Panama,PAN,February,14,42
+Panama,PAN,January,15,43
+Panama,PAN,July,-3,37
+Panama,PAN,June,-1,35
+Panama,PAN,March,11,41
+Panama,PAN,May,2,36
+Panama,PAN,November,10,44
+Panama,PAN,October,10,45
+Panama,PAN,September,4,42
+Papua New Guinea,PNG,April,21,36
+Papua New Guinea,PNG,August,20,39
+Papua New Guinea,PNG,December,22,38
+Papua New Guinea,PNG,February,21,38
+Papua New Guinea,PNG,January,22,39
+Papua New Guinea,PNG,July,20,35
+Papua New Guinea,PNG,June,20,35
+Papua New Guinea,PNG,March,20,42
+Papua New Guinea,PNG,May,21,35
+Papua New Guinea,PNG,November,22,39
+Papua New Guinea,PNG,October,21,37
+Papua New Guinea,PNG,September,20,36
+Paraguay,PRY,April,13,37
+Paraguay,PRY,August,6,39
+Paraguay,PRY,December,19,40
+Paraguay,PRY,February,17,39
+Paraguay,PRY,January,19,39
+Paraguay,PRY,July,7,37
+Paraguay,PRY,June,3,35
+Paraguay,PRY,March,14,40
+Paraguay,PRY,May,8,36
+Paraguay,PRY,November,13,43
+Paraguay,PRY,October,16,43
+Paraguay,PRY,September,10,42
+Peru,PER,April,18,33
+Peru,PER,August,17,31
+Peru,PER,December,17,33
+Peru,PER,February,19,33
+Peru,PER,January,20,39
+Peru,PER,July,16,32
+Peru,PER,June,18,33
+Peru,PER,March,20,34
+Peru,PER,May,18,33
+Peru,PER,November,16,32
+Peru,PER,October,15,32
+Peru,PER,September,18,31
+Philippines,PHL,April,15,32
+Philippines,PHL,August,22,34
+Philippines,PHL,December,14,29
+Philippines,PHL,February,13,30
+Philippines,PHL,January,13,28
+Philippines,PHL,July,22,35
+Philippines,PHL,June,22,35
+Philippines,PHL,March,14,32
+Philippines,PHL,May,20,35
+Philippines,PHL,November,16,39
+Philippines,PHL,October,17,33
+Philippines,PHL,September,22,34
+Poland,POL,April,-6,26
+Poland,POL,August,6,34
+Poland,POL,December,-11,13
+Poland,POL,February,-15,15
+Poland,POL,January,-15,13
+Poland,POL,July,7,34
+Poland,POL,June,1,33
+Poland,POL,March,-13,18
+Poland,POL,May,-3,30
+Poland,POL,November,-8,18
+Poland,POL,October,-2,24
+Poland,POL,September,1,32
+Portugal,PRT,April,0,22
+Portugal,PRT,August,16,29
+Portugal,PRT,December,0,22
+Portugal,PRT,February,6,21
+Portugal,PRT,January,0,21
+Portugal,PRT,July,15,29
+Portugal,PRT,June,11,27
+Portugal,PRT,March,0,23
+Portugal,PRT,May,8,24
+Portugal,PRT,November,10,24
+Portugal,PRT,October,9,27
+Portugal,PRT,September,14,28
+Qatar,QAT,April,17,60
+Qatar,QAT,August,30,48
+Qatar,QAT,December,12,32
+Qatar,QAT,February,10,34
+Qatar,QAT,January,10,32
+Qatar,QAT,July,26,48
+Qatar,QAT,June,24,49
+Qatar,QAT,March,14,42
+Qatar,QAT,May,21,48
+Qatar,QAT,November,18,37
+Qatar,QAT,October,22,43
+Qatar,QAT,September,27,46
+Romania,ROU,April,-7,28
+Romania,ROU,August,5,36
+Romania,ROU,December,-16,18
+Romania,ROU,February,-19,18
+Romania,ROU,January,-21,19
+Romania,ROU,July,7,35
+Romania,ROU,June,6,34
+Romania,ROU,March,-20,23
+Romania,ROU,May,1,29
+Romania,ROU,November,-13,23
+Romania,ROU,October,-8,28
+Romania,ROU,September,-1,36
+Russian Federation,RUS,April,-30,0
+Russian Federation,RUS,August,-4,6
+Russian Federation,RUS,December,-34,0
+Russian Federation,RUS,February,-39,0
+Russian Federation,RUS,January,-35,1
+Russian Federation,RUS,July,-4,8
+Russian Federation,RUS,June,-8,5
+Russian Federation,RUS,March,-38,1
+Russian Federation,RUS,May,-20,2
+Russian Federation,RUS,November,-29,3
+Russian Federation,RUS,October,-19,3
+Russian Federation,RUS,September,-9,6
+Rwanda,RWA,April,14,32
+Rwanda,RWA,August,14,32
+Rwanda,RWA,December,12,32
+Rwanda,RWA,February,14,33
+Rwanda,RWA,January,14,33
+Rwanda,RWA,July,9,31
+Rwanda,RWA,June,12,29
+Rwanda,RWA,March,14,33
+Rwanda,RWA,May,12,30
+Rwanda,RWA,November,14,30
+Rwanda,RWA,October,13,32
+Rwanda,RWA,September,10,32
+Réunion,REU,April,22,34
+Réunion,REU,August,18,31
+Réunion,REU,December,22,34
+Réunion,REU,February,23,33
+Réunion,REU,January,22,33
+Réunion,REU,July,17,31
+Réunion,REU,June,19,32
+Réunion,REU,March,23,34
+Réunion,REU,May,19,33
+Réunion,REU,November,22,33
+Réunion,REU,October,20,32
+Réunion,REU,September,20,31
+Saint Pierre and Miquelon,SPM,April,-10,13
+Saint Pierre and Miquelon,SPM,August,6,26
+Saint Pierre and Miquelon,SPM,December,-11,12
+Saint Pierre and Miquelon,SPM,February,-16,8
+Saint Pierre and Miquelon,SPM,January,-14,9
+Saint Pierre and Miquelon,SPM,July,7,28
+Saint Pierre and Miquelon,SPM,June,1,22
+Saint Pierre and Miquelon,SPM,March,-13,11
+Saint Pierre and Miquelon,SPM,May,-1,17
+Saint Pierre and Miquelon,SPM,November,-7,15
+Saint Pierre and Miquelon,SPM,October,0,20
+Saint Pierre and Miquelon,SPM,September,3,23
+Saudi Arabia,SAU,April,2,36
+Saudi Arabia,SAU,August,16,45
+Saudi Arabia,SAU,December,-5,26
+Saudi Arabia,SAU,February,-5,28
+Saudi Arabia,SAU,January,-7,24
+Saudi Arabia,SAU,July,17,45
+Saudi Arabia,SAU,June,14,43
+Saudi Arabia,SAU,March,-3,34
+Saudi Arabia,SAU,May,8,40
+Saudi Arabia,SAU,November,-4,29
+Saudi Arabia,SAU,October,5,38
+Saudi Arabia,SAU,September,14,43
+Senegal,SEN,April,14,45
+Senegal,SEN,August,19,38
+Senegal,SEN,December,10,42
+Senegal,SEN,February,11,41
+Senegal,SEN,January,10,40
+Senegal,SEN,July,14,40
+Senegal,SEN,June,14,44
+Senegal,SEN,March,14,42
+Senegal,SEN,May,12,45
+Senegal,SEN,November,15,42
+Senegal,SEN,October,19,44
+Senegal,SEN,September,14,42
+Serbia,SRB,April,-5,31
+Serbia,SRB,August,9,40
+Serbia,SRB,December,-17,22
+Serbia,SRB,February,-12,22
+Serbia,SRB,January,-19,19
+Serbia,SRB,July,9,40
+Serbia,SRB,June,8,39
+Serbia,SRB,March,-20,26
+Serbia,SRB,May,3,32
+Serbia,SRB,November,-7,25
+Serbia,SRB,October,-2,29
+Serbia,SRB,September,2,37
+Seychelles,SYC,April,23,35
+Seychelles,SYC,August,21,31
+Seychelles,SYC,December,21,33
+Seychelles,SYC,February,23,35
+Seychelles,SYC,January,22,33
+Seychelles,SYC,July,22,31
+Seychelles,SYC,June,23,32
+Seychelles,SYC,March,20,34
+Seychelles,SYC,May,23,33
+Seychelles,SYC,November,22,34
+Seychelles,SYC,October,20,32
+Seychelles,SYC,September,22,31
+Sierra Leone,SLE,April,23,39
+Sierra Leone,SLE,August,22,31
+Sierra Leone,SLE,December,20,39
+Sierra Leone,SLE,February,20,34
+Sierra Leone,SLE,January,22,34
+Sierra Leone,SLE,July,21,38
+Sierra Leone,SLE,June,22,32
+Sierra Leone,SLE,March,19,39
+Sierra Leone,SLE,May,22,33
+Sierra Leone,SLE,November,22,39
+Sierra Leone,SLE,October,22,34
+Sierra Leone,SLE,September,21,33
+Slovakia,SVK,April,-8,28
+Slovakia,SVK,August,5,38
+Slovakia,SVK,December,-15,15
+Slovakia,SVK,February,-14,18
+Slovakia,SVK,January,-20,14
+Slovakia,SVK,July,5,37
+Slovakia,SVK,June,5,37
+Slovakia,SVK,March,-15,22
+Slovakia,SVK,May,-2,31
+Slovakia,SVK,November,-10,20
+Slovakia,SVK,October,-3,26
+Slovakia,SVK,September,0,32
+Slovenia,SVN,April,-17,10
+Slovenia,SVN,August,-3,19
+Slovenia,SVN,December,-20,10
+Slovenia,SVN,February,-27,10
+Slovenia,SVN,January,-24,8
+Slovenia,SVN,July,-2,19
+Slovenia,SVN,June,-4,21
+Slovenia,SVN,March,-20,8
+Slovenia,SVN,May,-11,12
+Slovenia,SVN,November,-19,13
+Slovenia,SVN,October,-9,15
+Slovenia,SVN,September,-8,18
+Solomon Islands,SLB,April,22,33
+Solomon Islands,SLB,August,20,32
+Solomon Islands,SLB,December,23,33
+Solomon Islands,SLB,February,21,34
+Solomon Islands,SLB,January,20,33
+Solomon Islands,SLB,July,21,32
+Solomon Islands,SLB,June,22,32
+Solomon Islands,SLB,March,22,34
+Solomon Islands,SLB,May,22,35
+Solomon Islands,SLB,November,20,34
+Solomon Islands,SLB,October,22,33
+Solomon Islands,SLB,September,22,32
+South Africa,ZAF,April,2,35
+South Africa,ZAF,August,-3,32
+South Africa,ZAF,December,10,41
+South Africa,ZAF,February,12,38
+South Africa,ZAF,January,13,41
+South Africa,ZAF,July,-5,29
+South Africa,ZAF,June,-5,32
+South Africa,ZAF,March,10,38
+South Africa,ZAF,May,-3,30
+South Africa,ZAF,November,6,39
+South Africa,ZAF,October,6,38
+South Africa,ZAF,September,-1,36
+Spain,ESP,April,5,26
+Spain,ESP,August,13,33
+Spain,ESP,December,3,22
+Spain,ESP,February,2,24
+Spain,ESP,January,2,23
+Spain,ESP,July,13,33
+Spain,ESP,June,10,32
+Spain,ESP,March,3,28
+Spain,ESP,May,6,34
+Spain,ESP,November,5,24
+Spain,ESP,October,7,33
+Spain,ESP,September,11,35
+Sri Lanka,LKA,April,21,38
+Sri Lanka,LKA,August,22,38
+Sri Lanka,LKA,December,16,36
+Sri Lanka,LKA,February,19,33
+Sri Lanka,LKA,January,19,31
+Sri Lanka,LKA,July,22,38
+Sri Lanka,LKA,June,23,38
+Sri Lanka,LKA,March,12,36
+Sri Lanka,LKA,May,21,38
+Sri Lanka,LKA,November,20,34
+Sri Lanka,LKA,October,22,40
+Sri Lanka,LKA,September,22,38
+Suriname,SUR,April,21,35
+Suriname,SUR,August,21,35
+Suriname,SUR,December,20,36
+Suriname,SUR,February,20,33
+Suriname,SUR,January,13,34
+Suriname,SUR,July,11,34
+Suriname,SUR,June,21,34
+Suriname,SUR,March,20,34
+Suriname,SUR,May,21,34
+Suriname,SUR,November,21,38
+Suriname,SUR,October,22,39
+Suriname,SUR,September,22,39
+Sweden,SWE,April,-17,9
+Sweden,SWE,August,0,25
+Sweden,SWE,December,-35,0
+Sweden,SWE,February,-32,4
+Sweden,SWE,January,-29,3
+Sweden,SWE,July,2,30
+Sweden,SWE,June,-2,26
+Sweden,SWE,March,-29,6
+Sweden,SWE,May,-12,20
+Sweden,SWE,November,-30,4
+Sweden,SWE,October,-15,10
+Sweden,SWE,September,-4,20
+Switzerland,CHE,April,-3,28
+Switzerland,CHE,August,8,37
+Switzerland,CHE,December,-13,17
+Switzerland,CHE,February,-12,20
+Switzerland,CHE,January,-10,19
+Switzerland,CHE,July,8,37
+Switzerland,CHE,June,5,36
+Switzerland,CHE,March,-6,25
+Switzerland,CHE,May,0,33
+Switzerland,CHE,November,-6,22
+Switzerland,CHE,October,-1,29
+Switzerland,CHE,September,3,32
+Syrian Arab Republic,SYR,April,-2,37
+Syrian Arab Republic,SYR,August,12,47
+Syrian Arab Republic,SYR,December,-10,22
+Syrian Arab Republic,SYR,February,-16,23
+Syrian Arab Republic,SYR,January,-11,21
+Syrian Arab Republic,SYR,July,9,47
+Syrian Arab Republic,SYR,June,10,45
+Syrian Arab Republic,SYR,March,-7,27
+Syrian Arab Republic,SYR,May,2,42
+Syrian Arab Republic,SYR,November,-4,29
+Syrian Arab Republic,SYR,October,0,38
+Syrian Arab Republic,SYR,September,6,48
+Tajikistan,TJK,April,-1,34
+Tajikistan,TJK,August,11,41
+Tajikistan,TJK,December,-14,21
+Tajikistan,TJK,February,-14,22
+Tajikistan,TJK,January,-20,17
+Tajikistan,TJK,July,12,43
+Tajikistan,TJK,June,9,42
+Tajikistan,TJK,March,-6,28
+Tajikistan,TJK,May,7,39
+Tajikistan,TJK,November,-13,25
+Tajikistan,TJK,October,-2,32
+Tajikistan,TJK,September,3,39
+"Tanzania, United Republic of",TZA,April,16,34
+"Tanzania, United Republic of",TZA,August,10,34
+"Tanzania, United Republic of",TZA,December,14,32
+"Tanzania, United Republic of",TZA,February,16,34
+"Tanzania, United Republic of",TZA,January,14,34
+"Tanzania, United Republic of",TZA,July,8,37
+"Tanzania, United Republic of",TZA,June,10,33
+"Tanzania, United Republic of",TZA,March,15,56
+"Tanzania, United Republic of",TZA,May,11,32
+"Tanzania, United Republic of",TZA,November,13,33
+"Tanzania, United Republic of",TZA,October,15,33
+"Tanzania, United Republic of",TZA,September,16,34
+Thailand,THA,April,16,45
+Thailand,THA,August,21,36
+Thailand,THA,December,8,33
+Thailand,THA,February,8,37
+Thailand,THA,January,9,33
+Thailand,THA,July,21,38
+Thailand,THA,June,21,40
+Thailand,THA,March,12,41
+Thailand,THA,May,20,43
+Thailand,THA,November,12,34
+Thailand,THA,October,17,37
+Thailand,THA,September,20,37
+Togo,TGO,April,20,44
+Togo,TGO,August,20,35
+Togo,TGO,December,16,41
+Togo,TGO,February,18,42
+Togo,TGO,January,16,40
+Togo,TGO,July,21,40
+Togo,TGO,June,20,38
+Togo,TGO,March,20,43
+Togo,TGO,May,21,42
+Togo,TGO,November,16,40
+Togo,TGO,October,16,39
+Togo,TGO,September,14,36
+Trinidad and Tobago,TTO,April,19,59
+Trinidad and Tobago,TTO,August,21,36
+Trinidad and Tobago,TTO,December,20,34
+Trinidad and Tobago,TTO,February,19,34
+Trinidad and Tobago,TTO,January,18,33
+Trinidad and Tobago,TTO,July,22,35
+Trinidad and Tobago,TTO,June,20,35
+Trinidad and Tobago,TTO,March,18,36
+Trinidad and Tobago,TTO,May,22,35
+Trinidad and Tobago,TTO,November,22,35
+Trinidad and Tobago,TTO,October,21,36
+Trinidad and Tobago,TTO,September,21,36
+Tunisia,TUN,April,2,32
+Tunisia,TUN,August,11,49
+Tunisia,TUN,December,-5,28
+Tunisia,TUN,February,-6,28
+Tunisia,TUN,January,-2,24
+Tunisia,TUN,July,16,49
+Tunisia,TUN,June,7,42
+Tunisia,TUN,March,5,31
+Tunisia,TUN,May,3,40
+Tunisia,TUN,November,2,32
+Tunisia,TUN,October,11,39
+Tunisia,TUN,September,8,41
+Turkmenistan,TKM,April,-2,38
+Turkmenistan,TKM,August,8,44
+Turkmenistan,TKM,December,-16,21
+Turkmenistan,TKM,February,-25,26
+Turkmenistan,TKM,January,-22,19
+Turkmenistan,TKM,July,12,49
+Turkmenistan,TKM,June,12,46
+Turkmenistan,TKM,March,-10,32
+Turkmenistan,TKM,May,5,44
+Turkmenistan,TKM,November,-18,25
+Turkmenistan,TKM,October,-12,36
+Turkmenistan,TKM,September,0,43
+Tuvalu,TUV,April,21,35
+Tuvalu,TUV,August,24,33
+Tuvalu,TUV,December,24,34
+Tuvalu,TUV,February,24,34
+Tuvalu,TUV,January,21,34
+Tuvalu,TUV,July,24,33
+Tuvalu,TUV,June,24,33
+Tuvalu,TUV,March,21,34
+Tuvalu,TUV,May,23,33
+Tuvalu,TUV,November,24,40
+Tuvalu,TUV,October,22,34
+Tuvalu,TUV,September,22,34
+Türkiye,TUR,April,2,30
+Türkiye,TUR,August,12,34
+Türkiye,TUR,December,-5,25
+Türkiye,TUR,February,-4,24
+Türkiye,TUR,January,-5,24
+Türkiye,TUR,July,14,35
+Türkiye,TUR,June,11,35
+Türkiye,TUR,March,-3,28
+Türkiye,TUR,May,5,34
+Türkiye,TUR,November,0,31
+Türkiye,TUR,October,3,30
+Türkiye,TUR,September,9,34
+Ukraine,UKR,April,-5,28
+Ukraine,UKR,August,4,35
+Ukraine,UKR,December,-18,14
+Ukraine,UKR,February,-22,15
+Ukraine,UKR,January,-26,14
+Ukraine,UKR,July,6,35
+Ukraine,UKR,June,3,34
+Ukraine,UKR,March,-21,22
+Ukraine,UKR,May,-1,30
+Ukraine,UKR,November,-14,21
+Ukraine,UKR,October,-6,26
+Ukraine,UKR,September,-2,35
+United Arab Emirates,ARE,April,17,43
+United Arab Emirates,ARE,August,30,49
+United Arab Emirates,ARE,December,14,32
+United Arab Emirates,ARE,February,11,36
+United Arab Emirates,ARE,January,12,31
+United Arab Emirates,ARE,July,28,48
+United Arab Emirates,ARE,June,25,48
+United Arab Emirates,ARE,March,14,40
+United Arab Emirates,ARE,May,22,45
+United Arab Emirates,ARE,November,17,38
+United Arab Emirates,ARE,October,21,43
+United Arab Emirates,ARE,September,26,46
+United Kingdom,GBR,April,-5,14
+United Kingdom,GBR,August,6,20
+United Kingdom,GBR,December,-5,13
+United Kingdom,GBR,February,-5,11
+United Kingdom,GBR,January,-6,12
+United Kingdom,GBR,July,5,23
+United Kingdom,GBR,June,3,22
+United Kingdom,GBR,March,-6,13
+United Kingdom,GBR,May,-2,20
+United Kingdom,GBR,November,-2,14
+United Kingdom,GBR,October,1,16
+United Kingdom,GBR,September,4,21
+United States,USA,April,-33,4
+United States,USA,August,-3,24
+United States,USA,December,-38,4
+United States,USA,February,-43,1
+United States,USA,January,-39,2
+United States,USA,July,-2,23
+United States,USA,June,-9,23
+United States,USA,March,-42,1
+United States,USA,May,-21,8
+United States,USA,November,-33,2
+United States,USA,October,-27,7
+United States,USA,September,-14,16
+United States Minor Outlying Islands,UMI,April,25,29
+United States Minor Outlying Islands,UMI,August,25,30
+United States Minor Outlying Islands,UMI,December,25,30
+United States Minor Outlying Islands,UMI,February,25,28
+United States Minor Outlying Islands,UMI,January,25,29
+United States Minor Outlying Islands,UMI,July,26,30
+United States Minor Outlying Islands,UMI,June,24,30
+United States Minor Outlying Islands,UMI,March,25,29
+United States Minor Outlying Islands,UMI,May,25,30
+United States Minor Outlying Islands,UMI,November,24,30
+United States Minor Outlying Islands,UMI,October,24,29
+United States Minor Outlying Islands,UMI,September,25,30
+Uruguay,URY,April,2,32
+Uruguay,URY,August,-2,33
+Uruguay,URY,December,10,40
+Uruguay,URY,February,7,39
+Uruguay,URY,January,10,41
+Uruguay,URY,July,-2,29
+Uruguay,URY,June,-3,29
+Uruguay,URY,March,5,38
+Uruguay,URY,May,0,30
+Uruguay,URY,November,6,36
+Uruguay,URY,October,4,34
+Uruguay,URY,September,-3,35
+Uzbekistan,UZB,April,2,35
+Uzbekistan,UZB,August,9,40
+Uzbekistan,UZB,December,-22,13
+Uzbekistan,UZB,July,15,42
+Uzbekistan,UZB,June,13,40
+Uzbekistan,UZB,May,8,36
+Uzbekistan,UZB,November,-3,21
+Uzbekistan,UZB,October,-3,28
+Uzbekistan,UZB,September,6,31
+Vanuatu,VUT,April,20,34
+Vanuatu,VUT,August,19,36
+Vanuatu,VUT,December,2,34
+Vanuatu,VUT,February,20,35
+Vanuatu,VUT,January,20,34
+Vanuatu,VUT,July,20,34
+Vanuatu,VUT,June,20,34
+Vanuatu,VUT,March,15,35
+Vanuatu,VUT,May,19,34
+Vanuatu,VUT,November,20,38
+Vanuatu,VUT,October,20,32
+Vanuatu,VUT,September,20,38
+"Venezuela, Bolivarian Republic of",VEN,April,16,40
+"Venezuela, Bolivarian Republic of",VEN,August,0,38
+"Venezuela, Bolivarian Republic of",VEN,December,15,38
+"Venezuela, Bolivarian Republic of",VEN,February,0,38
+"Venezuela, Bolivarian Republic of",VEN,January,0,38
+"Venezuela, Bolivarian Republic of",VEN,July,15,37
+"Venezuela, Bolivarian Republic of",VEN,June,15,38
+"Venezuela, Bolivarian Republic of",VEN,March,16,40
+"Venezuela, Bolivarian Republic of",VEN,May,0,39
+"Venezuela, Bolivarian Republic of",VEN,November,0,37
+"Venezuela, Bolivarian Republic of",VEN,October,16,39
+"Venezuela, Bolivarian Republic of",VEN,September,0,38
+Viet Nam,VNM,April,10,38
+Viet Nam,VNM,August,20,34
+Viet Nam,VNM,December,2,30
+Viet Nam,VNM,February,0,35
+Viet Nam,VNM,January,1,32
+Viet Nam,VNM,July,19,40
+Viet Nam,VNM,June,17,37
+Viet Nam,VNM,March,7,38
+Viet Nam,VNM,May,15,41
+Viet Nam,VNM,November,9,32
+Viet Nam,VNM,October,12,34
+Viet Nam,VNM,September,15,35
+"Virgin Islands, U.S.",VIR,April,21,33
+"Virgin Islands, U.S.",VIR,August,23,35
+"Virgin Islands, U.S.",VIR,December,8,33
+"Virgin Islands, U.S.",VIR,February,19,31
+"Virgin Islands, U.S.",VIR,January,18,31
+"Virgin Islands, U.S.",VIR,July,23,34
+"Virgin Islands, U.S.",VIR,June,23,34
+"Virgin Islands, U.S.",VIR,March,18,32
+"Virgin Islands, U.S.",VIR,May,4,34
+"Virgin Islands, U.S.",VIR,November,21,32
+"Virgin Islands, U.S.",VIR,October,18,34
+"Virgin Islands, U.S.",VIR,September,23,36
+Western Sahara,ESH,April,14,26
+Western Sahara,ESH,August,20,40
+Western Sahara,ESH,December,14,30
+Western Sahara,ESH,February,10,34
+Western Sahara,ESH,January,12,28
+Western Sahara,ESH,July,18,38
+Western Sahara,ESH,June,16,36
+Western Sahara,ESH,March,12,32
+Western Sahara,ESH,May,16,32
+Western Sahara,ESH,November,14,32
+Western Sahara,ESH,October,18,36
+Western Sahara,ESH,September,20,32
+Zambia,ZMB,April,13,29
+Zambia,ZMB,August,10,32
+Zambia,ZMB,December,15,33
+Zambia,ZMB,February,15,29
+Zambia,ZMB,January,15,29
+Zambia,ZMB,July,8,29
+Zambia,ZMB,June,9,30
+Zambia,ZMB,March,15,31
+Zambia,ZMB,May,10,28
+Zambia,ZMB,November,15,34
+Zambia,ZMB,October,13,36
+Zambia,ZMB,September,13,34
+Zimbabwe,ZWE,April,7,30
+Zimbabwe,ZWE,August,3,32
+Zimbabwe,ZWE,December,12,35
+Zimbabwe,ZWE,February,12,34
+Zimbabwe,ZWE,January,11,34
+Zimbabwe,ZWE,July,2,28
+Zimbabwe,ZWE,June,2,28
+Zimbabwe,ZWE,March,11,31
+Zimbabwe,ZWE,May,4,28
+Zimbabwe,ZWE,November,9,36
+Zimbabwe,ZWE,October,6,36
+Zimbabwe,ZWE,September,4,35
