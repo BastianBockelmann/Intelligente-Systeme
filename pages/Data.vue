@@ -125,7 +125,8 @@ export default defineComponent({
       }
 
       try {
-        const { data, error } = await useFetch(`/api/getWeatherData?iso3Code=${this.iso3Code}`);
+        const { data, error } = await useFetch(`/api/getWeatherData?iso3Code=${this.iso3Code.trim()}`);
+
         if (error.value) {
           throw new Error(error.value);
         }

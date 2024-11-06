@@ -5,7 +5,7 @@ import csvParser from 'csv-parser';
 
 interface WeatherData {
   Country: string;
-  ISO_Code: string;
+  ISO3_Code: string;
   Month: string;
   tmin: string;
   tmax: string;
@@ -13,6 +13,11 @@ interface WeatherData {
 
 // Funktion zum Einlesen der CSV-Datei und Filtern der Temperaturdaten nach ISO-Code
 export async function getTemperatureDataByISOCode(isoCode: string): Promise<string> {
+  // Sicherstellen, dass isoCode nicht leer ist
+  if (!isoCode || typeof isoCode !== 'string') {
+    return Promise.reject('Ungültiger ISO-Code übergeben.');
+  }
+
   const filePath = join(process.cwd(), 'data', 'average_monthly_weather_data.csv');
   const weatherData: WeatherData[] = [];
 
@@ -20,8 +25,13 @@ export async function getTemperatureDataByISOCode(isoCode: string): Promise<stri
     fs.createReadStream(filePath)
       .pipe(csvParser())
       .on('data', (row: WeatherData) => {
-        if (row.ISO_Code.toUpperCase() === isoCode.toUpperCase()) {
-          weatherData.push(row);
+        // Prüfen, ob row.ISO3_Code definiert ist, bevor die Methode toUpperCase aufgerufen wird
+        if (row.ISO3_Code && typeof row.ISO3_Code === 'string') {
+          if (row.ISO3_Code.toUpperCase() === isoCode.toUpperCase()) {
+            weatherData.push(row);
+          }
+        } else {
+          console.warn('Warnung: ISO3_Code in CSV-Zeile ist undefiniert oder kein String:', row);
         }
       })
       .on('end', () => {
@@ -41,8 +51,3 @@ export async function getTemperatureDataByISOCode(isoCode: string): Promise<stri
       });
   });
 }
-
-// Beispielaufruf
-getTemperatureDataByISOCode('DEU')
-  .then((result) => console.log(result))
-  .catch((error) => console.error(error));
