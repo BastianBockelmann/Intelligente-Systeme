@@ -232,10 +232,10 @@ export default defineComponent({
       <div class="content-fetcher">
         <h2 class="text-lg font-semibold">Länder-Content Abrufen</h2>
         <!-- Eingabefeld für den ISO3-Code -->
-        <input v-model="iso3Code" type="text" placeholder="Geben Sie den ISO3-Code ein" />
+        <UInput class="mr-2 mb-2 w-80" v-model="iso3Code" type="text" placeholder="Geben Sie den ISO3-Code ein" />
 
         <!-- Button, um den Content abzurufen -->
-        <UButton class="ml-3" @click="fetchContent">Content abrufen</UButton>
+        <UButton @click="fetchContent">Content abrufen</UButton>
 
         <!-- Bereich zur Anzeige des Inhalts -->
         <div v-if="content" class="content-display">
@@ -249,7 +249,7 @@ export default defineComponent({
       <div class="weather-fetcher mt-4">
         <h2 class="text-lg font-semibold">Wetterdaten Abrufen</h2>
         <!-- Button, um die Wetterdaten abzurufen -->
-        <UButton class="ml-3" @click="fetchWeatherData">Wetterdaten abrufen</UButton>
+        <UButton @click="fetchWeatherData">Wetterdaten abrufen</UButton>
 
         <!-- Bereich zur Anzeige der Wetterdaten -->
         <div v-if="weatherData" class="weather-display mt-2">
@@ -262,10 +262,16 @@ export default defineComponent({
       <div class="travel-data-fetcher mt-2">
         <h2 class="text-lg font-semibold">Reiseinformationen Abrufen</h2>
         <!-- Eingabefelder für die Abfrageparameter -->
-        <input v-model="travelQueryString" type="text"
-          placeholder="Geben Sie einen Suchbegriff für Reiseinformationen ein" />
-        <input v-model.number="minRelevance" type="number" placeholder="Minimale Relevanz (%)" />
-        <input v-model.number="topK" type="number" placeholder="Maximale Anzahl an Ergebnissen" />
+        <div class="flex items-start m-1">
+          <p class="mr-1">Suche für Reiseinformationen:</p>
+          <UInput class="mr-2 w-80" v-model="travelQueryString" type="text"
+            placeholder="Geben Sie einen Suchbegriff für Reiseinformationen ein" />
+          <p class="mr-1">Minimale Relevanz (%):</p>
+          <UInput class="mr-2" v-model.number="minRelevance" type="number" placeholder="Minimale Relevanz (%)" />
+          <p class="mr-1">Maximale Anzahl an Ergebnissen:</p>
+          <UInput class="mr-2" v-model.number="topK" type="number" placeholder="Maximale Anzahl an Ergebnissen" />
+        </div>
+        
 
         <!-- Button, um die Reiseinformationen abzurufen -->
         <UButton class="ml-3" @click="fetchTravelData">Reiseinformationen abrufen</UButton>

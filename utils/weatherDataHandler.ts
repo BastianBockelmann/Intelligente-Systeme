@@ -18,11 +18,11 @@ export async function getTemperatureDataByISOCode(isoCode: string): Promise<stri
     return Promise.reject('Ungültiger ISO-Code übergeben.');
   }
 
-  const filePath = join(process.cwd(), 'data', 'average_monthly_weather_data.csv');
+  const weatherFilePath = join(process.cwd(), 'data', 'average_monthly_weather_data.csv');
   const weatherData: WeatherData[] = [];
 
   return new Promise((resolve, reject) => {
-    fs.createReadStream(filePath)
+    fs.createReadStream(weatherFilePath)
       .pipe(csvParser())
       .on('data', (row: WeatherData) => {
         // Prüfen, ob row.ISO3_Code definiert ist, bevor die Methode toUpperCase aufgerufen wird
@@ -39,12 +39,23 @@ export async function getTemperatureDataByISOCode(isoCode: string): Promise<stri
           return resolve(`Keine Wetterdaten für ISO-Code ${isoCode} gefunden.`);
         }
 
+        // Den vollständigen Ländernamen verwenden
+        const countryName = weatherData[0].Country;
+
+        // Wetterdaten nach den Monaten in der richtigen Reihenfolge sortieren
+        const monthOrder = [
+          'January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        weatherData.sort((a, b) => monthOrder.indexOf(a.Month) - monthOrder.indexOf(b.Month));
+
         // Erstellen einer kurzen Zusammenfassung der Temperaturdaten
         const summary = weatherData
           .map(data => `${data.Month}: Tmin ${data.tmin}°C, Tmax ${data.tmax}°C`)
           .join('; ');
 
-        resolve(`Wetterdaten für ${isoCode}: ${summary}`);
+        resolve(`Weatherdata for ${countryName}: ${summary}`);
       })
       .on('error', (error) => {
         reject(`Fehler beim Einlesen der Wetterdaten: ${error.message}`);
