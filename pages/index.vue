@@ -206,6 +206,14 @@ const items = [
       disabled: true,
     },
   ],
+  [
+    {
+      label: "Data testing",
+      slot: "vector",
+      to: "/Data",
+      disabled: true,
+    },
+  ],
 ];
 </script>
 
@@ -237,6 +245,14 @@ const items = [
           <div class="text-left">
             <p>Benutze API:</p>
             <UButton class="font-medium text-left break-words" :to="item.label" :label="item.label" variant="link">
+            </UButton>
+          </div>
+        </template>
+
+        <template #vector="{ item }">
+          <div class="text-left">
+            <p>Vektor Page:</p>
+            <UButton class="font-medium text-left break-words" :to="item.to" :label="item.label" variant="link">
             </UButton>
           </div>
         </template>
