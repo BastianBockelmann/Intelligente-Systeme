@@ -1,9 +1,11 @@
 <script setup lang="ts">
+// Bibiliotheken Importieren
 import moment from "moment";
 
 const userInput = ref("");
 const chatContainer = ref<HTMLElement | null>(null);
 const showScrollButton = ref(false); // Scroll-Button sichtbar oder nicht
+const isLoading = ref(false); // Lade-Status für den Chatbot
 const messages = ref([
   {
     text: "Stelle mir eine <b>Frage</b> <br>über deine Auslandsreise für nötige Informationen vor deiner Reise.",
@@ -15,18 +17,29 @@ const messages = ref([
 // Funktion zum Senden einer Nachricht
 const sendMessage = async () => {
   if (userInput.value.trim() !== "") {
+
+    // Lokal Text speichern
+    const textInput = userInput.value
+
+    // Eingabe löschen
+    userInput.value = "";
+
     // Benutzer-Nachricht hinzufügen
     messages.value.push({
-      text: String(userInput.value),
+      text: String(textInput),
       isUser: true,
       time: convertDate(new Date()),
     });
 
-    // Nachricht an Langchain-Backend senden
-    await fetchChatbotResponse(String(userInput.value));
+    // Lade-Status aktivieren
+    isLoading.value = true;
 
-    // Eingabe löschen
-    userInput.value = "";
+    // Nachricht an Langchain-Backend senden
+    await fetchChatbotResponse(String(textInput));
+
+
+    // Lade-Status deaktivieren
+    isLoading.value = false;
   }
 };
 
@@ -119,16 +132,16 @@ function formatMessageWithLists(text: string): string {
   // Fettschrift für Titel (z.B. **Titel**)
   let formattedText = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
 
-  formattedText = formattedText.replace(/(?:\n|^)(\d+)\.\s(.+?)(?=\n|$)/g, "<li>$1. $2</li>");
+  formattedText = formattedText.replace(/(?:\n|^)(\d+)\.\s(.+?)(?=\n|$)/g, "<b><li>$1. $2</li></b>");
 
   // Nummerierte Listen (1., 2., 3. ...) erkennen und in <li> umwandeln
-  formattedText = formattedText.replace(/(?:\n|^)(\d+)\.\s(.+?)(?=\n|$)/g, "<li>$1. $2</li>");
+  formattedText = formattedText.replace(/(?:\n|^)(\d+)\.\s(.+?)(?=\n|$)/g, "<b><li>$1. $2</li></b>");
 
   // Aufzählungen mit - in Listen umwandeln (- Listenelement)
-  formattedText = formattedText.replace(/(?:\n|^)-\s(.+?)(?=\n|$)/g, "<li>$1</li>");
+  formattedText = formattedText.replace(/(?:\n|^)-\s(.+?)(?=\n|$)/g, "<b><li>$1</li></b>");
 
   // Alle <li> in <ul> oder <ol> umschließen, abhängig von der Liste
-  formattedText = formattedText.replace(/(<li>\d+\. .*<\/li>)/g, "<ol>$1</ol>");
+  formattedText = formattedText.replace(/(<li>\d+\. .*<\/li>)/g, "<b><ol>$1</ol></b>");
   formattedText = formattedText.replace(/(<li>(?!\d\.).*<\/li>)/g, "<ul>$1</ul>");
 
   // Doppelte Zeilenumbrüche in Absätze (<p>) umwandeln
@@ -144,11 +157,14 @@ function formatMessageWithLists(text: string): string {
   return `<p>${formattedText}</p>`;
 }
 
+
+
+
 // Funktion zum Hinzufügen der Chatbot-Nachricht
 const addMessageToChatbot = (text: string) => {
 
-   // Nachricht formatieren
-   const formattedText = formatMessageWithLists(text);
+  // Nachricht formatieren
+  const formattedText = formatMessageWithLists(text);
 
   // Aktualisiere die letzte Nachricht oder füge eine neue hinzu
   const lastMessage = messages.value[messages.value.length - 1];
@@ -255,7 +271,7 @@ const items = [
 
           <div v-if="message.usUser"
             class="bg-gray-200 dark:text-gray-300 dark:bg-gray-800 p-1 my-auto rounded-md shadow-sm max-w-xs break-words">
-            <span>{{message.text}}</span>
+            <span>{{ message.text }}</span>
           </div>
         </div>
 
@@ -263,6 +279,12 @@ const items = [
           class="text-gray-600 dark:text-gray-400 text-center items-center justify-center flex h-10 w-10 ml-2 rounded-full bg-white dark:bg-gray-800 border dark:border-gray-600">
           <UIcon name="i-heroicons-user" class="w-6 h-6" />
         </div>
+      </div>
+
+      <!-- Lade-Status-Anzeige -->
+      <div v-if="isLoading" class="flex self-start items-center text-gray-600 dark:text-gray-400 space-x-2">
+        <span>Chatbot lädt...</span>
+        <UIcon name="i-heroicons-ellipsis-horizontal" class="animate-bounce" />
       </div>
 
       <!-- Scroll to Bottom Button -->
