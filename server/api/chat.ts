@@ -194,6 +194,11 @@ export default defineLazyEventHandler(() => {
       contextSentence = previousSessionData.context;
     }
 
+    // Ausgabe des aktuellen ISO-Codes in der Konsole
+    if (contextSentence) {
+      console.log(`Verwendeter ISO Code: ${contextSentence}`);
+    }
+
     // Daten und entsprechendes Prompt-Template basierend auf der Klassifizierung abrufen
     let auswaertigesAmtData = "";
     let weatherData = "";
