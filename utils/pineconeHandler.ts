@@ -228,7 +228,7 @@ export function getFullContentFromJson(iso3Code: string): string | null {
   if (countryData && countryData.content) {
     return countryData.content;  // Rückgabe des gesamten Contents des Eintrags
   } else {
-    console.error(`Kein Content für ISO3-Code ${iso3Code} gefunden.`);
+    console.error(`Kein Content für ISO3-Code "${iso3Code}" gefunden.`);
     return null;  // Rückgabe null, wenn kein Eintrag oder Content vorhanden ist
   }
 }

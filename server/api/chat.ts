@@ -6,9 +6,9 @@ import { HumanMessage } from "@langchain/core/messages";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { Langfuse } from "langfuse";
 import { encoding_for_model } from "tiktoken"; // Import tiktoken
-// import { useFetch } from '#app';
 
-
+// Memory Store für die Konversationen (alternativ könnte hier eine Datenbank verwendet werden)
+const memoryStore = new Map<string, { messages: Message[], context?: string }>();
 // Token counting function
 function countTokens(text: string, model: string): number {
   const encoding = encoding_for_model(model);
@@ -131,20 +131,32 @@ export default defineLazyEventHandler(() => {
   });
 
   return defineEventHandler(async (event) => {
-    const { messages } = await readBody<{ messages: Message[] }>(event);
+    const { messages, sessionId } = await readBody<{ messages: Message[], sessionId: string }>(event);
 
-    if (!messages || messages.length === 0) {
+    if (!messages || messages.length === 0 || !sessionId) {
       throw createError({
         statusCode: 400,
-        statusMessage: "Keine Nachrichten gefunden",
+        statusMessage: "Fehlende Nachrichten oder Session-ID",
       });
     }
 
+    // Nachrichten und Kontext aus dem Speicher abrufen oder initialisieren
+    const previousSessionData = memoryStore.get(sessionId) || { messages: [], context: undefined };
+    const currentMessages = [...previousSessionData.messages, ...messages];
+
+    // Nutzerfrage extrahieren
     const userQuestion = messages[0].content;
+
+    // Speicherung der Nachrichten im Memory aktualisieren
+    previousSessionData.messages = currentMessages;
+    memoryStore.set(sessionId, previousSessionData);
+
+    // Verknüpfen des bisherigen Verlaufs mit der neuen Nachricht
+    const chatHistory = currentMessages.map(msg => new HumanMessage(msg.content));
 
     const trace = langfuse.trace({
       name: "chat-api-call",
-      userId: "Team_Arbeit_Auswärtiges_Amt",
+      userId: sessionId,
       metadata: {
         userQuestion,
       },
@@ -156,64 +168,38 @@ export default defineLazyEventHandler(() => {
       userQuestion,
     });
 
-    // Tokenzählung für die Klassifizierung
-    const classificationInputTokens = countTokens(themePromptFormatted, "gpt-4");
-
-    const classificationResponse = await classificationLlm.call([
-      new HumanMessage(themePromptFormatted),
-    ]);
-
-    const classificationOutputTokens = countTokens(
-      classificationResponse.content,
-      "gpt-4"
-    );
-
+    // Klassifizierung der Frage, um zu bestimmen, ob es um das Wetter, Reiseinformationen oder beides geht
+    const classificationResponse = await classificationLlm.call([new HumanMessage(themePromptFormatted)]);
     const classification = classificationResponse.content.trim();
 
-    // Ereignis für die Klassifizierung
-    trace.event({
-      name: "Classification_Result",
-      metadata: {
-        classification,
-      },
-    });
-
     // 2. Kontextsatz erstellen
-    const contextPromptFormatted = await contextPrompt.format({
-      userQuestion,
-    });
+    let contextSentence = "";
+    if (classification !== "Wetterabfrage") {
+      const contextPromptFormatted = await contextPrompt.format({
+        userQuestion,
+      });
 
-    // Tokenzählung für die Kontextgenerierung
-    const contextInputTokens = countTokens(contextPromptFormatted, "gpt-4");
+      const contextResponse = await classificationLlm.call([new HumanMessage(contextPromptFormatted)]);
+      contextSentence = contextResponse.content.trim();
 
-    const contextResponse = await classificationLlm.call([
-      new HumanMessage(contextPromptFormatted),
-    ]);
+      // Kontext speichern, falls ein Land erkannt wurde
+      if (contextSentence) {
+        previousSessionData.context = contextSentence; // z.B. "NOR" für Norwegen
+        memoryStore.set(sessionId, previousSessionData);
+      }
+    }
 
-    const contextOutputTokens = countTokens(
-      contextResponse.content,
-      "gpt-4"
-    );
-
-    const contextSentence = contextResponse.content.trim();
-
-    // Ereignis für die Kontextgenerierung
-    trace.event({
-      name: "Context_Generation_Result",
-      metadata: {
-        contextSentence,
-      },
-    });
+    // Wenn kein Kontext in der aktuellen Nachricht gefunden wurde, den letzten bekannten Kontext verwenden
+    if (!contextSentence && previousSessionData.context) {
+      contextSentence = previousSessionData.context;
+    }
 
     // Daten und entsprechendes Prompt-Template basierend auf der Klassifizierung abrufen
     let auswaertigesAmtData = "";
     let weatherData = "";
     let prompt = "";
-    let inputTokenCount = 0;
-    let outputTokenCount = 0;
-    let isoCode
 
-    if (classification === "Wetterabfrage") {
+    if (classification === "Wetterabfrage" && contextSentence) {
       // Wetterdaten abrufen
       weatherData = await getWeatherData(contextSentence);
 
@@ -222,27 +208,17 @@ export default defineLazyEventHandler(() => {
         userQuestion,
         weatherData,
       });
-
-      // Tokenzählung für den Haupt-Prompt
-      inputTokenCount = countTokens(prompt, "gpt-4");
-    } else if (classification === "Auswärtiges Amt Daten") {
-      // Daten vom Auswärtigen Amt abrufen mit dem Kontextsatz
-      // auswaertigesAmtData = await getAuswaertigesAmtData(contextSentence);
-      auswaertigesAmtData = await fetchContent(contextSentence)
+    } else if (classification === "Auswärtiges Amt Daten" && contextSentence) {
+      auswaertigesAmtData = await fetchContent(contextSentence);
 
       // Prompt für Auswärtiges Amt Daten formatieren
       prompt = await promptTemplateAuswaertigesAmt.format({
         userQuestion,
         auswaertigesAmtData,
       });
-
-      // Tokenzählung für den Haupt-Prompt
-      inputTokenCount = countTokens(prompt, "gpt-4");
-    } else if (classification === "Beide") {
-      // Beide Daten abrufen
+    } else if (classification === "Beide" && contextSentence) {
       weatherData = await getWeatherData(contextSentence);
-      // auswaertigesAmtData = await getAuswaertigesAmtData(contextSentence);
-      auswaertigesAmtData = await fetchContent(contextSentence)
+      auswaertigesAmtData = await fetchContent(contextSentence);
 
       // Prompt für beide Daten formatieren
       prompt = await promptTemplateBeide.format({
@@ -250,15 +226,9 @@ export default defineLazyEventHandler(() => {
         auswaertigesAmtData,
         weatherData,
       });
-
-      // Tokenzählung für den Haupt-Prompt
-      inputTokenCount = countTokens(prompt, "gpt-4");
     } else {
-      // Unerwartete Klassifizierung behandeln
-      throw createError({
-        statusCode: 400,
-        statusMessage: "Unbekannte Klassifizierung",
-      });
+      // Wenn keine relevanten Daten gefunden werden konnten, standardmäßige Antwort
+      prompt = "Entschuldigen Sie, ich habe dazu keine genaue Antwort.";
     }
 
     const { stream, handlers } = LangChainStream();
@@ -266,37 +236,24 @@ export default defineLazyEventHandler(() => {
 
     try {
       // Verarbeitung der Nachricht mit Streaming
-      await llm.call([new HumanMessage(prompt)], {
+      await llm.call([...chatHistory, new HumanMessage(prompt)], {
         callbacks: [
           {
             handleLLMNewToken(token) {
               // Token zählen, während sie gestreamt werden
-              outputTokenCount++;
             },
             handleLLMEnd() {
-              // Wenn die Antwort abgeschlossen ist
               console.log("Stream beendet.");
             },
           },
-          handlers, // Vorhandene Handler für die Streaming-Antwort
+          handlers,
         ],
       });
 
-      // Ereignis bei erfolgreicher Antwort
       trace.event({
         name: "LLM_Response_Success",
         metadata: {
           duration: Date.now() - start,
-          prompt,
-          inputTokenCount,
-          outputTokenCount,
-          totalTokens:
-            inputTokenCount +
-            outputTokenCount +
-            classificationInputTokens +
-            classificationOutputTokens +
-            contextInputTokens +
-            contextOutputTokens,
         },
       });
     } catch (error) {
@@ -313,84 +270,6 @@ export default defineLazyEventHandler(() => {
       });
     }
 
-    const duration = Date.now() - start;
-
-    // Kostenberechnung (GPT-4 Preis pro 1000 Tokens)
-    const totalTokens =
-      inputTokenCount +
-      outputTokenCount +
-      classificationInputTokens +
-      classificationOutputTokens +
-      contextInputTokens +
-      contextOutputTokens;
-    const costPerToken = 0.00003; // Beispielkosten für OpenAI GPT-4
-    const inputCost = inputTokenCount * costPerToken;
-    const outputCost = outputTokenCount * costPerToken;
-    const classificationInputCost = classificationInputTokens * costPerToken;
-    const classificationOutputCost = classificationOutputTokens * costPerToken;
-    const contextInputCost = contextInputTokens * costPerToken;
-    const contextOutputCost = contextOutputTokens * costPerToken;
-    const totalCost =
-      inputCost +
-      outputCost +
-      classificationInputCost +
-      classificationOutputCost +
-      contextInputCost +
-      contextOutputCost;
-
-    // Erstellung der Langfuse-Generierung mit Nutzungs- und Kostenverfolgung für die Klassifizierung und Kontextgenerierung
-    const classificationGeneration = langfuse.generation({
-      model: "gpt-4",
-      usage: {
-        promptTokens:
-          classificationInputTokens + contextInputTokens,
-        completionTokens:
-          classificationOutputTokens + contextOutputTokens,
-        totalTokens:
-          classificationInputTokens +
-          classificationOutputTokens +
-          contextInputTokens +
-          contextOutputTokens,
-        unit: "TOKENS",
-        inputCost: classificationInputCost + contextInputCost,
-        outputCost: classificationOutputCost + contextOutputCost,
-        totalCost:
-          classificationInputCost +
-          classificationOutputCost +
-          contextInputCost +
-          contextOutputCost,
-      },
-    });
-
-    // Klassifizierungs- und Kontextgenerierungs-Generierung abschließen
-    classificationGeneration.end();
-
-    // Erstellung der Langfuse-Generierung für die Hauptantwort
-    const generation = langfuse.generation({
-      model: "gpt-4",
-      usage: {
-        promptTokens: inputTokenCount,
-        completionTokens: outputTokenCount,
-        totalTokens: inputTokenCount + outputTokenCount,
-        unit: "TOKENS",
-        inputCost,
-        outputCost,
-        totalCost: inputCost + outputCost,
-      },
-    });
-
-    // Generierung abschließen
-    generation.end();
-
-    // Gesamtkosten und Nutzungsdaten aktualisieren
-    trace.event({
-      name: "Total_Cost_And_Usage",
-      metadata: {
-        totalTokens,
-        totalCost,
-      },
-    });
-
     // Rückgabe der gestreamten Antwort
     return new Response(stream, {
       status: 200,
@@ -400,6 +279,16 @@ export default defineLazyEventHandler(() => {
     });
   });
 });
+
+
+
+
+
+
+
+
+
+
 
 // Funktion zum Abrufen der Wetterdaten basierend auf dem Kontextsatz
 async function getWeatherData(isoCode: string): Promise<string> {
