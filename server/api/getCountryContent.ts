@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
   const content = getFullContentFromJson(iso3Code);
   if (!content) {
-    return { error: `Kein Content für ISO3-Code ${iso3Code} gefunden.` };
+    return { error: `Kein Content für ISO3-Code "${iso3Code}" gefunden.` };
   }
 
   return { content };

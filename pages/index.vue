@@ -14,6 +14,14 @@ const messages = ref([
   },
 ]);
 
+// Funktion zur Erstellung einer eindeutigen Session-ID
+function generateSessionId() {
+  return `session-${Math.random().toString(36).substring(2, 15)}-${Math.random().toString(36).substring(2, 15)}`;
+}
+
+// Session-ID holen oder generieren
+const sessionId = ref<string | null>(null);
+
 // Funktion zum Senden einer Nachricht
 const sendMessage = async () => {
   if (userInput.value.trim() !== "") {
@@ -64,8 +72,16 @@ watch(messages, () => {
   scrollToBottom();
 });
 
-// Scrollen beim Laden der Komponente
 onMounted(() => {
+  // Beim Laden der Komponente prüfen, ob eine Session-ID existiert, sonst eine neue erstellen
+  let storedSessionId = localStorage.getItem("chatSessionId");
+  if (!storedSessionId) {
+    storedSessionId = generateSessionId();
+    localStorage.setItem("chatSessionId", storedSessionId);
+  }
+  sessionId.value = storedSessionId;
+
+  // Scrollen beim Laden der Komponente
   scrollToBottom();
 
   // Scroll-Button sichtbar machen, wenn nicht unten gescrollt wird
@@ -80,19 +96,45 @@ onMounted(() => {
   }
 });
 
+// Funktion, um eine neue Session zu starten
+const startNewSession = () => {
+  const newSessionId = generateSessionId();
+  sessionId.value = newSessionId;
+  localStorage.setItem("chatSessionId", newSessionId);
+
+  // Leeren Sie den Memory-Store und die Nachrichten
+  messages.value = [
+    {
+      text: "Stelle mir eine <b>Frage</b> <br>über deine Auslandsreise für nötige Informationen vor deiner Reise.",
+      isUser: false,
+      time: convertDate(new Date()),
+    },
+  ];
+
+  console.log("Neue Session gestartet mit ID:", newSessionId);
+};
+
 
 // Funktion um Chatbot-Antwort vom Backend abzurufen
 const fetchChatbotResponse = async (userMessage: string) => {
   try {
+    if (!sessionId.value) {
+      console.error("Fehler: Session-ID fehlt!");
+      return;
+    }
+
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ messages: [{ role: 'user', content: userMessage }] }), // Benutzer-Nachricht
+      body: JSON.stringify({
+        messages: [{ role: 'user', content: userMessage }],
+        sessionId: sessionId.value // Session-ID hinzufügen
+      }),
     });
 
-    userInput.value = ""
+    userInput.value = "";
 
     // Sicherstellen, dass die Antwort ein Stream ist
     const reader = response.body?.getReader();
@@ -109,15 +151,15 @@ const fetchChatbotResponse = async (userMessage: string) => {
           // Chunk dekodieren
           const chunk = decoder.decode(value, { stream: true });
 
-          console.log('Dies ist die rückgabe von Chatgpt: ' + chunk)
+          console.log('Dies ist die Rückgabe von ChatGPT: ' + chunk);
 
-          // Clean up the format: remove the '0:' indices and other artifacts
+          // Bereinigen des Formats, um Artefakte zu entfernen
           const cleanedChunk = chunk.replace(/\d+:"/g, '').replace(/"\n?/g, '').replace(/\n\n/g, ' ');
 
-          // Dynamically add the clean text to the message being built
+          // Dynamisch den Text zur Nachricht hinzufügen
           chatbotMessage += cleanedChunk;
 
-          // Dynamisch die Nachricht aktualisieren, während der Text gestreamt wird
+          // Nachricht aktualisieren, während der Text gestreamt wird
           addMessageToChatbot(chatbotMessage.trim());
         }
       }
@@ -312,7 +354,14 @@ const items = [
     </div>
 
     <!-- Input Area -->
-    <div class="w-full pb-4 md:px-36 px-7 flex-1 items-center">
+    <div class="w-full pb-4 md:px-36 px-7 flex-1 items-center flex">
+      <!-- Neuer Button zum Starten einer neuen Session -->
+      <UButton @click="startNewSession" variant="soft" size="xl" icon="i-heroicons-chat-bubble-left" :padded="false" class="mr-4 p-2"
+        title="Neuen Chat starten">
+        <span class="hidden md:inline">Neuer Chat</span>
+      </UButton>
+
+      <!-- Chat-Eingabefeld -->
       <UInput v-model="userInput" @keyup.enter="sendMessage" placeholder="Senden Sie eine Nachricht..."
         variant="outline" class="flex-1" autocomplete="off"
         :ui="{ rounded: 'rounded-2xl', icon: { trailing: { pointer: '' } } }" size="lg"
@@ -322,10 +371,6 @@ const items = [
             icon="i-heroicons-arrow-up" :padded="false"></UButton>
         </template>
       </UInput>
-      <p class="text-center text-gray-500 text-xs">Dies ist ein Projekt für das Modul: Intelligente Systeme von
-      </p>
-      <p class="text-center text-gray-500 text-xs">Lea Mangelsen, Gerrit Biller und Bastian Bockelmann
-      </p>
     </div>
   </div>
 </template>
