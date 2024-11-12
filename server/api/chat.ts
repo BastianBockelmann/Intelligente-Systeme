@@ -171,6 +171,8 @@ export default defineLazyEventHandler(() => {
     // Klassifizierung der Frage, um zu bestimmen, ob es um das Wetter, Reiseinformationen oder beides geht
     const classificationResponse = await classificationLlm.call([new HumanMessage(themePromptFormatted)]);
     const classification = classificationResponse.content.trim();
+    console.log(`Response classification: "${classification}"`);
+
 
     // 2. Kontextsatz erstellen
     let contextSentence = "";
@@ -181,10 +183,11 @@ export default defineLazyEventHandler(() => {
 
       const contextResponse = await classificationLlm.call([new HumanMessage(contextPromptFormatted)]);
       contextSentence = contextResponse.content.trim();
+      console.log(`Response contextSentence: "${contextSentence}"`);
 
       // Kontext speichern, falls ein Land erkannt wurde
       if (contextSentence) {
-        previousSessionData.context = contextSentence; // z.B. "NOR" für Norwegen
+        previousSessionData.context = contextSentence;
         memoryStore.set(sessionId, previousSessionData);
       }
     }
