@@ -73,11 +73,12 @@ export default defineLazyEventHandler(() => {
       Benutzerfrage: {userQuestion}
 
       Klassifiziere die Nutzerfrage und ordne sie einem gefragten Themenbereich ein!
-      Gebe nur den iso3CountryCode des Landes aus der Frage aus! Nicht das Land ausschreiben nur den ISO3CountryCode! Ein Wort nur!
+      Gebe nur den Namen des Landes aus der Frage aus! Nicht das Land ausschreiben nur den Namen! Ein Wort nur!
+
+      Dann Hänge nur eine ganz kurze Kontext frage dahinter!
     `,
     inputVariables: ["userQuestion"],
   });
-  //Antworte nur mit maximal 3 Worten! Die Ausgabe darf nicht länger als drei Worte sein!
 
 
   // Prompt-Template für Auswärtiges Amt Daten
@@ -211,11 +212,15 @@ export default defineLazyEventHandler(() => {
     let prompt = "";
     let inputTokenCount = 0;
     let outputTokenCount = 0;
-    let isoCode
+    let pinecoreData = ""
 
     if (classification === "Wetterabfrage") {
       // Wetterdaten abrufen
-      weatherData = await getWeatherData(contextSentence);
+      pinecoreData = await getAuswaertigesAmtData(contextSentence)
+      if (pinecoreData.length > 0) {
+        pinecoreData = pinecoreData[0].iso3CountryCode
+        weatherData = await getWeatherData(pinecoreData);
+      }
 
       // Prompt für Wetterdaten formatieren
       prompt = await promptTemplateWetter.format({
@@ -228,7 +233,13 @@ export default defineLazyEventHandler(() => {
     } else if (classification === "Auswärtiges Amt Daten") {
       // Daten vom Auswärtigen Amt abrufen mit dem Kontextsatz
       // auswaertigesAmtData = await getAuswaertigesAmtData(contextSentence);
-      auswaertigesAmtData = await fetchContent(contextSentence)
+      pinecoreData = await getAuswaertigesAmtData(contextSentence)
+      if (pinecoreData.length > 0) {
+        pinecoreData = pinecoreData[0].iso3CountryCode
+        auswaertigesAmtData = await fetchContent(pinecoreData)
+      } else {
+        auswaertigesAmtData = 'keine Daten'
+      }
 
       // Prompt für Auswärtiges Amt Daten formatieren
       prompt = await promptTemplateAuswaertigesAmt.format({
@@ -239,10 +250,18 @@ export default defineLazyEventHandler(() => {
       // Tokenzählung für den Haupt-Prompt
       inputTokenCount = countTokens(prompt, "gpt-4");
     } else if (classification === "Beide") {
-      // Beide Daten abrufen
-      weatherData = await getWeatherData(contextSentence);
-      // auswaertigesAmtData = await getAuswaertigesAmtData(contextSentence);
-      auswaertigesAmtData = await fetchContent(contextSentence)
+      pinecoreData = await getAuswaertigesAmtData(contextSentence)
+      if (pinecoreData.length > 0) {
+        pinecoreData = pinecoreData[0].iso3CountryCode
+        // Beide Daten abrufen
+        weatherData = await getWeatherData(pinecoreData);
+        // auswaertigesAmtData = await getAuswaertigesAmtData(contextSentence);
+        auswaertigesAmtData = await fetchContent(pinecoreData)
+      } else {
+        weatherData = "Keine Wetterdaten"
+        auswaertigesAmtData = "Keine Auswertiges Amt Daten"
+      }
+
 
       // Prompt für beide Daten formatieren
       prompt = await promptTemplateBeide.format({
@@ -323,7 +342,7 @@ export default defineLazyEventHandler(() => {
       classificationOutputTokens +
       contextInputTokens +
       contextOutputTokens;
-    const costPerToken = 0.00003; // Beispielkosten für OpenAI GPT-4
+    const costPerToken = 0.00003; // Kosten pro Token für OpenAI GPT-4
     const inputCost = inputTokenCount * costPerToken;
     const outputCost = outputTokenCount * costPerToken;
     const classificationInputCost = classificationInputTokens * costPerToken;
@@ -433,7 +452,7 @@ async function getAuswaertigesAmtData(queryText: string): Promise<string> {
       },
       body: JSON.stringify({
         queryText: queryText,
-        topK: 1,
+        topK: 5,
       }),
     });
 
