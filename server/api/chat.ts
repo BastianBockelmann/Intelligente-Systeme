@@ -9,6 +9,7 @@ import { encoding_for_model } from "tiktoken"; // Import tiktoken
 
 // Memory Store für die Konversationen (alternativ könnte hier eine Datenbank verwendet werden)
 const memoryStore = new Map<string, { messages: Message[], context?: string }>();
+
 // Token counting function
 function countTokens(text: string, model: string): number {
   const encoding = encoding_for_model(model);
@@ -73,12 +74,12 @@ export default defineLazyEventHandler(() => {
       Benutzerfrage: {userQuestion}
 
       Klassifiziere die Nutzerfrage und ordne sie einem gefragten Themenbereich ein!
-      Gebe nur den iso3CountryCode des Landes aus der Frage aus! Nicht das Land ausschreiben nur den ISO3CountryCode! Ein Wort nur!
+      Gebe nur den Namen des Landes aus der Frage aus! Nicht das Land ausschreiben nur den Namen! Ein Wort nur!
+
+      Dann Hänge nur eine ganz kurze Kontext frage dahinter!
     `,
     inputVariables: ["userQuestion"],
   });
-  //Antworte nur mit maximal 3 Worten! Die Ausgabe darf nicht länger als drei Worte sein!
-
 
   // Prompt-Template für Auswärtiges Amt Daten
   const promptTemplateAuswaertigesAmt = new PromptTemplate({
@@ -131,6 +132,12 @@ export default defineLazyEventHandler(() => {
   });
 
   return defineEventHandler(async (event) => {
+    // Initialize token counting variables with default value of 0
+    let classificationInputTokens = 0;
+    let classificationOutputTokens = 0;
+    let contextInputTokens = 0;
+    let contextOutputTokens = 0;
+
     const { messages, sessionId } = await readBody<{ messages: Message[], sessionId: string }>(event);
 
     if (!messages || messages.length === 0 || !sessionId) {
@@ -167,12 +174,13 @@ export default defineLazyEventHandler(() => {
     const themePromptFormatted = await themePrompt.format({
       userQuestion,
     });
+    classificationInputTokens = countTokens(themePromptFormatted, "gpt-4");
 
     // Klassifizierung der Frage, um zu bestimmen, ob es um das Wetter, Reiseinformationen oder beides geht
     const classificationResponse = await classificationLlm.call([new HumanMessage(themePromptFormatted)]);
     const classification = classificationResponse.content.trim();
+    classificationOutputTokens = countTokens(classification, "gpt-4");
     console.log(`Response classification: "${classification}"`);
-
 
     // 2. Kontextsatz erstellen
     let contextSentence = "";
@@ -180,9 +188,11 @@ export default defineLazyEventHandler(() => {
       const contextPromptFormatted = await contextPrompt.format({
         userQuestion,
       });
+      contextInputTokens = countTokens(contextPromptFormatted, "gpt-4");
 
       const contextResponse = await classificationLlm.call([new HumanMessage(contextPromptFormatted)]);
       contextSentence = contextResponse.content.trim();
+      contextOutputTokens = countTokens(contextSentence, "gpt-4");
       console.log(`Response contextSentence: "${contextSentence}"`);
 
       // Kontext speichern, falls ein Land erkannt wurde
@@ -206,36 +216,55 @@ export default defineLazyEventHandler(() => {
     let auswaertigesAmtData = "";
     let weatherData = "";
     let prompt = "";
+    let inputTokenCount = 0;
+    let outputTokenCount = 0;
+    let pinecoreData = ""
 
     if (classification === "Wetterabfrage" && contextSentence) {
-      // Wetterdaten abrufen
-      weatherData = await getWeatherData(contextSentence);
+      pinecoreData = await getAuswaertigesAmtData(contextSentence)
+      if (pinecoreData.length > 0) {
+        pinecoreData = pinecoreData[0].iso3CountryCode
+        weatherData = await getWeatherData(pinecoreData);
+      }
 
-      // Prompt für Wetterdaten formatieren
       prompt = await promptTemplateWetter.format({
         userQuestion,
         weatherData,
       });
-    } else if (classification === "Auswärtiges Amt Daten" && contextSentence) {
-      auswaertigesAmtData = await fetchContent(contextSentence);
+      inputTokenCount = countTokens(prompt, "gpt-4");
 
-      // Prompt für Auswärtiges Amt Daten formatieren
+    } else if (classification === "Auswärtiges Amt Daten") {
+      pinecoreData = await getAuswaertigesAmtData(contextSentence)
+      if (pinecoreData.length > 0) {
+        pinecoreData = pinecoreData[0].iso3CountryCode
+        auswaertigesAmtData = await fetchContent(pinecoreData)
+      } else {
+        auswaertigesAmtData = 'keine Daten'
+      }
+
       prompt = await promptTemplateAuswaertigesAmt.format({
         userQuestion,
         auswaertigesAmtData,
       });
-    } else if (classification === "Beide" && contextSentence) {
-      weatherData = await getWeatherData(contextSentence);
-      auswaertigesAmtData = await fetchContent(contextSentence);
+      inputTokenCount = countTokens(prompt, "gpt-4");
 
-      // Prompt für beide Daten formatieren
+    } else if (classification === "Beide") {
+      pinecoreData = await getAuswaertigesAmtData(contextSentence)
+      if (pinecoreData.length > 0) {
+        pinecoreData = pinecoreData[0].iso3CountryCode
+        weatherData = await getWeatherData(pinecoreData);
+        auswaertigesAmtData = await fetchContent(pinecoreData)
+      } else {
+        weatherData = "Keine Wetterdaten"
+        auswaertigesAmtData = "Keine Auswertiges Amt Daten"
+      }
+
       prompt = await promptTemplateBeide.format({
         userQuestion,
         auswaertigesAmtData,
         weatherData,
       });
     } else {
-      // Wenn keine relevanten Daten gefunden werden konnten, standardmäßige Antwort
       prompt = "Entschuldigen Sie, ich habe dazu keine genaue Antwort.";
     }
 
@@ -243,7 +272,6 @@ export default defineLazyEventHandler(() => {
     const start = Date.now();
 
     try {
-      // Verarbeitung der Nachricht mit Streaming
       await llm.call([...chatHistory, new HumanMessage(prompt)], {
         callbacks: [
           {
@@ -265,7 +293,6 @@ export default defineLazyEventHandler(() => {
         },
       });
     } catch (error) {
-      // Fehlerbehandlung für Langfuse
       trace.event({
         name: "LLM_Response_Error",
         metadata: {
@@ -278,7 +305,78 @@ export default defineLazyEventHandler(() => {
       });
     }
 
-    // Rückgabe der gestreamten Antwort
+    const duration = Date.now() - start;
+
+    const totalTokens =
+      inputTokenCount +
+      outputTokenCount +
+      classificationInputTokens +
+      classificationOutputTokens +
+      contextInputTokens +
+      contextOutputTokens;
+    const costPerToken = 0.00003; 
+    const inputCost = inputTokenCount * costPerToken;
+    const outputCost = outputTokenCount * costPerToken;
+    const classificationInputCost = classificationInputTokens * costPerToken;
+    const classificationOutputCost = classificationOutputTokens * costPerToken;
+    const contextInputCost = contextInputTokens * costPerToken;
+    const contextOutputCost = contextOutputTokens * costPerToken;
+    const totalCost =
+      inputCost +
+      outputCost +
+      classificationInputCost +
+      classificationOutputCost +
+      contextInputCost +
+      contextOutputCost;
+
+    const classificationGeneration = langfuse.generation({
+      model: "gpt-4",
+      usage: {
+        promptTokens:
+          classificationInputTokens + contextInputTokens,
+        completionTokens:
+          classificationOutputTokens + contextOutputTokens,
+        totalTokens:
+          classificationInputTokens +
+          classificationOutputTokens +
+          contextInputTokens +
+          contextOutputTokens,
+        unit: "TOKENS",
+        inputCost: classificationInputCost + contextInputCost,
+        outputCost: classificationOutputCost + contextOutputCost,
+        totalCost:
+          classificationInputCost +
+          classificationOutputCost +
+          contextInputCost +
+          contextOutputCost,
+      },
+    });
+
+    classificationGeneration.end();
+
+    const generation = langfuse.generation({
+      model: "gpt-4",
+      usage: {
+        promptTokens: inputTokenCount,
+        completionTokens: outputTokenCount,
+        totalTokens: inputTokenCount + outputTokenCount,
+        unit: "TOKENS",
+        inputCost,
+        outputCost,
+        totalCost: inputCost + outputCost,
+      },
+    });
+
+    generation.end();
+
+    trace.event({
+      name: "Total_Cost_And_Usage",
+      metadata: {
+        totalTokens,
+        totalCost,
+      },
+    });
+
     return new Response(stream, {
       status: 200,
       headers: {
@@ -289,26 +387,14 @@ export default defineLazyEventHandler(() => {
 });
 
 
-
-
-
-
-
-
-
-
-
 // Funktion zum Abrufen der Wetterdaten basierend auf dem Kontextsatz
 async function getWeatherData(isoCode: string): Promise<string> {
   try {
     const response = await fetch(`http://localhost:3000/api/getWeatherData?iso3Code=${isoCode}`);
-
     if (!response.ok) {
       throw new Error(`HTTP-Fehler! Status: ${response.status}`);
     }
-
     const data = await response.json();
-
     if (data && data.weatherData) {
       return data.weatherData;
     } else {
@@ -330,12 +416,11 @@ async function getAuswaertigesAmtData(queryText: string): Promise<string> {
       },
       body: JSON.stringify({
         queryText: queryText,
-        topK: 1,
+        topK: 5,
       }),
     });
 
     const data = await response.json();
-
     if (!data || data.length === 0) {
       return 'Keine Ergebnisse gefunden';
     } else {
@@ -350,13 +435,10 @@ async function getAuswaertigesAmtData(queryText: string): Promise<string> {
 async function fetchContent(isoCode: string): Promise<string> {
   try {
     const response = await fetch(`http://localhost:3000/api/getCountryContent?iso3Code=${isoCode}`);
-
     if (!response.ok) {
       throw new Error(`HTTP-Fehler! Status: ${response.status}`);
     }
-
     const data = await response.json();
-
     if (data && data.content) {
       return data.content;
     } else {
