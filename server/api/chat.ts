@@ -47,7 +47,7 @@ export default defineLazyEventHandler(() => {
     streaming: true,
   });
 
-  // Klassifizierung der Frage (Wetterabfrage, Auswärtiges Amt Daten, Beide)
+  // Klassifizierung der Frage (Wetterabfrage, Auswärtiges Amt Daten, Beide, Sonstiges)
   const themePrompt = new PromptTemplate({
     template: `
       Du bist ein Assistent, der Informationen und Hilfe zu Auslandsreisen und relevanten Vorgaben des Auswärtigen Amts in Deutschland bereitstellt.
@@ -56,9 +56,10 @@ export default defineLazyEventHandler(() => {
 
       Benutzerfrage: {userQuestion}
 
-      Bitte klassifiziere die Nutzerfrage zu einer Wahl zwischen "Wetterabfrage", "Auswärtiges Amt Daten" oder "Beide"
+      Bitte klassifiziere die Nutzerfrage zu einer Wahl zwischen "Wetterabfrage", "Auswärtiges Amt Daten", "Beide" oder "Sonstiges".
+      "Beide" bezieht sich dabei auf Anfragen zu den Wetterdaten und den Daten des Auswärtiges Amt.
 
-      Antworte nur mit der Auswahl zwischen den drei Klassifizierungen, die gegeben sind!
+      Antworte nur mit der Auswahl zwischen den vier Klassifizierungen, die gegeben sind!
     `,
     inputVariables: ["userQuestion"],
   });
@@ -128,6 +129,26 @@ export default defineLazyEventHandler(() => {
         Bitte beantworte die folgende Frage: {userQuestion}
 
         Gib eine detaillierte Antwort basierend auf den offiziellen Richtlinien und Informationen des Auswärtigen Amts und den bereitgestellten Wetterdaten. Beantworte die Frage nur, wenn du relevante Informationen findest. Wenn nicht, antworte mit 'Entschuldigen Sie, ich habe dazu keine genaue Antwort.'`,
+    inputVariables: ["userQuestion", "auswaertigesAmtData", "weatherData"],
+  });
+
+  // Prompt-Template für beide Daten
+  const promptTemplateOther = new PromptTemplate({
+    template: `
+        Du hast folgende Daten zur Verfügung:
+
+        Daten vom Auswärtigen Amt: {auswaertigesAmtData}
+        Wetterdaten: {weatherData}
+
+        Du bist ein Assistent, der Informationen und Hilfe zu Auslandsreisen und relevanten Vorgaben des Auswärtigen Amts in Deutschland bereitstellt.
+        Deine Aufgabe ist es, präzise und hilfreiche Informationen zu liefern, die für jemanden, der ins Ausland reisen möchte, wichtig sind.
+        Dazu gehören Reisehinweise, Sicherheitswarnungen, Empfehlungen des Auswärtigen Amts, sowie aktuelle und vergangene Wetterinformationen.
+
+        Bitte beantworte die folgende Frage: {userQuestion}
+
+        Wenn möglich beantworte die Frage mit einer detaillierten Antwort basierend auf den offiziellen Richtlinien und Informationen des Auswärtigen Amts und den bereitgestellten Wetterdaten.
+        Wenn du keine relevanen Informationen in den Daten findest oder die Frage unabhänig zu beantworten ist gebe bitte eine allgemeingültige antwort aus.
+        Füge in dieem Fall unbedigt am Anfang folgenden Satz in die Antwort ein: 'Entschuldigen Sie, ich habe dazu keine genaue Antwort in den mir vorliegenden Daten gefunden. Allgemein kann ich ihnen aber folgende Informationen geben: '`,
     inputVariables: ["userQuestion", "auswaertigesAmtData", "weatherData"],
   });
 
@@ -264,6 +285,26 @@ export default defineLazyEventHandler(() => {
         auswaertigesAmtData,
         weatherData,
       });
+      inputTokenCount = countTokens(prompt, "gpt-4");
+
+    } else if (classification === "Sonstiges") {
+      pinecoreData = await getAuswaertigesAmtData(contextSentence)
+      if (pinecoreData.length > 0) {
+        pinecoreData = pinecoreData[0].iso3CountryCode
+        weatherData = await getWeatherData(pinecoreData);
+        auswaertigesAmtData = await fetchContent(pinecoreData)
+      } else {
+        weatherData = "Keine Wetterdaten"
+        auswaertigesAmtData = "Keine Auswertiges Amt Daten"
+      }
+
+      prompt = await promptTemplateOther.format({
+        userQuestion,
+        auswaertigesAmtData,
+        weatherData,
+      });
+      inputTokenCount = countTokens(prompt, "gpt-4");
+    
     } else {
       prompt = "Entschuldigen Sie, ich habe dazu keine genaue Antwort.";
     }
