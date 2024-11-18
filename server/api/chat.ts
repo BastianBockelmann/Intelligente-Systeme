@@ -47,7 +47,7 @@ export default defineLazyEventHandler(() => {
     streaming: true,
   });
 
-  // Klassifizierung der Frage (Wetterabfrage, Auswärtiges Amt Daten, Beide)
+  // Klassifizierung der Frage (Wetterabfrage, Auswärtiges Amt Daten, Beide, Sonstiges)
   const themePrompt = new PromptTemplate({
     template: `
       Du bist ein Assistent, der Informationen und Hilfe zu Auslandsreisen und relevanten Vorgaben des Auswärtigen Amts in Deutschland bereitstellt.
@@ -56,9 +56,10 @@ export default defineLazyEventHandler(() => {
 
       Benutzerfrage: {userQuestion}
 
-      Bitte klassifiziere die Nutzerfrage zu einer Wahl zwischen "Wetterabfrage", "Auswärtiges Amt Daten" oder "Beide"
+      Bitte klassifiziere die Nutzerfrage zu einer Wahl zwischen "Wetterabfrage", "Auswärtiges Amt Daten", "Beide" oder "Sonstiges".
+      "Beide" bezieht sich dabei auf Anfragen zu den Wetterdaten und den Daten des Auswärtiges Amt.
 
-      Antworte nur mit der Auswahl zwischen den drei Klassifizierungen, die gegeben sind!
+      Antworte nur mit der Auswahl zwischen den vier Klassifizierungen, die gegeben sind!
     `,
     inputVariables: ["userQuestion"],
   });
@@ -69,14 +70,15 @@ export default defineLazyEventHandler(() => {
       Du bist ein Assistent, der Informationen und Hilfe zu Auslandsreisen und relevanten Vorgaben des Auswärtigen Amts in Deutschland bereitstellt.
       Deine Aufgabe ist es, präzise und hilfreiche Informationen zu liefern, die für jemanden, der ins Ausland reisen möchte, wichtig sind.
       Dazu gehören Reisehinweise, Sicherheitswarnungen und Empfehlungen des Auswärtigen Amts.
-      Analysiere die folgende Benutzerfrage und finde heraus um welche Land es geht. Wenn es kein Land dazu gibt nutze Schlüsselwörter über die Themen.
+      Analysiere die folgende Benutzerfrage und finde heraus um welche Land es geht. Wenn in der Frage kein Land ist prüfe Verlauf der Unterhaltung.
+      Wenn es kein Land dazu gibt nutze Schlüsselwörter über die Themen.
 
       Benutzerfrage: {userQuestion}
 
       Klassifiziere die Nutzerfrage und ordne sie einem gefragten Themenbereich ein!
       Gebe nur den Namen des Landes aus der Frage aus! Nicht das Land ausschreiben nur den Namen! Ein Wort nur!
 
-      Dann Hänge nur eine ganz kurze Kontext frage dahinter!
+      Dann Hänge nur eine ganz kurze Kontext frage zum Abrufen relevanter Daten aus einer Vektor Datenbank!
     `,
     inputVariables: ["userQuestion"],
   });
@@ -128,6 +130,26 @@ export default defineLazyEventHandler(() => {
         Bitte beantworte die folgende Frage: {userQuestion}
 
         Gib eine detaillierte Antwort basierend auf den offiziellen Richtlinien und Informationen des Auswärtigen Amts und den bereitgestellten Wetterdaten. Beantworte die Frage nur, wenn du relevante Informationen findest. Wenn nicht, antworte mit 'Entschuldigen Sie, ich habe dazu keine genaue Antwort.'`,
+    inputVariables: ["userQuestion", "auswaertigesAmtData", "weatherData"],
+  });
+
+  // Prompt-Template für beide Daten
+  const promptTemplateOther = new PromptTemplate({
+    template: `
+        Du hast folgende Daten zur Verfügung:
+
+        Daten vom Auswärtigen Amt: {auswaertigesAmtData}
+        Wetterdaten: {weatherData}
+
+        Du bist ein Assistent, der Informationen und Hilfe zu Auslandsreisen und relevanten Vorgaben des Auswärtigen Amts in Deutschland bereitstellt.
+        Deine Aufgabe ist es, präzise und hilfreiche Informationen zu liefern, die für jemanden, der ins Ausland reisen möchte, wichtig sind.
+        Dazu gehören Reisehinweise, Sicherheitswarnungen, Empfehlungen des Auswärtigen Amts, sowie aktuelle und vergangene Wetterinformationen.
+
+        Bitte beantworte die folgende Frage: {userQuestion}
+
+        Wenn möglich beantworte die Frage mit einer detaillierten Antwort basierend auf den offiziellen Richtlinien und Informationen des Auswärtigen Amts und den bereitgestellten Wetterdaten.
+        Wenn du keine relevanen Informationen in den Daten findest oder die Frage unabhänig zu beantworten ist gebe bitte eine allgemeingültige antwort aus.
+        Füge in dieem Fall unbedigt am Anfang folgenden Satz in die Antwort ein: 'Entschuldigen Sie, ich habe dazu keine genaue Antwort in den mir vorliegenden Daten gefunden. Allgemein kann ich ihnen aber folgende Informationen geben: '`,
     inputVariables: ["userQuestion", "auswaertigesAmtData", "weatherData"],
   });
 
@@ -193,7 +215,7 @@ export default defineLazyEventHandler(() => {
       const contextResponse = await classificationLlm.call([new HumanMessage(contextPromptFormatted)]);
       contextSentence = contextResponse.content.trim();
       contextOutputTokens = countTokens(contextSentence, "gpt-4");
-      console.log(`Response contextSentence: "${contextSentence}"`);
+      console.log(`- Response contextSentence: "${contextSentence}" -\n`);
 
       // Kontext speichern, falls ein Land erkannt wurde
       if (contextSentence) {
@@ -202,14 +224,14 @@ export default defineLazyEventHandler(() => {
       }
     }
 
-    // Wenn kein Kontext in der aktuellen Nachricht gefunden wurde, den letzten bekannten Kontext verwenden
+    // // Wenn kein Kontext in der aktuellen Nachricht gefunden wurde, den letzten bekannten Kontext verwenden
     if (!contextSentence && previousSessionData.context) {
       contextSentence = previousSessionData.context;
     }
 
     // Ausgabe des aktuellen ISO-Codes in der Konsole
     if (contextSentence) {
-      console.log(`Verwendeter ISO Code: ${contextSentence}`);
+      console.log(`- Verwendeter context Sentece nach memory Funktion: "${contextSentence}" -\n`);
     }
 
     // Daten und entsprechendes Prompt-Template basierend auf der Klassifizierung abrufen
@@ -264,6 +286,26 @@ export default defineLazyEventHandler(() => {
         auswaertigesAmtData,
         weatherData,
       });
+      inputTokenCount = countTokens(prompt, "gpt-4");
+
+    } else if (classification === "Sonstiges") {
+      pinecoreData = await getAuswaertigesAmtData(contextSentence)
+      if (pinecoreData.length > 0) {
+        pinecoreData = pinecoreData[0].iso3CountryCode
+        weatherData = await getWeatherData(pinecoreData);
+        auswaertigesAmtData = await fetchContent(pinecoreData)
+      } else {
+        weatherData = "Keine Wetterdaten"
+        auswaertigesAmtData = "Keine Auswertiges Amt Daten"
+      }
+
+      prompt = await promptTemplateOther.format({
+        userQuestion,
+        auswaertigesAmtData,
+        weatherData,
+      });
+      inputTokenCount = countTokens(prompt, "gpt-4");
+    
     } else {
       prompt = "Entschuldigen Sie, ich habe dazu keine genaue Antwort.";
     }
