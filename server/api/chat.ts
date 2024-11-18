@@ -70,14 +70,15 @@ export default defineLazyEventHandler(() => {
       Du bist ein Assistent, der Informationen und Hilfe zu Auslandsreisen und relevanten Vorgaben des Auswärtigen Amts in Deutschland bereitstellt.
       Deine Aufgabe ist es, präzise und hilfreiche Informationen zu liefern, die für jemanden, der ins Ausland reisen möchte, wichtig sind.
       Dazu gehören Reisehinweise, Sicherheitswarnungen und Empfehlungen des Auswärtigen Amts.
-      Analysiere die folgende Benutzerfrage und finde heraus um welche Land es geht. Wenn es kein Land dazu gibt nutze Schlüsselwörter über die Themen.
+      Analysiere die folgende Benutzerfrage und finde heraus um welche Land es geht. Wenn in der Frage kein Land ist prüfe Verlauf der Unterhaltung.
+      Wenn es kein Land dazu gibt nutze Schlüsselwörter über die Themen.
 
       Benutzerfrage: {userQuestion}
 
       Klassifiziere die Nutzerfrage und ordne sie einem gefragten Themenbereich ein!
       Gebe nur den Namen des Landes aus der Frage aus! Nicht das Land ausschreiben nur den Namen! Ein Wort nur!
 
-      Dann Hänge nur eine ganz kurze Kontext frage dahinter!
+      Dann Hänge nur eine ganz kurze Kontext frage zum Abrufen relevanter Daten aus einer Vektor Datenbank!
     `,
     inputVariables: ["userQuestion"],
   });
@@ -214,7 +215,7 @@ export default defineLazyEventHandler(() => {
       const contextResponse = await classificationLlm.call([new HumanMessage(contextPromptFormatted)]);
       contextSentence = contextResponse.content.trim();
       contextOutputTokens = countTokens(contextSentence, "gpt-4");
-      console.log(`Response contextSentence: "${contextSentence}"`);
+      console.log(`- Response contextSentence: "${contextSentence}" -\n`);
 
       // Kontext speichern, falls ein Land erkannt wurde
       if (contextSentence) {
@@ -223,14 +224,14 @@ export default defineLazyEventHandler(() => {
       }
     }
 
-    // Wenn kein Kontext in der aktuellen Nachricht gefunden wurde, den letzten bekannten Kontext verwenden
+    // // Wenn kein Kontext in der aktuellen Nachricht gefunden wurde, den letzten bekannten Kontext verwenden
     if (!contextSentence && previousSessionData.context) {
       contextSentence = previousSessionData.context;
     }
 
     // Ausgabe des aktuellen ISO-Codes in der Konsole
     if (contextSentence) {
-      console.log(`Verwendeter ISO Code: ${contextSentence}`);
+      console.log(`- Verwendeter context Sentece nach memory Funktion: "${contextSentence}" -\n`);
     }
 
     // Daten und entsprechendes Prompt-Template basierend auf der Klassifizierung abrufen
