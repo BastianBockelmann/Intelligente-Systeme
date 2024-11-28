@@ -60,6 +60,19 @@ export default defineComponent({
       }
     },
 
+    async writeEvaluationPinecone() {
+      console.log('Evaluationsdaten fürs Chunking werden in Pinecone Daten hochgeladen -  Button wurde geklickt!');
+      try {
+        const { data, error } = await useFetch('/api/storeEvaluationData');
+        if (error.value) {
+          throw new Error(error.value);
+        }
+        message.value = data.value.message;
+      } catch (err) {
+        message.value = `Error: ${err.message}`;
+      }
+    },
+
     // Pinecone Datenabfrage
     async searchPinecone() {
       if (!searchQuery.value.trim()) {
@@ -225,6 +238,9 @@ export default defineComponent({
       </UButton>
       <UButton @click="writePinecone" size="lg">
         Daten in VektorDB / Pinecone hochladen
+      </UButton>
+      <UButton @click="writeEvaluationPinecone" size="lg" color="orange">
+        Evaluationsdaten in VektorDB / Pinecone hochladen
       </UButton>
 
 

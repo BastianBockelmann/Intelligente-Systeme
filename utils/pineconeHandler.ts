@@ -44,6 +44,109 @@ async function getEmbedding(text: string) {
   return response.data[0].embedding;  // Rückgabe des generierten Embeddings
 }
 
+// Methode 1: Feste Chunkgröße (in Zeichen)
+function fixedSizeChunkingByCharacters(text: string, chunkSize: number) {
+  let chunks = [];
+  for (let i = 0; i < text.length; i += chunkSize) {
+    chunks.push(text.slice(i, i + chunkSize));
+  }
+  return chunks;
+}
+
+// Methode 2: Feste Chunkgröße (in Tokens)
+function fixedSizeChunkingByTokens(text: string, chunkSize: number) {
+  const tokens = encode(text);
+  let chunks = [];
+  for (let i = 0; i < tokens.length; i += chunkSize) {
+    const chunkTokens = tokens.slice(i, i + chunkSize);
+    chunks.push(decode(chunkTokens));
+  }
+  return chunks;
+}
+
+// Methode 3: Inhaltsbasiertes Chunking/Content-aware Chunking
+function contentAwareChunking(text: string, maxTokens: number) {
+  const delimiters = [
+    '\n\n',  // Absatztrennung
+    '\n',    // Zeilenumbrüche
+    '. ',     // Satzende
+    ', ',     // Komma
+    ' ',      // Leerzeichen
+  ];
+  let chunks = [];
+  let remainingText = text;
+
+  while (encode(remainingText).length > maxTokens) {
+    let chunk = '';
+    for (const delimiter of delimiters) {
+      const parts = remainingText.split(delimiter);
+      let tempChunk = parts[0];
+      for (let i = 1; i < parts.length; i++) {
+        if (encode(tempChunk + delimiter + parts[i]).length > maxTokens) {
+          break;
+        }
+        tempChunk += delimiter + parts[i];
+      }
+      if (encode(tempChunk).length <= maxTokens) {
+        chunk = tempChunk;
+        break;
+      }
+    }
+    if (!chunk) {
+      chunk = decode(encode(remainingText).slice(0, maxTokens));
+    }
+    chunks.push(chunk);
+    remainingText = remainingText.slice(chunk.length).trim();
+  }
+  if (remainingText) {
+    chunks.push(remainingText);
+  }
+  return chunks;
+}
+
+// Methode 4: Semantisches Chunking mit einem Modell basierend auf semantischer Ähnlichkeit
+async function semanticChunking(text: string, maxTokens: number) {
+  let chunks = [];
+  let currentChunk = '';
+  let sentences = text.split(/(?<=[.!?])\s+/);  // Aufteilen des Textes in Sätze basierend auf Satzzeichen
+
+  for (const sentence of sentences) {
+    const potentialChunk = currentChunk ? `${currentChunk} ${sentence}` : sentence;
+
+    // Erstellen des Embeddings, um semantische Ähnlichkeit zu überprüfen
+    const currentEmbedding = await getEmbedding(potentialChunk);
+    const currentChunkEmbedding = currentChunk ? await getEmbedding(currentChunk) : null;
+
+    if (currentChunkEmbedding && cosineSimilarity(currentEmbedding, currentChunkEmbedding) < 0.8) {
+      // Falls die semantische Ähnlichkeit unter einem Schwellenwert liegt, neuen Chunk beginnen
+      chunks.push(currentChunk);
+      currentChunk = sentence;
+    } else {
+      // Andernfalls den Satz zum aktuellen Chunk hinzufügen
+      currentChunk = potentialChunk;
+    }
+
+    if (encode(currentChunk).length > maxTokens) {
+      chunks.push(currentChunk);
+      currentChunk = '';
+    }
+  }
+
+  if (currentChunk) {
+    chunks.push(currentChunk);
+  }
+
+  return chunks;
+}
+
+// Funktion zur Berechnung der Kosinusähnlichkeit zwischen zwei Vektoren
+function cosineSimilarity(vecA: number[], vecB: number[]): number {
+  const dotProduct = vecA.reduce((acc, val, idx) => acc + val * vecB[idx], 0);
+  const magnitudeA = Math.sqrt(vecA.reduce((acc, val) => acc + val * val, 0));
+  const magnitudeB = Math.sqrt(vecB.reduce((acc, val) => acc + val * val, 0));
+  return dotProduct / (magnitudeA * magnitudeB);
+}
+
 // Funktion zum Aufteilen von Text in Chunks (Abschnitte), um Token-Limits einzuhalten
 function splitTextIntoChunks(text: string, maxTokens: number, overlap: number, countryName: string) {
   const tokens = encode(text);  // Tokenisierung des gesamten Textes
@@ -66,9 +169,8 @@ function splitTextIntoChunks(text: string, maxTokens: number, overlap: number, c
   return chunks;
 }
 
-
 // Funktion zum Prüfen und ggf. Initialisieren des Pinecone-Indexes
-async function checkAndInitIndex() {
+async function checkAndInitIndex(indexName: string) {
   try {
     const response = await pinecone.listIndexes();  // Abrufen aller existierenden Pinecone-Indexes
     const existingIndexes = response.names || [];  // Extrahieren der Indexnamen
@@ -101,7 +203,7 @@ async function checkAndInitIndex() {
 export async function processAndStoreData() {
 
   // prüfen und initialisieren des Pinecone-Indexes
-  const indexInitMessage = await checkAndInitIndex();
+  const indexInitMessage = await checkAndInitIndex(indexName);
   console.log(indexInitMessage);  // Log-Eintrag zur Index-Initialisierung
 
   const countries = Object.entries(countriesData);  // Umwandlung in Array von [key, value] Paaren
@@ -154,6 +256,80 @@ export async function processAndStoreData() {
         console.error(`Error processing chunk ${i} for country ${iso3Code}: ${error}`);
       }
     }
+  }
+}
+
+// Einlesen der Länderinformationen aus der JSON-Datei für die Evaluation
+const countriesDataEvaluation = readJsonFile('20_evaluation_auswaertiges_amt_by_Iso3CountryCode.json');
+
+// Funktion zum Verarbeiten und Speichern der Länderdaten in Pinecone für Evaluationszwecke
+export async function processAndStoreDataForEvaluation() {
+  const chunkingMethods = [
+    { name: 'fixed-characters', method: (text: string) => fixedSizeChunkingByCharacters(text, 2000) },
+    { name: 'fixed-tokens', method: (text: string) => fixedSizeChunkingByTokens(text, 1000) },
+    { name: 'content-aware', method: (text: string) => contentAwareChunking(text, 1000) },
+    { name: 'semantic', method: async (text: string) => await semanticChunking(text, 1000) }
+  ];
+
+  for (const { name, method } of chunkingMethods) {
+    const evalIndexName = `traveldata-${name}`;
+    console.log(`Initialisiere Index: ${evalIndexName}`);
+    const indexInitMessage = await checkAndInitIndex(evalIndexName);
+    console.log(indexInitMessage);
+
+    const countries = Object.entries(countriesDataEvaluation);  // Umwandlung in Array von [key, value] Paaren
+    const totalCountries = countries.length;  // Gesamtanzahl der Länder bestimmen
+
+    for (let countryIndex = 0; countryIndex < totalCountries; countryIndex++) {
+      const [iso3Code, countryData] = countries[countryIndex];
+      console.log(`Verarbeite Land ${countryIndex + 1} von ${totalCountries} mit Methode ${name}: ${iso3Code}`);
+
+      // Typ-Sicherstellung und Extraktion der benötigten Daten
+      const country = countryData as {
+        countryName: string;
+        iso3CountryCode: string;
+        content: string;
+        warning: boolean;
+        // ggf. weitere Felder hinzufügen
+      };
+      
+      // Zusammenführen der relevanten Textdaten
+      const countryText = `${country.countryName}: ${country.content}`;
+      const countryChunks = await method(countryText);
+      const totalChunks = countryChunks.length;
+
+      // Verarbeitung der Chunks
+      for (let i = 0; i < countryChunks.length; i++) {
+        try {
+          const chunk = countryChunks[i];
+          const embedding = await getEmbedding(chunk);  // Erstellen des Embeddings für den Chunk
+
+          // Speichern in Pinecone mit korrekter ID und Metadaten; nur der Text des Chunks wird als Content gespeichert
+          await pinecone.Index(evalIndexName).upsert([
+            {
+              id: `${iso3Code}_chunk_${i}`, // Verwendung des ISO3-Codes aus der Schlüsselstruktur
+              values: embedding,
+              metadata: {
+                countryName: country.countryName,
+                iso3CountryCode: iso3Code, // Verwendung des ISO3-Codes aus der Schlüsselstruktur
+                warning: country.warning,
+                content: chunk,  // Speichern nur des jeweiligen Chunks
+                chunkIndex: i,
+                totalChunks: totalChunks,
+              },
+            },
+          ]);
+
+          console.log(`Stored chunk ${i} for country ${country.countryName} (${iso3Code}) in index ${evalIndexName}`);
+        } catch (error) {
+          console.error(`Error processing chunk ${i} for country ${iso3Code} in index ${evalIndexName}: ${error}`);
+        }
+      }
+    }
+
+    // 60 Sekunden warten, bevor zur nächsten Methode gewechselt wird
+    console.log(`Warte 60 Sekunden, bevor die nächste Chunking-Strategie angewendet wird.`);
+    await new Promise(resolve => setTimeout(resolve, 60000));
   }
 }
 
