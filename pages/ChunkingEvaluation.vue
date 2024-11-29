@@ -8,7 +8,7 @@
 
         <div class="flex items-start mb-2">
             <label class="mr-1">DB Query:</label>
-            <u-input v-model="query" class="mr-2 w-80" label="Frage an die Pinecone DB" placeholder="Geben Sie eine Frage ein..."/>
+            <u-input v-model="query" class="mr-2 w-80" label="Frage an die Pinecone DB" placeholder="Geben Sie eine Frage ein..." />
             <label class="mr-1">Min. Relevanz:</label>
             <u-input v-model.number="minRelevance" class="mr-2" label="Minimale Relevanz" type="number" min="0" max="1" step="0.01" />
             <label class="mr-1">Max. Ergebnisse:</label>
@@ -25,11 +25,17 @@
         </div>
 
         <div class="results-section" v-if="results.length > 0">
-            <div v-for="(result, index) in results" :key="index" class="result">
-                <h3>{{ result.strategy }}</h3>
-                <ul>
-                    <li v-for="(item, idx) in result.data" :key="idx">{{ item.metadata.content }}</li>
-                </ul>
+            <div v-for="(result, index) in results" :key="index" class="p-4 border rounded-lg mt-4">
+                <h3 class="font-semibold">{{ result.strategy }}</h3>
+                <div v-for="(item, idx) in result.data" :key="idx" class="text-sm text-gray-600 dark:text-gray-300 mt-2">
+                    <p class="font-semibold">Ergebnis {{ idx + 1 }}</p>
+                    <p>ISO Code: {{ item.iso3CountryCode }}</p>
+                    <p>Ähnlichkeit: {{ (item.score * 100).toFixed(2) }}%</p>
+                    <p>Chunk: {{ item.chunkIndex }} von {{ item.totalChunks }} Chunks</p>
+                    <p v-if="item.warning" class="text-red-500">Warnung vorhanden!</p>
+                    <p class="font-semibold mt-2">Content</p>
+                    <p class="max-h-60 overflow-y-auto break-words p-2 border rounded">{{ item.metadata.content }}</p>
+                </div>
             </div>
         </div>
     </div>
@@ -106,20 +112,19 @@ export default {
 </script>
 
 <style scoped>
+.results-section {
+  margin-top: 20px;
+}
+.result {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
 .checkbox-section {
   margin-top: 20px;
   margin-bottom: 20px;
   display: flex;
   gap: 15px;
-}
-.results-section {
-  margin-top: 30px;
-}
-.result {
-  margin-bottom: 20px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #f9f9f9;
 }
 </style>
