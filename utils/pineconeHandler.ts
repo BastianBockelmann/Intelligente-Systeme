@@ -333,6 +333,32 @@ export async function processAndStoreDataForEvaluation() {
   }
 }
 
+// Funktion zum Abfragen von Pinecone-Daten für Evaluationszwecke
+export async function queryDataForEvaluation(indexName: string, queryString: string, minRelevance: number, topK: number) {
+  try {
+    console.log(`Querying index: ${indexName} with query: ${queryString}`);
+    const queryEmbedding = await getEmbedding(queryString);  // Erstellen des Embeddings für die Abfrage
+    const response = await pinecone.Index(indexName).query({
+      vector: queryEmbedding,
+      topK: topK,
+      includeMetadata: true
+    });
+
+    console.log(`Found ${response.matches.length} results for query: ${queryString}`);
+    
+    // Filter-Logik nach der Abfrage anwenden, da Pinecone keinen direkten Relevanzfilter unterstützt
+    const filteredResults = response.matches.filter(match => match.score !== undefined && match.score >= minRelevance);
+
+    console.log(`Found ${filteredResults.length} results with relevance above ${minRelevance}%`);
+    
+    return filteredResults;
+  } catch (error) {
+    console.error(`Fehler bei der Abfrage von Pinecone für Index ${indexName}: ${error}`);
+    throw new Error(`Fehler bei der Abfrage von Pinecone für Index ${indexName}`);
+  }
+}
+
+
 // Funktion zum Abfragen von Daten aus Pinecone
 export async function queryPineconeData(
   queryText: string,
