@@ -29,10 +29,10 @@
                 <h3 class="font-semibold">{{ result.strategy }}</h3>
                 <div v-for="(item, idx) in result.data" :key="idx" class="text-sm text-gray-600 dark:text-gray-300 mt-2">
                     <p class="font-semibold">Ergebnis {{ idx + 1 }}</p>
-                    <p>ISO Code: {{ item.iso3CountryCode }}</p>
+                    <p>ISO Code: {{ item.metadata.iso3CountryCode }}</p>
                     <p>Ähnlichkeit: {{ (item.score * 100).toFixed(2) }}%</p>
-                    <p>Chunk: {{ item.chunkIndex }} von {{ item.totalChunks }} Chunks</p>
-                    <p v-if="item.warning" class="text-red-500">Warnung vorhanden!</p>
+                    <p>Chunk: {{ item.metadata.chunkIndex }} von {{ item.metadata.totalChunks }} Chunks</p>
+                    <p v-if="item.metadata.warning" class="text-red-500">Warnung vorhanden!</p>
                     <p class="font-semibold mt-2">Content</p>
                     <p class="max-h-60 overflow-y-auto break-words p-2 border rounded">{{ item.metadata.content }}</p>
                 </div>
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       query: '',
-      minRelevance: 0.5,
+      minRelevance: 0.25,
       maxResults: 10,
       selectedStrategies: {
         fixedCharacters: false,

@@ -350,6 +350,18 @@ export async function queryDataForEvaluation(indexName: string, queryString: str
     const filteredResults = response.matches.filter(match => match.score !== undefined && match.score >= minRelevance);
 
     console.log(`Found ${filteredResults.length} results with relevance above ${minRelevance}%`);
+
+    // Ergebnisse aufbereiten
+    const results = filteredResults.map(match => ({
+      score: match.score,
+      countryName: match.metadata?.countryName,
+      iso3CountryCode: match.metadata?.iso3CountryCode,
+      warning: match.metadata?.warning,
+      content: match.metadata?.content,
+      chunkIndex: match.metadata?.chunkIndex,
+      totalChunks: match.metadata?.totalChunks,
+      id: match.id
+    }));
     
     return filteredResults;
   } catch (error) {

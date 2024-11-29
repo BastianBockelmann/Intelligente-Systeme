@@ -18,7 +18,7 @@ export default defineComponent({
       iso3Code: '',
       content: '',
       weatherData: '',
-      minRelevance: 50, // Standardwert für Relevanz
+      minRelevance: 25, // Standardwert für Relevanz
       topK: 10, // Standardwert für Anzahl der Ergebnisse
       travelQueryString: '', // Suchstring für Reiseinformationen
       travelData: '', // Ergebniss für Reiseinformationen
