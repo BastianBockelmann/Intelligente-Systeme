@@ -340,6 +340,8 @@ export async function processAndStoreDataForEvaluation() {
 
 
 // Funktion zum Verarbeiten und Speichern der Länderdaten in JSON-Dateien für Evaluationszwecke
+const countriesDataEvaluationJson6 = readJsonFile('6_evaluation_auswaertiges_amt_by_Iso3CountryCode.json');
+
 export async function processAndStoreDataInJsonForEvaluation() {
   const chunkingMethods = [
     { name: 'fixed-characters', method: (text: string) => fixedSizeChunkingByCharacters(text, 2000) },
@@ -352,7 +354,7 @@ export async function processAndStoreDataInJsonForEvaluation() {
     try {
       console.log(`Starte Evaluation mit Methode: ${name}`);
 
-      const countries = Object.entries(countriesDataEvaluation);  // Umwandlung in Array von [key, value] Paaren
+      const countries = Object.entries(countriesDataEvaluationJson6);  // Umwandlung in Array von [key, value] Paaren
       const totalCountries = countries.length;  // Gesamtanzahl der Länder bestimmen
 
       let resultData: Record<string, any> = {};
