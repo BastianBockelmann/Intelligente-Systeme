@@ -45,7 +45,7 @@
 
     <div class="results-section" v-if="results.length > 0">
       <div v-for="(result, index) in results" :key="index" class="p-4 border rounded-lg mt-4">
-        <h3 class="font-semibold">{{ result.strategy }}</h3>
+        <h2 class="font-semibold">{{ result.strategy }}</h2>
         <div v-for="(item, idx) in result.data" :key="idx" class="text-sm text-gray-600 dark:text-gray-300 mt-2">
           <p class="font-semibold">Ergebnis {{ idx + 1 }}</p>
           <p>ISO Code: {{ item.metadata.iso3CountryCode }}</p>
@@ -159,10 +159,10 @@ export default {
 
 <style scoped>
 .results-section {
-  margin-top: 20px;
+  margin-top: 25px;
 }
 .result {
-  border: 1px solid #ddd;
+  border: 2px solid #ddd;
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 10px;

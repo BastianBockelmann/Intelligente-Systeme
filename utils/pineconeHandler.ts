@@ -340,7 +340,7 @@ export async function processAndStoreDataForEvaluation() {
 
 
 // Funktion zum Verarbeiten und Speichern der Länderdaten in JSON-Dateien für Evaluationszwecke
-const countriesDataEvaluationJson6 = readJsonFile('6_evaluation_auswaertiges_amt_by_Iso3CountryCode.json');
+const countriesDataEvaluationJson6 = readJsonFile('5_evaluation_auswaertiges_amt_by_Iso3CountryCode.json');
 
 export async function processAndStoreDataInJsonForEvaluation() {
   const chunkingMethods = [
