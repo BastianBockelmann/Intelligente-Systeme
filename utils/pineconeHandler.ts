@@ -333,6 +333,80 @@ export async function processAndStoreDataForEvaluation() {
   }
 }
 
+
+
+
+
+
+
+// Funktion zum Verarbeiten und Speichern der Länderdaten in JSON-Dateien für Evaluationszwecke
+export async function processAndStoreDataInJsonForEvaluation() {
+  const chunkingMethods = [
+    { name: 'fixed-characters', method: (text: string) => fixedSizeChunkingByCharacters(text, 2000) },
+    { name: 'fixed-tokens', method: (text: string) => fixedSizeChunkingByTokens(text, 1000) },
+    { name: 'content-aware', method: (text: string) => contentAwareChunking(text, 1000) },
+    { name: 'semantic', method: async (text: string) => await semanticChunking(text, 1000) }
+  ];
+
+  for (const { name, method } of chunkingMethods) {
+    try {
+      console.log(`Starte Evaluation mit Methode: ${name}`);
+
+      const countries = Object.entries(countriesDataEvaluation);  // Umwandlung in Array von [key, value] Paaren
+      const totalCountries = countries.length;  // Gesamtanzahl der Länder bestimmen
+
+      let resultData: Record<string, any> = {};
+
+      for (let countryIndex = 0; countryIndex < totalCountries; countryIndex++) {
+        const [iso3Code, countryData] = countries[countryIndex];
+        console.log(`Verarbeite Land ${countryIndex + 1} von ${totalCountries} mit Methode ${name}: ${iso3Code}`);
+
+        // Typ-Sicherstellung und Extraktion der benötigten Daten
+        const country = countryData as {
+          countryName: string;
+          iso3CountryCode: string;
+          content: string;
+          warning: boolean;
+          // ggf. weitere Felder hinzufügen
+        };
+        
+        // Zusammenführen der relevanten Textdaten
+        const countryText = `${country.countryName}: ${country.content}`;
+        const countryChunks = await method(countryText);
+        const totalChunks = countryChunks.length;
+
+        // Speichern der Chunks in der resultData-Struktur
+        resultData[country.countryName] = {
+          iso3CountryCode: country.iso3CountryCode,
+          warning: country.warning,
+          chunks: countryChunks.map((chunk, index) => ({
+            chunkIndex: index,
+            totalChunks: totalChunks,
+            content: chunk,
+          })),
+        };
+      }
+
+      // Speichern der Ergebnisse in einer JSON-Datei
+    const jsonFileName = `evaluation_chunks_${name}.json`;
+    console.log(`CWD: ${process.cwd()}`);
+    const filePath = join(process.cwd(), 'data', 'EvaluationJson', jsonFileName);
+    fs.writeFileSync(filePath, JSON.stringify(resultData, null, 2), 'utf-8');
+    console.log(`Ergebnisse für Methode ${name} wurden in ${jsonFileName} gespeichert.`);
+    } catch (error) {
+      console.error(`Fehler bei der Verarbeitung der Methode ${name}:`, error);
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
 // Funktion zum Abfragen von Pinecone-Daten für Evaluationszwecke
 export async function queryDataForEvaluation(indexName: string, queryString: string, minRelevance: number, topK: number) {
   try {
