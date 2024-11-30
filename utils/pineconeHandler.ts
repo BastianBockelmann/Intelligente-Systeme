@@ -45,19 +45,19 @@ async function getEmbedding(text: string) {
 }
 
 // Methode 1: Feste Chunkgröße (in Zeichen)
-function fixedSizeChunkingByCharacters(text: string, chunkSize: number) {
+function fixedSizeChunkingByCharacters(text: string, chunkSize: number, overlap: number = 0) {
   let chunks = [];
-  for (let i = 0; i < text.length; i += chunkSize) {
+  for (let i = 0; i < text.length; i += (chunkSize - overlap)) {
     chunks.push(text.slice(i, i + chunkSize));
   }
   return chunks;
 }
 
 // Methode 2: Feste Chunkgröße (in Tokens)
-function fixedSizeChunkingByTokens(text: string, chunkSize: number) {
+function fixedSizeChunkingByTokens(text: string, chunkSize: number, overlap: number = 0) {
   const tokens = encode(text);
   let chunks = [];
-  for (let i = 0; i < tokens.length; i += chunkSize) {
+  for (let i = 0; i < tokens.length; i += (chunkSize - overlap)) {
     const chunkTokens = tokens.slice(i, i + chunkSize);
     chunks.push(decode(chunkTokens));
   }
