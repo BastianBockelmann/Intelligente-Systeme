@@ -1,12 +1,5 @@
 // Funktionen zum Umgang mit Pinecone
 
-// Benötigt wird:
-// 1. Prüfen und initialisieren des Pinecone-Index
-// 2. Speichern von Vektoren(Daten) in Pinecone
-// 3. Aktualisieren von Vektoren in Pinecone
-// 4. Abfrage von Daten aus Pinecone
-// 5. optional: Löschen von Daten in Pinecone
-
 // Importieren der benötigten Bibliotheken
 import * as fs from 'fs';
 import { join } from 'path';
@@ -23,7 +16,7 @@ const openai = new OpenAI({
 const pinecone = new Pinecone({
   apiKey: process.env.PINECONE_API_KEY!,  // Pinecone API-Key aus Umgebungsvariablen laden
 });
-const indexName = 'traveldata';  // Name des Index, der in Pinecone verwendet wird
+const indexName = 'traveldata';  // Name des Index, der in Pinecone verwendet wird (Standardindex)
 
 // Funktion zum Einlesen einer JSON-Datei und Parsen in ein JavaScript-Objekt
 function readJsonFile(filename: string) {
@@ -199,7 +192,7 @@ async function checkAndInitIndex(indexName: string) {
   }
 }
 
-// Funktion zum Verarbeiten und Speichern der Länderdaten in Pinecone
+// Funktion zum Verarbeiten und Speichern der Länderdaten in Pinecone (Standardmethode)
 export async function processAndStoreData() {
 
   // prüfen und initialisieren des Pinecone-Indexes
@@ -333,12 +326,6 @@ export async function processAndStoreDataForEvaluation() {
   }
 }
 
-
-
-
-
-
-
 // Funktion zum Verarbeiten und Speichern der Länderdaten in JSON-Dateien für Evaluationszwecke
 const countriesDataEvaluationJson6 = readJsonFile('5_evaluation_auswaertiges_amt_by_Iso3CountryCode.json');
 
@@ -401,14 +388,6 @@ export async function processAndStoreDataInJsonForEvaluation() {
   }
 }
 
-
-
-
-
-
-
-
-
 // Funktion zum Abfragen von Pinecone-Daten für Evaluationszwecke
 export async function queryDataForEvaluation(indexName: string, queryString: string, minRelevance: number, topK: number) {
   try {
@@ -445,7 +424,6 @@ export async function queryDataForEvaluation(indexName: string, queryString: str
     throw new Error(`Fehler bei der Abfrage von Pinecone für Index ${indexName}`);
   }
 }
-
 
 // Funktion zum Abfragen von Daten aus Pinecone
 export async function queryPineconeData(
