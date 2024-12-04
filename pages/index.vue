@@ -2,6 +2,8 @@
 // Bibiliotheken Importieren
 import moment from "moment";
 
+// Neue Variable für die Startzeit
+let startTime: number;
 const userInput = ref("");
 const chatContainer = ref<HTMLElement | null>(null);
 const showScrollButton = ref(false); // Scroll-Button sichtbar oder nicht
@@ -41,6 +43,9 @@ const sendMessage = async () => {
 
     // Lade-Status aktivieren
     isLoading.value = true;
+
+     // Startzeit erfassen
+     startTime = performance.now();
 
     // Nachricht an Langchain-Backend senden
     await fetchChatbotResponse(String(textInput));
@@ -163,6 +168,12 @@ const fetchChatbotResponse = async (userMessage: string) => {
           addMessageToChatbot(chatbotMessage.trim());
         }
       }
+       // Endzeit erfassen
+       const endTime = performance.now();
+
+         // Reaktionszeit berechnen und ausgeben
+      const reactionTime = (endTime - startTime).toFixed(2);
+      console.log(`Reaktionszeit: ${reactionTime} ms`);
     }
   } catch (error) {
     console.error('Fehler beim Abrufen der Chatbot-Antwort:', error);
